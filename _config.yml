@@ -24,6 +24,14 @@ subscribe_email:
 email:
 
 # ----------------------- #
+#    Navigation Bar       #
+# ----------------------- #
+
+navigation:
+- text: Home
+  url: /index.html
+  
+# ----------------------- #
 #    Jekyll & Plugins     #
 # ----------------------- #
 
@@ -100,3 +108,6 @@ google_analytics_tracking_id:
 
 # Facebook Like
 facebook_like: false
+
+# LinkedIn
+linkedin_user: jaalcaldehernando
