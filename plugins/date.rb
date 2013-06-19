@@ -1,6 +1,21 @@
 module Octopress
   module Date
 
+    # Fechas en español
+
+    MONTHNAMES_TR = [nil,
+      "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ]
+    ABBR_MONTHNAMES_TR = [nil,
+      "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"
+    ]
+    DAYNAMES_TR = [
+      "Domingo", "Lunes", "Martes", "Mi&eacute;rcoles", "Jueves", "Viernes", "S&aacute;bado"
+    ]
+    ABBR_DAYNAMES_TR = [
+      "Dom", "Lun", "Mar", "Mi&eacute;", "Jue", "Vie", "S&aacute;b"
+    ]
+    
     # Returns a datetime if the input is a string
     def datetime(date)
       if date.class == String
@@ -36,10 +51,18 @@ module Octopress
       if format.nil? || format.empty? || format == "ordinal"
         date_formatted = ordinalize(date)
       else
-        date_formatted = date.strftime(format)
-        date_formatted.gsub!(/%o/, ordinal(date.strftime('%e').to_i))
+        date_formatted = format.gsub(/%a/, ABBR_DAYNAMES_TR[date.wday])
+        date_formatted = date_formatted.gsub(/%A/, DAYNAMES_TR[date.wday])
+        date_formatted = date_formatted.gsub(/%b/, ABBR_MONTHNAMES_TR[date.mon])
+        date_formatted = date_formatted.gsub(/%B/, MONTHNAMES_TR[date.mon])
+        date_formatted = date.strftime(date_formatted)
       end
       date_formatted
+    end
+    
+    # Formato de fecha en español para el listado de entradas
+    def format_date_archive(date)
+      "<span class='day'>#{date.day}</span> <span class='month'>#{ABBR_MONTHNAMES_TR[date.mon]}</span>"
     end
 
   end
@@ -60,6 +83,7 @@ module Jekyll
         "title"             => self.data['title'] || self.slug.split('-').select {|w| w.capitalize! || w }.join(' '),
         "url"               => self.url,
         "date"              => self.date,
+        "date_archive"      => format_date_archive(self.date),
         # Monkey patch
         "date_formatted"    => format_date(self.date, date_format),
         "updated_formatted" => self.data.has_key?('updated') ? format_date(self.data['updated'], date_format) : nil,

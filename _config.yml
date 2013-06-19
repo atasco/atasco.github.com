@@ -28,8 +28,10 @@ email:
 # ----------------------- #
 
 navigation:
-- text: Home
+- text: atasco
   url: /index.html
+- text: entradas
+  url: /blog/archives/index.html
   
 # ----------------------- #
 #    Jekyll & Plugins     #
@@ -43,6 +45,7 @@ destination: public
 plugins: plugins
 code_dir: downloads/code
 category_dir: blog/categories
+category_title_prefix: 'Etiqueta: '
 markdown: rdiscount
 rdiscount:
   extensions:

@@ -20,7 +20,7 @@ Siguiendo con la analogía cinéfila, la historia que en  **atas.co** se va a de
 > Comienza la lectura de documentación, los foros, los recuerdos de problemas previos que "se parecen un poco".
 
 + **Desenlace:** Después de aventuras sin fin, el protagonista sale airoso llevandose de paso a esa chica tan guapa que le ha ayudado en la aventura.
-> Después de numerosos ensayos de prueba y error la solución al problema aparece milagrosamente. Hay que registrar cuidadosamente los pasos seguidos para que cuando se repita la situación (que no lo dudéis se repetirá) podamos tener esa guía que nos saque del *atas.co* 
+> Después de numerosos ensayos de prueba y error la solución al problema aparece milagrosamente. Hay que registrar cuidadosamente los pasos seguidos para que cuando se repita la situación (que no lo dudéis se repetirá) podamos tener esa guía que nos saque del **atas.co** 
  
 Además de este argumento principal, también tendremos subtramas con sus respectivos nudos y desenlaces...
 
