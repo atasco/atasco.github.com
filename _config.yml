@@ -45,7 +45,7 @@ destination: public
 plugins: plugins
 code_dir: downloads/code
 category_dir: blog/categories
-category_title_prefix: 'Etiqueta: '
+category_title_prefix: 'Categoría: '
 markdown: rdiscount
 rdiscount:
   extensions:
