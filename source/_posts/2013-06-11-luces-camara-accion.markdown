@@ -10,6 +10,7 @@ categories: cajondesastre
 ***El personal se ubica en sus puestos y todo está listo para comenzar el rodaje.***
 
 Como en toda buena cinta lo importantes es un buen guión, con un planteamiento interesante seguido de un nudo que no deje que el "espectador" aparte la vista de la pantalla y un final redondo que cierre todas las incognitas planteadas durante el desarrollo.
+<!-- more -->
 
 Siguiendo con la analogía cinéfila, la historia que en  **atas.co** se va a desarrollar presenta las siguientes características:
 
