@@ -11,30 +11,30 @@ Vamos a ver como es posible aplicar los parches a los servidores ESXi de manera 
 
 <!-- more -->
 
-##Requisito previo
+## Requisito previo
 
 Es necesario tener acceso vía SSH al servidor, para habilitarlo tenemos dos opciones:
 
-###A través del vSphere Client
+### A través del vSphere Client
 
 1. Abrimos sesión en el servidor ESXi con el cliente
 2. Seleccionamos la pestaña *Configuration* y pinchamos en *Security Profile*
 3. Pinchar en *Properties* en la esquina superior derecha y seleccionar el servicio *SSH* pulsando el botón *Options*
 4. Desde aqui se puede arrancar el servicio y seleccionar las opciones de arranque del mismo
 
-###A través de la consola del servidor ESXi
+### A través de la consola del servidor ESXi
 
 1. Pulsar *F2* para acceder al menu de configuración
 2. Seleccionar *Troubleshooting Options*
 3. Desde el menu de opciones seleccionar *Enable SSH*
 
-##Dejar los parches en un Datastore accesible desde el servidor ESXi
+## Dejar los parches en un Datastore accesible desde el servidor ESXi
 
 Una vez que se descargan los parches desde la [web de vmware](http://www.vmware.com/patch/download), hay que dejar accesibles para el servidor ESXi al que se van a aplicar los mismos.
 
 > Es conveniente crear una carpeta en el datastore para dejarlos y poder aplicarlos posteriormente.
 
-##Aplicar los parches
+## Aplicar los parches
 
 Antes de aplicar los parches hay que apagar de forma ordenada todas las máquinas virtuales que están en el servidor.
 
@@ -47,7 +47,7 @@ esxcli software vib update /vmfs/volumes/parches/<your-upgrade-bundle.zip>
 Una vez que finaliza la aplicación del parche, aparecerá un mensaje indicándolo y solicitando el reinicio del servidor.
 
 
-##Referencias
+## Referencias
 [Using ESXi Shell in ESXi 5.0 and 5.1](http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=2004746)
 
-[How to patch ESXi 5](http://communities.vmware.com/thread/328758)
+[How to patch ESXi 5 en VMWare Communities](http://communities.vmware.com/thread/328758)

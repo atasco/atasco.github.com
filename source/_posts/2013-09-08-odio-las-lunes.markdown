@@ -7,7 +7,7 @@ categories: vmware
 ---
 Julio y agosto, meses de vacaciones, momento ideal para *romper* la infraestructura virtual con las actualizaciones anuales. Este año toca **vSpehere 5.1** (si esperamos un poco caemos en la 5.5).
 
-Tras la pertinente revisión de compatibilidad de hardware y la toma de decisiones previas (que implican cambio del vCenter, nos pasamos al nuevo appliance bajo LiNUX [VCSA](http://http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=2007619), asignación de nuevas LUN…) se procede a la instalación del nuevo vCenter y la migración de los ESX 4.1 U2.
+Tras la pertinente revisión de compatibilidad de hardware y la toma de decisiones previas (que implican cambio del vCenter, nos pasamos al nuevo appliance bajo LiNUX [VCSA](http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=2007619), asignación de nuevas LUN…) se procede a la instalación del nuevo vCenter y la migración de los ESX 4.1 U2.
 <!-- more -->
 
 **¡Sorpresa!** Al disponer de diferente hardware no es posible actualizar a 5.1 parte de los blades HP BL460c (los G1) que forman parte de la infraestructura, por lo que se decide mantener un entorno mixto con servidores ESXi 5.0 y 5.1.
