@@ -20,43 +20,30 @@ Revisando la configuración se observa que la politica de selección de caminos 
 
 Con el comando:
 
-{% codeblock %}
-esxcli storage nmp satp list
-{% endcodeblock %}
+> esxcli storage nmp satp list
 
 Obtenemos la política de selección de caminos (PSP) actual. 
 
 Por ejemplo, en un ESXi 5.0:
 
-{% codeblock %}
+{% codeblock lang:sh %}
 Name                 Default PSP    Description
 -------------------  -------------  -------------------------------------------------------   
-VMW_SATP_ALUA_CX     VMW_PSP_FIXED     Supports EMC CX that use the ALUA protocol             
+VMW_SATP_ALUA_CX     VMW_PSP_FIXED  Supports EMC CX that use the ALUA protocol             
 VMW_SATP_ALUA        VMW_PSP_MRU    Supports non-specific arrays that use the ALUA protocol
 VMW_SATP_CX          VMW_PSP_MRU    Supports EMC CX that do not use the ALUA protocol      
 VMW_SATP_MSA         VMW_PSP_MRU    Placeholder (plugin not loaded)                        
-VMW_SATP_DEFAULT_AP  VMW_PSP_MRU    Placeholder (plugin not loaded)                        
-VMW_SATP_SVC         VMW_PSP_FIXED  Placeholder (plugin not loaded)                        
-VMW_SATP_EQL         VMW_PSP_FIXED  Placeholder (plugin not loaded)                        
-VMW_SATP_INV         VMW_PSP_FIXED  Placeholder (plugin not loaded)                        
-VMW_SATP_EVA         VMW_PSP_FIXED  Placeholder (plugin not loaded)                        
-VMW_SATP_SYMM        VMW_PSP_RR     Placeholder (plugin not loaded)                        
-VMW_SATP_LSI         VMW_PSP_MRU    Placeholder (plugin not loaded)                        
-VMW_SATP_DEFAULT_AA  VMW_PSP_FIXED  Supports non-specific active/active arrays             
-VMW_SATP_LOCAL       VMW_PSP_FIXED  Supports direct attached devices
+VMW_SATP_DEFAULT_AP  VMW_PSP_MRU    Placeholder (plugin not loaded)
+...
 {% endcodeblock %}
 
 Cambiar la PSP por defecto es sencillo, solo hay que ejecutar el comando:
 
-{% codeblock %}
-esxcli storage nmp satp set --default-psp=policy --satp=your_SATP_name
-{% endcodeblock %}
+> esxcli storage nmp satp set --default-psp=policy --satp=your_SATP_name
 
 Para cambiar el modo FIXED por ROUND ROBIN en la cabina VNX 3000 que soporta ALUA, el comando a ejecutar es:
 
-{% codeblock %}
-esxcli storage nmp satp set --default-psp=VMW_PSP_RR --satp=VMW_SATP_ALUA_CX
-{% endcodeblock %}
+> esxcli storage nmp satp set --default-psp=VMW_PSP_RR --satp=VMW_SATP_ALUA_CX
 
 A partir de ahora las nuevas LUN de la cabina que se presenten a los ESXi 5.0 tendrán como PSP Round Robin, pero las que se encuentran ya presentadas mantendrán la política Fixed.
 
@@ -64,64 +51,52 @@ Se puede cambiar la politica selección de camino reiniciando el ESXi para hacer
 
 Para conseguir que una LUN pase a utilizar un PSP diferente, ejecutamos el comando siguiente en el ESXi afectado:
 
-{% codeblock %}
-esxcli storage nmp device set -d NAAID -psp=policy
-{% endcodeblock %}
+> esxcli storage nmp device set -d NAAID -psp=policy
 
 Es necesario identificar previamente el NAAID de la LUN afectada. Para ello se puede hacer uso del cliente gráfico (viclient o web) o con el comando:
 
-{% codeblock %}
-esxcli storage nmp device list
-{% endcodeblock %}
+> esxcli storage nmp device list
 
 Una vez realizado el cambio se verifica el mismo con:
 
-{% codeblock %}
-esxcli storage nmp device list -d NAAID
-{% endcodeblock %}
+> esxcli storage nmp device list -d NAAID
 
 Ejemplo:
 
-{% codeblock %}
+{% codeblock lang:sh %}
 esxcli storage nmp device set -d naa.6006016055711d00cff95e65664ee011 --psp=VMW_PSP_MRU
 {% endcodeblock %}
 
 Una vez realizados los cambios, con todos los ESXi utilizando la misma política de selección de caminos para las LUNes, el rendimiento de los hosts con versión 5.0 se estabiliza y adquiere valores similares a los que tienen la versión 5.1.
 
-## Resumiendo
+## Resumen
 
 ### Cambio de la PSP por defecto
 
-[Referencia](http://kb.vmware.com/selfservice/search.do?cmd=displayKC&docType=kc&docTypeID=DT_KB_1_1&externalId=1017760)
-
-** 1. Mirar la PSP (Path Selection Policy)actual: **
-
-> esxcli storage nmp satp list
-
-** 2. Cambiar la PSP por defecto: **
-
-> esxcli storage nmp satp set --default-psp=policy --satp=your_SATP_name
-
-** 3. Verificar el cambio: **
-
-> esxcli storage nmp satp list
+{% codeblock lang:sh %}
+# Mirar la PSP (Path Selection Policy)actual
+esxcli storage nmp satp list
+# Cambiar la PSP por defecto
+esxcli storage nmp satp set --default-psp=policy --satp=your_SATP_name
+# Verificar el cambio
+esxcli storage nmp satp list
+{% endcodeblock %}
 
 ### Cambio de la PSP por LUN
 
-[Referencia](http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=1036189)
+{% codeblock lang:sh %}
+# Identificar LUN ID (NAA ID)
+# 1. En VI Client (o web).
+# 2. Vía comando
+esxcli storage nmp device list
+# Cambiar la PSP
+esxcli storage nmp device set -d NAAID -psp=policy
+# Verificar el cambio
+esxcli storage nmp device list -d NAAID
+{% endcodeblock %}
 
-** 1. Identificar LUN ID (NAA ID) **
+## Referencias
 
-1.1. En VI Client (o web).
+[Changing the default pathing policy for new/existing LUNs](http://kb.vmware.com/selfservice/search.do?cmd=displayKC&docType=kc&docTypeID=DT_KB_1_1&externalId=1017760)
 
-1.2. Vía comando:
-
-> esxcli storage nmp device list
-
-** 2. Cambiar la PSP: ** 
-
-> esxcli storage nmp device set -d NAAID -psp=policy
-
-** 3. Verificar el cambio: **
-
-> esxcli storage nmp device list -d NAAID
+[Changing a LUN to use a different Path Selection Policy](http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=1036189)

@@ -30,7 +30,7 @@ Es necesario tener acceso vía SSH al servidor, para habilitarlo tenemos dos opc
 
 ## Dejar los parches en un Datastore accesible desde el servidor ESXi
 
-Una vez que se descargan los parches desde la [web de vmware](http://www.vmware.com/patch/download), hay que dejar accesibles para el servidor ESXi al que se van a aplicar los mismos.
+Una vez que se descargan los parches desde la [web de vmware](http://www.vmware.com/patch/download), hay que dejarlos accesibles al servidor ESXi donde se van a aplicar.
 
 > Es conveniente crear una carpeta en el datastore para dejarlos y poder aplicarlos posteriormente.
 
