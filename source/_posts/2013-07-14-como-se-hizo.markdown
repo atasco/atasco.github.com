@@ -21,5 +21,10 @@ Una vez que tenemos el blog operativo con **octopress**, si el contenido está e
 
 Gracias a toda esta información desplegar el blog no ha supuesto mucho esfuerzo, y si yo he podido hacerlo cualquiera es capaz :)
 
+## Actualización: 14/12/2013
+
+Preparando una nueva entrada repleta de tablas, me he dado cuenta que las tablas en octopress no se generan de forma correcta, ya que no presentan los bordes correspondientes. 
+
+La solución a este *"problemilla"* se puede encontrar en [Octopress Table Stylesheet](http://samwize.com/2012/09/24/octopress-table-stylesheet/).
  
 [^1]: Una búsqueda en google devuelve una cantidad importante de resultados. 

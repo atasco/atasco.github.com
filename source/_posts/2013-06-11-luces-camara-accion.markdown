@@ -5,7 +5,7 @@ date: 2013-06-11 22:44
 comments: true
 categories: cajondesastre 
 ---
- {% img left /images/lca.jpg 'Luces, Cámara, Acción' %}
+ {% img left /images/posts/lca.jpg 'Luces, Cámara, Acción' %}
   
 ***El personal se ubica en sus puestos y todo está listo para comenzar el rodaje.***
 
