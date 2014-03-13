@@ -147,13 +147,13 @@ switch (CAM)           | switch (ARP)
 0000.00c0.0001 2 Fa0/2 | 10.1.1.1 0000.00c0.0001
 0000.00c0.0002 3 Fa0/3 | 10.1.1.2 0000.00c0.0002
 
-Como los switches no conocen en que puerto se encuentra la MAC del cluster (*10.1.1.111 - 038F.0000.1111*, no hay un puerto físico del switch en la que se encuentra conectada), enviarán los paquetes a todos los puertos de la VLAN, resultando que todos los miembros del cluster recibirán el tráfico y el driver NBL en cada uno de los nodos determinará que nodo se hace cargo de la petición.
+Como los switches no conocen en que puerto se encuentra la MAC del cluster (*10.1.1.111 - 03BF.0000.1111*, no hay un puerto físico del switch en la que se encuentra conectada), enviarán los paquetes a todos los puertos de la VLAN, resultando que todos los miembros del cluster recibirán el tráfico y el driver NBL en cada uno de los nodos determinará que nodo se hace cargo de la petición.
 
 El problema es que todos los equipos en la misma VLAN también recibirán el tráfico destinado al cluster NBL ya que este tráfico se envía a todos los puertos.
 
 ## Teaming
 
-En aquellos casos en los que un host necesita enviar y/o recibir volumenes de tráfico muy elevados que no pueden asumir un sólo enlace es necesario agrupar (*team, bond...*) más de un adaptador de red para aumentar el ancho de banda. 
+En aquellos casos en los que un host necesita enviar y/o recibir volumenes de tráfico muy elevados que no puede asumir un sólo enlace es necesario agrupar (*team, bond...*) más de un adaptador de red para aumentar el ancho de banda. 
 
 Al igual que en el host se agrupan los interfaces de red, el switch debe conocer que puertos pertenecen al mismo enlace lógico y realizar el ether-channel correspondiente con los mismos. De otra manera habrá problemas con entradas incorrectas en la CAM que darán lugar a la presencia de tráfico unicast.
 
@@ -229,11 +229,11 @@ core1(config-if)#spanning-tree port-fast
 
 ## Microsoft NLB
 
-No existe una solución válida y sencilla que nos permita evitar el *unicast flooding* cuando tenemos NLB en la red. Una forma de mitigar el problema es crear una VLAN independiente para los nodos del clúster.
+No existe una solución válida y sencilla que nos permita evitar el *unicast flooding* cuando tenemos clusters NLB en la red. Una forma de mitigar el problema es crear una VLAN independiente para los nodos del clúster.
 
 Ahora bien, en el caso de tener un NLB en modo multicast, existe la posibilidad de evitar el tráfico unicast añadiendo de forma estática en las tablas ARP y CAM las IP y MAC asociadas a la IP virtual del clúster.
 
-> Por ejemplo, si la IP virtual es la 10.10.10.10 y la MAC 1111.1111.1111 en la VLAN 100 donde los nodos del clúster están conectados a los puertos Gi0/1 y Gi0/2:
+Por ejemplo, si la IP virtual es la 10.10.10.10 y la MAC 1111.1111.1111 en la VLAN 100 donde los nodos del clúster están conectados a los puertos Gi0/1 y Gi0/2:
 
 ``` sh
 # ROUTER
@@ -273,7 +273,7 @@ En este caso, la solución consiste en segmentar la red en subredes (VLAN) más 
 
 [^4]: En realidad son tres, también esta la tabla TCAM (Ternary Content Addressable Memory), pero no es necesaria para entender el comportamiento del *unicast flooding*.
 
-[^5]: Cuando un **host B** quiere enviar información a un **host A** y no tiene en su tabl ARP la direccion MAC del **host A**, el **host B** genera un mensaje de broadcast que llega a todos los host del dominio de broadcast (ARP Request) en el que se encuentra para obtener la dirección MAC asociada a la IP del **host A**. Sólo el **host A** responde al mensaje con su dirección MAC.
+[^5]: Cuando un **host B** quiere enviar información a un **host A** y no tiene en su tabla ARP la direccion MAC del **host A**, el **host B** genera un mensaje de broadcast que llega a todos los host del dominio de broadcast (ARP Request) en el que se encuentra para obtener la dirección MAC asociada a la IP del **host A**. Sólo el **host A** responde al mensaje con su dirección MAC.
 
 [^6]: A medida que los paquetes llegan a los puertos del switch este aprende la dirección MAC que se encuentra detrás de los mismos y los guarda en la tabla CAM. En la tabla CAM se registra la dirección MAC, el puerto, la VLAN y el timestamp. Si la dirección MAC aprendida por un switch en un puerto se mueve a otro puerto diferente, la dirección MAC y el timestamp se registran para el último puerto y la entrada previa se borra. Si la dirección MAC se encuentra registrada en la tabla CAM en el mismo puerto, únicamente se actualiza el timestamp en la entrada existente.
 
