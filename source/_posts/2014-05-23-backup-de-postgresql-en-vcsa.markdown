@@ -5,7 +5,7 @@ date: 2014-05-23 21:13:51 +0200
 comments: true
 categories: vmware
 ---
-Cuando se realiza el despliegue de un vCenter con el appliance de VMWare (vCenter Server Appliance 5.X) es interesante (cuando no imprescindible) realizar backups periódicos de la base de datos incorporada (postgresql), si en la instalación se decide hacer uso de la misma, con el fin de poder hacer una recuperación rápida en caso de *accidente*.
+Cuando se realiza el despliegue de un vCenter con el appliance de VMWare (vCenter Server Appliance 5.X) es interesante (cuando no imprescindible) realizar backups periódicos de la base de datos incorporada (postgresql)[^1] con el fin de poder hacer una recuperación rápida en caso de *accidente*.
 
 En esta entrada se recoge la forma de hacer esta copia de seguridad así como la recuperación correspondiente si llega a ser necesario.
 
@@ -13,7 +13,7 @@ En esta entrada se recoge la forma de hacer esta copia de seguridad así como la
 
 ## Requisito previo
 
-Es preciso disponer de acceso vía SSH al vCenter, para habilitarlo:
+Es preciso disponer de acceso vía SSH al vCenter. Para habilitarlo:
 
 1. Acceder a la consola web del VCSA (https://VCSA:5480)
 2. En la pestaña *Admin*, pulsar *Toggle SSH login* para permitir acceder al servidor a través de SSH
@@ -97,3 +97,5 @@ service vmware-vpxd start
 [Backing up and restoring the vCenter Server Appliance (vPostgres) database (2034505)](http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=2034505)
 
 [Enable or Disable SSH Administrator Login on the VMware vCenter Server Appliance](http://pubs.vmware.com/vsphere-55/index.jsp?topic=%2Fcom.vmware.vsphere.vcenterhost.doc%2FGUID-8DC793FF-1E00-43A1-B85C-070414B9F9B0.html&resultof=%22Enable%22%20%22enabl%22%20%22Disable%22%20%22disabl%22%20%22SSH%22%20%22ssh%22)
+
+[^1]: Si en la instalación se decide hacer uso de la misma, ya que también existe la posibilidad de utilizar otros motores de bases de datos como [oracle](http://es.wikipedia.org/wiki/Oracle_Database).

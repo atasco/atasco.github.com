@@ -3,7 +3,7 @@ layout: post
 title: "Backup de postgresql en VCSA"
 date: 2014-05-23 21:13:51 +0200
 comments: true
-categories: 
+categories: vmware
 ---
 Cuando se realiza el despliegue de un vCenter con el appliance de VMWare (vCenter Server Appliance 5.X) es interesante (cuando no imprescindible) realizar backups periódicos de la base de datos incorporada (postgresql), si en la instalación se decide hacer uso de la misma, con el fin de poder hacer una recuperación rápida en caso de *accidente*.
 
