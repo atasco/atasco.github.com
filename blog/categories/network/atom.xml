@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Categoría: network | a t a s c o]]></title>
+  <link href="http://atasco.github.io/blog/categories/network/atom.xml" rel="self"/>
+  <link href="http://atasco.github.io/"/>
+  <updated>2014-06-06T20:51:53+02:00</updated>
+  <id>http://atasco.github.io/</id>
+  <author>
+    <name><![CDATA[alcher]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Tráfico unicast en switches]]></title>
+    <link href="http://atasco.github.io/blog/2014/03/12/switch-unicast/"/>
+    <updated>2014-03-12T18:25:00+01:00</updated>
+    <id>http://atasco.github.io/blog/2014/03/12/switch-unicast</id>
+    <content type="html"><![CDATA[<p>Realizando una auditoría en la red para determinar su estado se observa, en el equipo en el que se está realizando la captura, tráfico unicast destinado a otros equipos.</p>
+
+<p>Este tráfico es bastante elevado en la <em>VLAN de Internet</em>, mientras que en las <em>VLANes de Servicio</em> el tráfico unicast recogido es el normal en una red conmutada.</p>
+
+<p>Aunque el tráfico unicast detectado no provoca problemas en la red, si es importante conocer la causa del mismo a fin de evitarlo en lo posible.</p>
+
+<blockquote><p>Aunque la estabilidad y el rendimiento de la red no se ve afectado, la presencia de tráfico unicast evidencia un agujero de seguridad importante que es preciso subsanar.</p></blockquote>
+
+<!-- more -->
+
+
+<h1>Funcionamiento básico de un switch</h1>
+
+<p>Un switch es un dispositivo de red de capa 2, es decir, procesa y envía los paquetes basándose en las direcciones MAC.</p>
+
+<p>Un switch &ldquo;aprende&rdquo; a lo largo del tiempo donde se encuentran las MACs destino de los paquetes (a que puerto está esa MAC conectada) a medida que el tráfico atraviesa sus puertos . Si desconoce donde se encuentra una MAC destino envía paquetes unicast (<em>unicast flooding</em>) a todos los puertos (excepto a aquel del que proviene el paquete) y cuando se recibe la respuesta de vuelta registra la MAC asociada a ese puerto <sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>.</p>
+
+<p>Por ejemplo, si un <em>host A</em> envía un paquete a un <em>host B</em> conectado a la misma VLAN de un switch, inicialmente la tabla CAM del switch se encuentra vacía y el switch reenvía el paquete a todos sus puertos.</p>
+
+<p><img src="/images/posts/switch_traffic_1.png" alt="Tráfico switch: IDA" /></p>
+
+<table>
+<thead>
+<tr>
+<th align="left">MAC            </th>
+<th align="right"> Puerto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">0000.00c0.0001 </td>
+<td align="right"> Fa0/1</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Cuando el <em>host B</em> recibe el paquete responde al <em>host A</em> momento en el que el switch también aprende la MAC del mismo.</p>
+
+<p><img src="/images/posts/switch_traffic_2.png" alt="Tráfico switch: VUELTA" /></p>
+
+<table>
+<thead>
+<tr>
+<th align="left">MAC            </th>
+<th align="right"> Puerto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">0000.00c0.0001 </td>
+<td align="right"> Fa0/1</td>
+</tr>
+<tr>
+<td align="left">0000.00c0.0002 </td>
+<td align="right"> Fa0/2</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Un switch &ldquo;olvida&rdquo; las direcciones MAC aprendidas después de un tiempo<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup> de modo que el switch necesita ser capaz de aprender de nuevo en que puertos se encuentran las MACs. Cuando esto sucede, comienza de nuevo el proceso de inundar todos los puertos con tráfico unicast para esperar la respuesta del equipo con la MAC correspondiente y aprenderla de nuevo. Esta es la razón por la que se produce tráfico unicast cada cierto tiempo<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>.</p>
+
+<h1>Orígenes del tráfico unicast</h1>
+
+<p>La presencia de tráfico unicast puede ocurrir por diversas causas en una red, lo importante es diferenciar cuando este tráfico esta dentro de parámetros normales y cuando puede provocar problemas.</p>
+
+<p>En los siguientes puntos se recogen aquellas causas que pueden dar lugar al llamado <em>unicast flooding</em> causante de posibles problemas.</p>
+
+<h2>Rutas asimétricas</h2>
+
+<p>Se produce esta situación cuando un paquete sigue una ruta de origen a destino distinta a la ruta de vuelta al origen (esto ocurre habitualmente en redes enrutadas, capa 3).</p>
+
+<p>Para entender el proceso que da lugar a esta situación hay que recordar que en un dispositivo de capa 3 (router) existen dos tablas<sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup>:</p>
+
+<ul>
+<li><p><strong>ARP (Address Resolution Protocol):</strong> Mantiene las relaciones entre las direcciones IP y las direcciones MAC con la finalidad de facilitar las comunicaciones IP en un dominio de broadcast (capa 2)<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>.</p></li>
+<li><p><strong>CAM (Content Addressable Memory):</strong> Mantiene las relaciones entre las direcciones MAC y el puerto(s) físico del switch<sup id="fnref:6"><a href="#fn:6" rel="footnote">6</a></sup>.</p></li>
+</ul>
+
+
+<blockquote><p>Por alguna oscura razón, en los switches Cisco con capacidades de routing (capa 3) el valor por defecto para la permanencia de las entradas en la tabla ARP es de 4 horas mientras que el tiempo de permanencia por defecto en la tabla CAM es de sólo 5 minutos.</p></blockquote>
+
+<p>Vamos a centrarnos en el siguiente esquema para entender mejor como se produce este tipo de problema:</p>
+
+<p><img src="/images/posts/unicast_asymmetric_routing.png" alt="Unicast Rutas Asimétricas" /></p>
+
+<p>Vemos que inicialmente las tablas (ARP y CAM) en los switches (<em>core 1</em> y <em>core 2</em>) se encuentran vacías, el <em>host A</em> tiene el <em>core 1</em> como ruta por defecto y el <em>host B</em> tiene como ruta por defecto al <em>core 2</em>.</p>
+
+<p><strong>[1]</strong> Imaginemos ahora que desde el <em>host A</em> se hace un ping al <em>host B</em>, enviando un paquete ICMP echo a través de su ruta de enlace, <em>core 1</em>. Como el <em>host A</em> desconoce la MAC de su gateway, envía en primer lugar un <em>ARP Request</em> para obtener la MAC de su IP (10.1.1.1).</p>
+
+<p><img src="/images/posts/unicast_asymmetric_routing_1.png" alt="Unicast Rutas Asimétricas: ICMP Echo" /></p>
+
+<table>
+<thead>
+<tr>
+<th align="left">host A (ARP)            </th>
+<th align="center"> core 1 (CAM)           </th>
+<th align="center"> core 1 (ARP)             </th>
+<th align="center"> core 2 (ARP) </th>
+<th align="center"> core 2 (CAM) </th>
+<th align="right"> host B (ARP)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">10.1.1.1 0003.6bf1.2a01 </td>
+<td align="center"> 0000.0c00.0001 1 Gi2/1 </td>
+<td align="center"> 10.1.1.10 0000.00c0.0001 </td>
+<td align="center">              </td>
+<td align="center">              </td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
+<p><strong>[2-3]</strong> El <em>core 1</em> desconoce la MAC del <em>host B</em>, de modo que envía un <em>ARP Request</em>. Cuando recibe el <em>ARP Replay</em> ambos <em>cores</em> aprenden el puerto origen del <em>host B</em>, con esta información el <em>core 1</em> enruta los paquetes al <em>core 2</em> a través de la <em>VLAN 2</em> (conoce la IP del <em>host B</em> y sabe que pertenece a la <em>VLAN 2</em>).</p>
+
+<p><img src="/images/posts/unicast_asymmetric_routing_2.png" alt="Unicast Rutas Asimétricas: Routing Core 1" /></p>
+
+<table>
+<thead>
+<tr>
+<th align="left">host A (ARP)            </th>
+<th align="center"> core 1 (CAM)           </th>
+<th align="center"> core 1 (ARP)             </th>
+<th align="center"> core 2 (ARP) </th>
+<th align="center"> core 2 (CAM)           </th>
+<th align="right"> host B (ARP)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">10.1.1.1 0003.6bf1.2a01 </td>
+<td align="center"> 0000.0c00.0001 1 Gi2/1 </td>
+<td align="center"> 10.1.1.10 0000.00c0.0001 </td>
+<td align="center">              </td>
+<td align="center"> 0000.0c00.0002 2 Gi2/1 </td>
+<td align="right"> 10.1.2.1 0003.6bf1.2a01</td>
+</tr>
+<tr>
+<td align="left">                        </td>
+<td align="center"> 0000.0c00.0002 2 Gi1/1 </td>
+<td align="center"> 10.1.2.10 0000.00c0.0002 </td>
+<td align="center">              </td>
+<td align="center">                        </td>
+<td align="right"> </td>
+</tr>
+</tbody>
+</table>
+
+
+<p><strong>[4]</strong> El <em>core 2</em> dispone de la información necesaria en su tabla CAM y entrega el <em>ICMP Echo Request</em> al <em>host B</em>.</p>
+
+<p><img src="/images/posts/unicast_asymmetric_routing_3.png" alt="Unicast Rutas Asimétricas: Entrega Host B" /></p>
+
+<table>
+<thead>
+<tr>
+<th align="left">host A (ARP)            </th>
+<th align="center"> core 1 (CAM)           </th>
+<th align="center"> core 1 (ARP)             </th>
+<th align="center"> core 2 (ARP)             </th>
+<th align="center"> core 2 (CAM)           </th>
+<th align="right"> host B (ARP)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">10.1.1.1 0003.6bf1.2a01 </td>
+<td align="center"> 0000.0c00.0001 1 Gi2/1 </td>
+<td align="center"> 10.1.1.10 0000.00c0.0001 </td>
+<td align="center"> 10.1.2.10 0000.00c0.0002 </td>
+<td align="center"> 0000.0c00.0002 2 Gi2/1 </td>
+<td align="right"> 10.1.2.1 0003.6bf1.2a01</td>
+</tr>
+<tr>
+<td align="left">                        </td>
+<td align="center"> 0000.0c00.0002 2 Gi1/1 </td>
+<td align="center"> 10.1.2.10 0000.00c0.0002 </td>
+<td align="center">                          </td>
+<td align="center">                        </td>
+<td align="right"> 10.1.2.2 0003.6bf1.2a02</td>
+</tr>
+</tbody>
+</table>
+
+
+<p><strong>[5]</strong> Ahora, el <em>host B</em> tiene que responder con un <em>ICMP Echo Replay</em> al <em>host A</em>. Como desconoce la MAC de su ruta por defecto envía un <em>ARP Request</em> a su gateway (10.1.2.2).</p>
+
+<p><img src="/images/posts/unicast_asymmetric_routing_replay.png" alt="Unicast Rutas Asimétricas: ICMP Reply" /></p>
+
+<table>
+<thead>
+<tr>
+<th align="left">host A (ARP)            </th>
+<th align="center"> core 1 (CAM)           </th>
+<th align="center"> core 1 (ARP)             </th>
+<th align="center"> core 2 (ARP)             </th>
+<th align="center"> core 2 (CAM)           </th>
+<th align="right"> host B (ARP)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">10.1.1.1 0003.6bf1.2a01 </td>
+<td align="center"> 0000.0c00.0001 1 Gi2/1 </td>
+<td align="center"> 10.1.1.10 0000.00c0.0001 </td>
+<td align="center"> 10.1.2.10 0000.00c0.0002 </td>
+<td align="center"> 0000.0c00.0002 2 Gi2/1 </td>
+<td align="right"> 10.1.2.1 0003.6bf1.2a01</td>
+</tr>
+<tr>
+<td align="left">                        </td>
+<td align="center"> 0000.0c00.0002 2 Gi1/1 </td>
+<td align="center"> 10.1.2.10 0000.00c0.0002 </td>
+<td align="center"> 10.1.1.10 0000.00c0.0001 </td>
+<td align="center"> 0000.0c00.0001 1 Gi1/1 </td>
+<td align="right"> 10.1.2.2 0003.6bf1.2a02</td>
+</tr>
+</tbody>
+</table>
+
+
+<p><strong>[6-7]</strong> Una vez que el <em>host B</em> envía el <em>Echo Replay</em> al <em>core 2</em> rellena con los datos su tabla ARP, pero como desconoce la MAC del <em>host A</em> envía un <em>ARP Request</em> a su IP (10.1.1.10). Con su respuesta agrega ese dato a sus tablas CAM y ARP, y enruta la respuesta al <em>core 2</em> a través de la VLAN 1.</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">host A (ARP)            </th>
+<th align="center"> core 1 (CAM)           </th>
+<th align="center"> core 1 (ARP)             </th>
+<th align="center"> core 2 (ARP)             </th>
+<th align="center"> core 2 (CAM)           </th>
+<th align="right"> host B (ARP)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">10.1.1.1 0003.6bf1.2a01 </td>
+<td align="center"> 0000.0c00.0001 1 Gi2/1 </td>
+<td align="center"> 10.1.1.10 0000.00c0.0001 </td>
+<td align="center"> 10.1.2.10 0000.00c0.0002 </td>
+<td align="center"> 0000.0c00.0002 2 Gi2/1 </td>
+<td align="right"> 10.1.2.1 0003.6bf1.2a01</td>
+</tr>
+<tr>
+<td align="left">10.1.1.2 0003.6bf1.2a02 </td>
+<td align="center"> 0000.0c00.0002 2 Gi1/1 </td>
+<td align="center"> 10.1.2.10 0000.00c0.0002 </td>
+<td align="center"> 10.1.1.10 0000.00c0.0001 </td>
+<td align="center"> 0000.0c00.0001 1 Gi1/1 </td>
+<td align="right"> 10.1.2.2 0003.6bf1.2a02</td>
+</tr>
+</tbody>
+</table>
+
+
+<p><strong>[8]</strong> El <em>core 1</em> dispone de la información necesaria en su tabla CAM para entregar el <em>ICMP Echo Reply</em> al <em>host A</em>. La respuesta llega a su destino y se finaliza el flujo quedando las tablas de todos los elementos con los datos de IPs y MACs actualizados.</p>
+
+<blockquote><p>El <em>host A</em> tiene como gateway el <em>core 1</em> en la VLAN 1 mientras que el <em>host B</em> tiene como gateway el <em>core 2</em> en la VLAN 2, es decir, existe una ruta asimétrica. La única manera de que el <em>core 1</em> aprenda la MAC del <em>host B</em>  es cuando el <em>host B</em> responde a un <em>ARP Request</em> del <em>core 1</em> (y al contrario con el <em>host A</em> y el <em>core 2</em>).</p></blockquote>
+
+<p><strong>¿Qué ocurre cuando pasan cinco minutos?</strong></p>
+
+<p>A los cinco minutos el <em>core 1</em> elimina de su tabla CAM las entradas de cuyas direcciones MAC no recibe tráfico, por lo que deja de conocer el puerto asociado a la MAC del <em>host B</em>. Como la tabla ARP no se vacía hasta que hayan transcurrido cuatro horas el <em>core 1</em> sigue conociendo la MAC asociada a la IP del <em>host B</em> (lo mismo ocurre con el <em>core 2</em> y el <em>host A</em>) y como resultado de esto el <em>core 1</em> tratará todo paquete con destino la MAC del <em>host B</em> como unicast (el <em>core 1</em> enviará el paquete con destino al <em>host B</em> a todos sus puertos produciéndose el <em>unicast flooding</em>).</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">host A (ARP)            </th>
+<th align="center"> core 1 (CAM)           </th>
+<th align="center"> core 1 (ARP)             </th>
+<th align="center"> core 2 (ARP)             </th>
+<th align="center"> core 2 (CAM)           </th>
+<th align="right"> host B (ARP)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">10.1.1.1 0003.6bf1.2a01 </td>
+<td align="center"> 0000.0c00.0001 1 Gi2/1 </td>
+<td align="center"> 10.1.1.10 0000.00c0.0001 </td>
+<td align="center"> 10.1.2.10 0000.00c0.0002 </td>
+<td align="center"> 0000.0c00.0002 2 Gi2/1 </td>
+<td align="right"> 10.1.2.1 0003.6bf1.2a01</td>
+</tr>
+<tr>
+<td align="left">10.1.1.2 0003.6bf1.2a02 </td>
+<td align="center">                        </td>
+<td align="center"> 10.1.2.10 0000.00c0.0002 </td>
+<td align="center"> 10.1.1.10 0000.00c0.0001 </td>
+<td align="center">                        </td>
+<td align="right"> 10.1.2.2 0003.6bf1.2a02</td>
+</tr>
+</tbody>
+</table>
+
+
+<h2>Cambios en la topología</h2>
+
+<p>Hay eventos en la red que pueden provocar que la tabla CAM del switch se libere con una frecuencia mayor a la configurada (<em>aging time</em>), uno de estos eventos es el cambio de topología debido a STP, <em>Spanning Tree Protocol</em>.</p>
+
+<p>Los cambios en la topología reducen el tiempo de las entradas en la tabla CAM de los 300 segundos habituales a 15 segundos en el caso del STP. En redes que hacen uso del RSTP, <em>Rapid Spanning Tree Protocol</em>, las direcciones MAC se liberan de la tabla CAM de forma inmediata.</p>
+
+<p>En una red estable, los cambio de topología son pocos y se producen muy de vez en cuando. Las razones para que estos cambios tengan lugar son:</p>
+
+<ul>
+<li>Switches nuevos que se añaden a la red.</li>
+<li>Eliminación de switches viejos.</li>
+<li>Cambios de configuración realizados por el administrador.</li>
+</ul>
+
+
+<p>En estos casos, el cambio de topología es normal y necesario para el correcto funcionamiento de la red<sup id="fnref:7"><a href="#fn:7" rel="footnote">7</a></sup>.</p>
+
+<p>Ahora bien, cuando se produce de forma continua tráfico unicast en una red estable es por la configuración incorrecta de los puertos asignados a los equipos (PCs, Hosts, Impresoras&hellip;). Estos equipos no participan en el proceso STP, por lo tanto los cambios de estado de sus interfaces de red (<em>LINK UP/LINK DOWN</em>) no deberían dar lugar a un cambio de topología STP<sup id="fnref:8"><a href="#fn:8" rel="footnote">8</a></sup> y la forma de asegurarnos que esto sea así es utilizar la característica <em>PortFast</em> en la configuración de los puertos de los switches en los que están conectados estos equipos.</p>
+
+<h2>Microsoft NLB</h2>
+
+<p>Los cluster de Microsoft funcionan utilizando una IP virtual (VIP), que se asigna a la dirección MAC del cluster. El problema es que la dirección MAC del cluster no se utiliza para enviar tráfico, sino que este tráfico se cursa desde los nodos del mismo que tienen direcciones MAC distintas.<sup id="fnref:9"><a href="#fn:9" rel="footnote">9</a></sup></p>
+
+<p><img src="/images/posts/microsoft_nlb.png" alt="Microsoft NLB" /></p>
+
+<table>
+<thead>
+<tr>
+<th align="center">switch (CAM)           </th>
+<th align="center"> switch (ARP)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0d00.0d00.0d01 1 Fa0/1 </td>
+<td align="center"> 192.168.1.1 0d00.0d00.0d01</td>
+</tr>
+<tr>
+<td align="center">0000.00c0.0001 2 Fa0/2 </td>
+<td align="center"> 10.1.1.1 0000.00c0.0001</td>
+</tr>
+<tr>
+<td align="center">0000.00c0.0002 3 Fa0/3 </td>
+<td align="center"> 10.1.1.2 0000.00c0.0002</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Como los switches no conocen en que puerto se encuentra la MAC del cluster (<em>10.1.1.111 &ndash; 03BF.0000.1111</em>, no hay un puerto físico del switch en la que se encuentra conectada), enviarán los paquetes a todos los puertos de la VLAN, resultando que todos los miembros del cluster recibirán el tráfico y el driver NBL en cada uno de los nodos determinará que nodo se hace cargo de la petición.</p>
+
+<p>El problema es que todos los equipos en la misma VLAN también recibirán el tráfico destinado al cluster NBL ya que este tráfico se envía a todos los puertos.</p>
+
+<h2>Teaming</h2>
+
+<p>En aquellos casos en los que un host necesita enviar y/o recibir volumenes de tráfico muy elevados que no puede asumir un sólo enlace es necesario agrupar (<em>team, bond&hellip;</em>) más de un adaptador de red para aumentar el ancho de banda.</p>
+
+<p>Al igual que en el host se agrupan los interfaces de red, el switch debe conocer que puertos pertenecen al mismo enlace lógico y realizar el ether-channel correspondiente con los mismos. De otra manera habrá problemas con entradas incorrectas en la CAM que darán lugar a la presencia de tráfico unicast.</p>
+
+<h2>LLenado de la tabla CAM</h2>
+
+<p>Cuando en una red hay una cantidad de host muy elevada, la tabla CAM puede llegar a llenarse. Si esto curre, el switch comenzará a enviar el trafico para aquellas direcciones que no tiene en la CAM a todos los puertos produciéndose el <em>unicast flooding</em>.</p>
+
+<h1>Cómo detectarlo</h1>
+
+<p>La forma más sencilla de detectar la presencia de tráfico unicast anómalo en la red es mediante la realización de capturas. Existen diversas herramientas para realizar estas capturas, siendo las más extendidas las que aparecen a continuación.</p>
+
+<h2>TCPDUMP</h2>
+
+<p>``` sh</p>
+
+<h1>Realizando las capturas desde el host 10.11.1.111 con MAC 00:19:99:57:5e:d5</h1>
+
+<p>tcpdump -i eth0 ether host not 00:19:99:57:5e:d5 and host not 10.11.1.111 and not broadcast and not multicast
+```</p>
+
+<h2>WIRESHARK</h2>
+
+<p>``` sh</p>
+
+<h1>excluir tráfico multicast y broadcast</h1>
+
+<p>!(eth.ig == 1)</p>
+
+<h1>excluir mac del router &ndash; switch (xx.yy.zz.tt.uu.vv)</h1>
+
+<p>!(eth.dst == xx.yy.zz.tt.uu.vv)
+```</p>
+
+<h1>Soluciones</h1>
+
+<h2>Rutas asimétricas</h2>
+
+<p>Se pueden realizar cambios en la configuración de lo switches para remediar esta situación:</p>
+
+<ul>
+<li>Ajustando el periodo de permanencia de las entradas en la tabla CAM a 14400 segundos (aunque es mejor un valor más alto de 4 horas, por ejemplo 6).</li>
+<li>Cambiar el tiempo de la tabla ARP a 5 minutos (300 segundos).</li>
+<li>Cambiar los tiempos en ambas tablas (CAM y ARP) para que tengan el mismo valor (por ejemplo 10 minutos, 600 segundos)</li>
+</ul>
+
+
+<p>Usaremos preferentemente el método de cambiar el tiempo de permanencia en la tabla CAM a 14400 segundos (mejor 21600):</p>
+
+<p>``` sh</p>
+
+<h1>CISCO IOS</h1>
+
+<p>core1(config)#mac address-table aging-time [time in seconds] [vlan id]</p>
+
+<h1>CISCO CatOS</h1>
+
+<p>core1(config)#set cam agingtime [vlan id] [time in seconds]
+```</p>
+
+<h2>Cambios en la topología</h2>
+
+<p>Es necesario identificar el puerto del switch causante del cambio, lo primero es determinar si ha ocurrido un cambio en la topología:</p>
+
+<p>``` sh</p>
+
+<h1>CISCO IOS</h1>
+
+<p>core1#show mac-address table aging vlan [vlan-id]</p>
+
+<h1>CISCO CatOS</h1>
+
+<p>core1#show cam agingtime [vlan-id]
+```</p>
+
+<p>Posteriormente identificamos el puerto causante del cambio:</p>
+
+<p>``` sh</p>
+
+<h1>CISCO IOS</h1>
+
+<p>core1#show spantree-tree vlan [vlan-id] detail</p>
+
+<h1>CISCO CatOS</h1>
+
+<p>core1#show spantree statistics [mod/port] [vlan-id]
+```</p>
+
+<p>Finalmente configuramos el puerto añadiendo:</p>
+
+<p>``` sh</p>
+
+<h1>CISCO IOS</h1>
+
+<p>core1(config-if)#spanning-tree port-fast
+```</p>
+
+<h2>Microsoft NLB</h2>
+
+<p>No existe una solución válida y sencilla que nos permita evitar el <em>unicast flooding</em> cuando tenemos clusters NLB en la red. Una forma de mitigar el problema es crear una VLAN independiente para los nodos del clúster.</p>
+
+<p>Ahora bien, en el caso de tener un NLB en modo multicast, existe la posibilidad de evitar el tráfico unicast añadiendo de forma estática en las tablas ARP y CAM las IP y MAC asociadas a la IP virtual del clúster.</p>
+
+<p>Por ejemplo, si la IP virtual es la 10.10.10.10 y la MAC 1111.1111.1111 en la VLAN 100 donde los nodos del clúster están conectados a los puertos Gi0/1 y Gi0/2:</p>
+
+<p>``` sh</p>
+
+<h1>ROUTER</h1>
+
+<p>core1#conf t
+core1#arp 10.10.10.10 1111.1111.1111 ARPA</p>
+
+<h1>SWITCH</h1>
+
+<p>core1#conf t
+core1#mac-address-table static 1111.1111.1111 vlan 100 int gi0/1 gi0/2
+```</p>
+
+<h2>Teaming</h2>
+
+<p>La manera de evitar el <em>unicast flooding</em> cuando hay host en la red con interfaces agrupados es verificar y realizar una configuración correcta del team (bond) en el lado del host y del ether-channel en el switch, asegurando el que el protocolo utilizado y los puertos agregados son los correctos.</p>
+
+<h2>LLenado de la tabla CAM</h2>
+
+<p>En este caso, la solución consiste en segmentar la red en subredes (VLAN) más pequeñas.</p>
+
+<h1>Referencias</h1>
+
+<p><a href="http://www.cisco.com/en/US/products/hw/switches/ps700/products_tech_note09186a00801d0808.shtml">Unicast Flooding in Switched Campus Networks</a></p>
+
+<p><a href="http://www.cisco.com/en/US/tech/tk648/tk362/technologies_tech_note09186a0080094afd.shtml#t8">Understanding and Troubleshooting HSRP Problems in Catalyst Switch Networks</a></p>
+
+<p><a href="http://www.cisco.com/en/US/products/hw/switches/ps708/products_tech_note09186a00807347ab.shtml">Catalyst 6500/6000 Switches ARP or CAM Table Issues Troubleshooting</a></p>
+
+<p><a href="http://www.ciscozine.com/2012/04/15/unicast-flooding-due-to-asymmetric-routing/">Unicast flooding due to asymmetric routing</a></p>
+
+<p><a href="http://www.ciscopress.com/articles/article.asp?p=336872">Troubleshooting Unicast Flooding Due to Topology</a></p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Los switches almacenan en tablas dinámicas (content addressable memory table, CAM table) las relaciones entre puertos y MACs. Estas tablas tienen un periodo de vida (timeout) determinado (en el caso de switches cisco, por defecto son 5 minutos) y un tamaño tambien limitado.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>Las MAC puede pasar a estar inactivas debido a que el dispositivo se encuentra apagado o bien a que los equipos se han conectado a otro puerto distinto del switch.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<li id="fn:3">
+<p>Este tráfico unicast es normal en la red y no supone un riesgo para la misma.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
+<li id="fn:4">
+<p>En realidad son tres, también esta la tabla TCAM (Ternary Content Addressable Memory), pero no es necesaria para entender el comportamiento del <em>unicast flooding</em>.<a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
+<li id="fn:5">
+<p>Cuando un <strong>host B</strong> quiere enviar información a un <strong>host A</strong> y no tiene en su tabla ARP la direccion MAC del <strong>host A</strong>, el <strong>host B</strong> genera un mensaje de broadcast que llega a todos los host del dominio de broadcast (ARP Request) en el que se encuentra para obtener la dirección MAC asociada a la IP del <strong>host A</strong>. Sólo el <strong>host A</strong> responde al mensaje con su dirección MAC.<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
+<li id="fn:6">
+<p>A medida que los paquetes llegan a los puertos del switch este aprende la dirección MAC que se encuentra detrás de los mismos y los guarda en la tabla CAM. En la tabla CAM se registra la dirección MAC, el puerto, la VLAN y el timestamp. Si la dirección MAC aprendida por un switch en un puerto se mueve a otro puerto diferente, la dirección MAC y el timestamp se registran para el último puerto y la entrada previa se borra. Si la dirección MAC se encuentra registrada en la tabla CAM en el mismo puerto, únicamente se actualiza el timestamp en la entrada existente.<a href="#fnref:6" rev="footnote">&#8617;</a></p></li>
+<li id="fn:7">
+<p>Las notificaciones de cambio de topología (<em>TCN</em>) están diseñadas para corregir la tablas de reenvío cuando se produce un cambio. Esto es necesario para evitar cortes en las comunicaciones, ya que cuando se produce un cambio de topología algunos destinos dejan de estar accesibles a través de unos determinados puertos para ser accesibles por otros. TCN funciona reduciendo el tiempo de permanencia de las entradas en la tabla CAM, de modo que si una dirección no se vuelve a aprender se eliminará de la tabla y se producirá el envío de tráfico unicast por todos los puertos del switch.<a href="#fnref:7" rev="footnote">&#8617;</a></p></li>
+<li id="fn:8">
+<p>Los puertos del switch asignados a los host no están involucrados en los cambios de topología STP o en el envío de las BPDUs.<a href="#fnref:8" rev="footnote">&#8617;</a></p></li>
+<li id="fn:9">
+<p>Es más complejo que todo todo esto, en función de como se configura el cluster NLB (multicast o unicast) el comportamiento del tráfico varía.<a href="#fnref:9" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

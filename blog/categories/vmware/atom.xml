@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Categoría: vmware | a t a s c o]]></title>
+  <link href="http://atasco.github.io/blog/categories/vmware/atom.xml" rel="self"/>
+  <link href="http://atasco.github.io/"/>
+  <updated>2014-06-06T20:51:53+02:00</updated>
+  <id>http://atasco.github.io/</id>
+  <author>
+    <name><![CDATA[alcher]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Backup de postgresql en VCSA]]></title>
+    <link href="http://atasco.github.io/blog/2014/05/23/backup-de-postgresql-en-vcsa/"/>
+    <updated>2014-05-23T21:13:51+02:00</updated>
+    <id>http://atasco.github.io/blog/2014/05/23/backup-de-postgresql-en-vcsa</id>
+    <content type="html"><![CDATA[<p>Cuando se realiza el despliegue de un vCenter con el appliance de VMWare (vCenter Server Appliance 5.X) es interesante (cuando no imprescindible) realizar backups periódicos de la base de datos incorporada (postgresql)<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> con el fin de poder hacer una recuperación rápida en caso de <em>accidente</em>.</p>
+
+<p>En esta entrada se recoge la forma de hacer esta copia de seguridad así como la recuperación correspondiente si llega a ser necesario.</p>
+
+<!-- more -->
+
+
+<h2>Requisito previo</h2>
+
+<p>Es preciso disponer de acceso vía SSH al vCenter. Para habilitarlo:</p>
+
+<ol>
+<li>Acceder a la consola web del VCSA (<a href="https://VCSA:5480">https://VCSA:5480</a>)</li>
+<li>En la pestaña <em>Admin</em>, pulsar <em>Toggle SSH login</em> para permitir acceder al servidor a través de SSH</li>
+</ol>
+
+
+<h2>Copia</h2>
+
+<p><strong>1.</strong> Acceder al vCenter e ir al directorio donde se encuentran los binarios de postgresql:</p>
+
+<p><code>sh
+cd /opt/vmware/vpostgres/1.0/bin
+</code></p>
+
+<p><strong>2.</strong> Para ver la configuración de la base de datos ejecutar el comando:</p>
+
+<p><code>sh
+cat /etc/vmware-vpx/embedded_db.cfg
+</code></p>
+
+<p><strong>3.</strong> Parar el servicio del vCenter:</p>
+
+<p><code>sh
+service vmware-vpxd stop
+</code></p>
+
+<p><strong>4.</strong> Realizar la copia:</p>
+
+<p><code>sh
+./pg_dump EMB_DB_INSTANCE -U EMB_DB_USER -Fp -c &gt; VCDBBackupFile
+</code></p>
+
+<p>Donde <em>EMB_DB_INSTANCE</em> y <em>EMB_DB_USER</em> se sustituyen por los valores obtenidos en el punto <strong>[2]</strong>. <em>VCDBBackupFile</em> es el nombre del fichero donde se guardará el backup.</p>
+
+<blockquote><p>./pg_dump VCDB -U postgres -Fp -c > /tmp/VCDBackUp</p></blockquote>
+
+<p><strong>5.</strong> Arrancar el servicio del vCenter:</p>
+
+<p><code>sh
+service vmware-vpxd start
+</code></p>
+
+<h2>Recuperación</h2>
+
+<p><strong>1.</strong> Acceder al vCenter e ir al directorio donde se encuentran los binarios de postgresql:</p>
+
+<p><code>sh
+cd /opt/vmware/vpostgres/1.0/bin
+</code></p>
+
+<p><strong>2.</strong> Para ver la configuración de la base de datos ejecutar el comando:</p>
+
+<p><code>sh
+cat /etc/vmware-vpx/embedded_db.cfg
+</code></p>
+
+<p><strong>3.</strong> Parar el servicio del vCenter:</p>
+
+<p><code>sh
+service vmware-vpxd stop
+</code></p>
+
+<p><strong>4.</strong> Restaurar la copia:</p>
+
+<p><code>sh
+PGPASSWORD='EMB_DB_PASSWORD' ./psql -d EMB_DB_INSTANCE -Upostgres -f VCDBBackupFile
+</code></p>
+
+<p>Donde <em>PGPASSWORD</em> y <em>EMB_DB_INSTANCE</em> se sustituyen por los valores obtenidos en el punto <strong>[2]</strong>. <em>VCDBBackupFile</em> es el nombre del fichero donde se ha guardado previamente el backup.</p>
+
+<p>Utilizar comillas simples <strong>[&lsquo;]</strong> con la password tal como aparecece en el fichero de configuración del punto <strong>[2]</strong>.</p>
+
+<blockquote><p>PGPASSWORD=<code>'g&lt;T4EuybGsA=kG$G'</code> ./psql -d VCDB -U postgres -f /tmp/VCDBackUp</p></blockquote>
+
+<p><strong>5.</strong> Arrancar el servicio del vCenter:</p>
+
+<p><code>sh
+service vmware-vpxd start
+</code></p>
+
+<h2>Referencias</h2>
+
+<p><a href="http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&amp;cmd=displayKC&amp;externalId=2034505">Backing up and restoring the vCenter Server Appliance (vPostgres) database (2034505)</a></p>
+
+<p><a href="http://pubs.vmware.com/vsphere-55/index.jsp?topic=%2Fcom.vmware.vsphere.vcenterhost.doc%2FGUID-8DC793FF-1E00-43A1-B85C-070414B9F9B0.html&amp;resultof=%22Enable%22%20%22enabl%22%20%22Disable%22%20%22disabl%22%20%22SSH%22%20%22ssh%22">Enable or Disable SSH Administrator Login on the VMware vCenter Server Appliance</a></p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Si en la instalación se decide hacer uso de la misma, ya que también existe la posibilidad de utilizar otros motores de bases de datos como <a href="http://es.wikipedia.org/wiki/Oracle_Database">oracle</a>.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Parcheando ESXi 5.X sin VUM]]></title>
+    <link href="http://atasco.github.io/blog/2013/11/28/parcheando-esxi-sin-vum/"/>
+    <updated>2013-11-28T18:30:00+01:00</updated>
+    <id>http://atasco.github.io/blog/2013/11/28/parcheando-esxi-sin-vum</id>
+    <content type="html"><![CDATA[<p>En ocasiones, aplicar parches a los servidores <strong>ESXi 5.X</strong> no es sencillo cuando no se dispone de un vCenter (con vSphere Update Manager, VUM), tal como ocurre en los entornos de laboratorio formados por ESXi independientes.</p>
+
+<p>Vamos a ver como es posible aplicar los parches a los servidores ESXi de manera sencilla siguiendo los pasos siguientes.</p>
+
+<!-- more -->
+
+
+<h2>Requisito previo</h2>
+
+<p>Es necesario tener acceso vía SSH al servidor, para habilitarlo tenemos dos opciones:</p>
+
+<h3>A través del vSphere Client</h3>
+
+<ol>
+<li>Abrimos sesión en el servidor ESXi con el cliente</li>
+<li>Seleccionamos la pestaña <em>Configuration</em> y pinchamos en <em>Security Profile</em></li>
+<li>Pinchar en <em>Properties</em> en la esquina superior derecha y seleccionar el servicio <em>SSH</em> pulsando el botón <em>Options</em></li>
+<li>Desde aqui se puede arrancar el servicio y seleccionar las opciones de arranque del mismo</li>
+</ol>
+
+
+<h3>A través de la consola del servidor ESXi</h3>
+
+<ol>
+<li>Pulsar <em>F2</em> para acceder al menu de configuración</li>
+<li>Seleccionar <em>Troubleshooting Options</em></li>
+<li>Desde el menu de opciones seleccionar <em>Enable SSH</em></li>
+</ol>
+
+
+<h2>Dejar los parches en un Datastore accesible desde el servidor ESXi</h2>
+
+<p>Una vez que se descargan los parches desde la <a href="http://www.vmware.com/patch/download">web de vmware</a>, hay que dejarlos accesibles al servidor ESXi donde se van a aplicar.</p>
+
+<blockquote><p>Es conveniente crear una carpeta en el datastore para dejarlos y poder aplicarlos posteriormente.</p></blockquote>
+
+<h2>Aplicar los parches</h2>
+
+<p>Antes de aplicar los parches hay que apagar de forma ordenada todas las máquinas virtuales que están en el servidor.</p>
+
+<p>Conectarse por SSH al servidor ESXi y aplicar los parches mediante el comando:</p>
+
+<p>{% codeblock %}
+esxcli software vib update /vmfs/volumes/parches/&lt;your-upgrade-bundle.zip>
+{% endcodeblock %}</p>
+
+<p>Una vez que finaliza la aplicación del parche, aparecerá un mensaje indicándolo y solicitando el reinicio del servidor.</p>
+
+<h2>Referencias</h2>
+
+<p><a href="http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&amp;cmd=displayKC&amp;externalId=2004746">Using ESXi Shell in ESXi 5.0 and 5.1</a></p>
+
+<p><a href="http://communities.vmware.com/thread/328758">How to patch ESXi 5 en VMWare Communities</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Odio las LUNes!]]></title>
+    <link href="http://atasco.github.io/blog/2013/09/08/odio-las-lunes/"/>
+    <updated>2013-09-08T20:30:00+02:00</updated>
+    <id>http://atasco.github.io/blog/2013/09/08/odio-las-lunes</id>
+    <content type="html"><![CDATA[<p>Julio y agosto, meses de vacaciones, momento ideal para <em>romper</em> la infraestructura virtual con las actualizaciones anuales. Este año toca <strong>vSpehere 5.1</strong> (si esperamos un poco caemos en la 5.5).</p>
+
+<p>Tras la pertinente revisión de compatibilidad de hardware y la toma de decisiones previas (que implican cambio del vCenter, nos pasamos al nuevo appliance bajo LiNUX <a href="http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&amp;cmd=displayKC&amp;externalId=2007619">VCSA</a>, asignación de nuevas LUN…) se procede a la instalación del nuevo vCenter y la migración de los ESX 4.1 U2.</p>
+
+<!-- more -->
+
+
+<p><strong>¡Sorpresa!</strong> Al disponer de diferente hardware no es posible actualizar a 5.1 parte de los blades HP BL460c (los G1) que forman parte de la infraestructura, por lo que se decide mantener un entorno mixto con servidores ESXi 5.0 y 5.1.</p>
+
+<p>Esto supone reconsiderar la planificación inicial y separar los ESXi por versión en dos cluster (planificado inicialmente para mantener dos entornos independientes, uno para servidores de desarrollo y otro para los de producción) en vez de mantener un único cluster con un pool de recursos dedicado a las VM de desarrollo.</p>
+
+<p>Una vez realizada la migración, se observa que el rendimiento en acceso a disco de las VM en los ESXi 5.0 no se corresponde con las VM en los ESXi 5.1.</p>
+
+<p>Revisando la configuración se observa que la politica de selección de caminos en las LUNes de la cabina (EMC VNX 5500 que soporta el protocolo ALUA) para los ESXi 5.0 no es la que tenemos configurada habitualmente. Aparece como FIXED cuando debería estar como ROUND ROBIN.</p>
+
+<p>Con el comando:</p>
+
+<blockquote><p>esxcli storage nmp satp list</p></blockquote>
+
+<p>Obtenemos la política de selección de caminos (PSP) actual.</p>
+
+<p>Por ejemplo, en un ESXi 5.0:</p>
+
+<p>{% codeblock lang:sh %}
+Name                 Default PSP    Description</p>
+
+<hr />
+
+<p>VMW_SATP_ALUA_CX     VMW_PSP_FIXED  Supports EMC CX that use the ALUA protocol           <br/>
+VMW_SATP_ALUA        VMW_PSP_MRU    Supports non-specific arrays that use the ALUA protocol
+VMW_SATP_CX          VMW_PSP_MRU    Supports EMC CX that do not use the ALUA protocol    <br/>
+VMW_SATP_MSA         VMW_PSP_MRU    Placeholder (plugin not loaded)                      <br/>
+VMW_SATP_DEFAULT_AP  VMW_PSP_MRU    Placeholder (plugin not loaded)
+&hellip;
+{% endcodeblock %}</p>
+
+<p>Cambiar la PSP por defecto es sencillo, solo hay que ejecutar el comando:</p>
+
+<blockquote><p>esxcli storage nmp satp set &mdash;default-psp=policy &mdash;satp=your_SATP_name</p></blockquote>
+
+<p>Para cambiar el modo FIXED por ROUND ROBIN en la cabina VNX 3000 que soporta ALUA, el comando a ejecutar es:</p>
+
+<blockquote><p>esxcli storage nmp satp set &mdash;default-psp=VMW_PSP_RR &mdash;satp=VMW_SATP_ALUA_CX</p></blockquote>
+
+<p>A partir de ahora las nuevas LUN de la cabina que se presenten a los ESXi 5.0 tendrán como PSP Round Robin, pero las que se encuentran ya presentadas mantendrán la política Fixed.</p>
+
+<p>Se puede cambiar la politica selección de camino reiniciando el ESXi para hacerlo de forma global para todas las LUN que se presebtan al mismo, o bien de forma individual para cada LUN.</p>
+
+<p>Para conseguir que una LUN pase a utilizar un PSP diferente, ejecutamos el comando siguiente en el ESXi afectado:</p>
+
+<blockquote><p>esxcli storage nmp device set -d NAAID -psp=policy</p></blockquote>
+
+<p>Es necesario identificar previamente el NAAID de la LUN afectada. Para ello se puede hacer uso del cliente gráfico (viclient o web) o con el comando:</p>
+
+<blockquote><p>esxcli storage nmp device list</p></blockquote>
+
+<p>Una vez realizado el cambio se verifica el mismo con:</p>
+
+<blockquote><p>esxcli storage nmp device list -d NAAID</p></blockquote>
+
+<p>Ejemplo:</p>
+
+<p>{% codeblock lang:sh %}
+esxcli storage nmp device set -d naa.6006016055711d00cff95e65664ee011 &mdash;psp=VMW_PSP_MRU
+{% endcodeblock %}</p>
+
+<p>Una vez realizados los cambios, con todos los ESXi utilizando la misma política de selección de caminos para las LUNes, el rendimiento de los hosts con versión 5.0 se estabiliza y adquiere valores similares a los que tienen la versión 5.1.</p>
+
+<h2>Resumen</h2>
+
+<h3>Cambio de la PSP por defecto</h3>
+
+<p>{% codeblock lang:sh %}</p>
+
+<h1>Mirar la PSP (Path Selection Policy)actual</h1>
+
+<p>esxcli storage nmp satp list</p>
+
+<h1>Cambiar la PSP por defecto</h1>
+
+<p>esxcli storage nmp satp set &mdash;default-psp=policy &mdash;satp=your_SATP_name</p>
+
+<h1>Verificar el cambio</h1>
+
+<p>esxcli storage nmp satp list
+{% endcodeblock %}</p>
+
+<h3>Cambio de la PSP por LUN</h3>
+
+<p>{% codeblock lang:sh %}</p>
+
+<h1>Identificar LUN ID (NAA ID)</h1>
+
+<h1>1. En VI Client (o web).</h1>
+
+<h1>2. Vía comando</h1>
+
+<p>esxcli storage nmp device list</p>
+
+<h1>Cambiar la PSP</h1>
+
+<p>esxcli storage nmp device set -d NAAID -psp=policy</p>
+
+<h1>Verificar el cambio</h1>
+
+<p>esxcli storage nmp device list -d NAAID
+{% endcodeblock %}</p>
+
+<h2>Referencias</h2>
+
+<p><a href="http://kb.vmware.com/selfservice/search.do?cmd=displayKC&amp;docType=kc&amp;docTypeID=DT_KB_1_1&amp;externalId=1017760">Changing the default pathing policy for new/existing LUNs</a></p>
+
+<p><a href="http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&amp;cmd=displayKC&amp;externalId=1036189">Changing a LUN to use a different Path Selection Policy</a></p>
+]]></content>
+  </entry>
+  
+</feed>

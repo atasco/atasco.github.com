@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Categoría: cajondesastre | a t a s c o]]></title>
+  <link href="http://atasco.github.io/blog/categories/cajondesastre/atom.xml" rel="self"/>
+  <link href="http://atasco.github.io/"/>
+  <updated>2014-06-06T20:51:53+02:00</updated>
+  <id>http://atasco.github.io/</id>
+  <author>
+    <name><![CDATA[alcher]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Cómo se hizo]]></title>
+    <link href="http://atasco.github.io/blog/2013/07/14/como-se-hizo/"/>
+    <updated>2013-07-14T18:30:00+02:00</updated>
+    <id>http://atasco.github.io/blog/2013/07/14/como-se-hizo</id>
+    <content type="html"><![CDATA[<p>En la actualidad crear un blog, partiendo de unos conocimientos básicos, es relativamente sencillo. Existen diversas herramientas que facilitan la tarea, de modo que lo más complicado es elegir la que se adapte a las necesiades de cada uno.</p>
+
+<p>En <strong>atas.co</strong> la herramienta utilizada es <a href="http://octopress.org">octopress</a> con el tema <a href="http://alexgaribay.com">octoflat</a> y utilizando como hosting <a href="http://pages.github.com">Github Pages</a>.</p>
+
+<!-- more -->
+
+
+<p>La documentación de octopress es muy completa y clara, siguiéndola es muy sencillo crear y desplegar un blog con esta herramienta. Además, existen múltiples blogs<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> donde los usuarios han detallado paso a paso como hacer la instalación así que no voy a repetir aquí aquello que ya esta escrito en otros lugares.</p>
+
+<p>Si que voy a recoger en esta entrada aquellas fuentes que han facilitado (y que posiblemente sin ellas este mismo post no existiría) la creación de <strong>atas.co</strong>. Además de la <a href="http://octopress.org/docs/">documentación de octopress</a>, la información que se recoge en las siguientes webs me ha resultado muy útil para poner en marcha este proyecto.</p>
+
+<ul>
+<li><a href="http://www.moncefbelyamani.com/how-to-install-and-configure-octopress-on-a-mac/">How to Install &amp; Configure Octopress on a Mac, and Host Your Static Website on Amazon S3</a></li>
+<li><a href="http://codeloveandboards.com/blog/2013/01/24/desplegando-tu-blog-octopress-en-github-pages/">Desplegando tu blog Octopress en GitHub Pages</a></li>
+</ul>
+
+
+<p>Una vez que tenemos el blog operativo con <strong>octopress</strong>, si el contenido está en español como es el caso, tenemos el &ldquo;pequeño&rdquo; inconveniente de que las fechas aparecen automáticamente en perfecto inglés. La solución es sencilla si seguimos las instrucciones que aparecen en <a href="http://www.hazteonline.es/blog/press/2012/08/17/las-fechas-en-octopress/">las fechas en octopress</a>.</p>
+
+<p>Gracias a toda esta información desplegar el blog no ha supuesto mucho esfuerzo, y si yo he podido hacerlo cualquiera es capaz :)</p>
+
+<h2>Actualización: 14/12/2013</h2>
+
+<p>Preparando una nueva entrada repleta de tablas, me he dado cuenta que las tablas en octopress no se generan de forma correcta, ya que no presentan los bordes correspondientes.</p>
+
+<p>La solución a este <em>&ldquo;problemilla&rdquo;</em> se puede encontrar en <a href="http://samwize.com/2012/09/24/octopress-table-stylesheet/">Octopress Table Stylesheet</a>.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Una búsqueda en google devuelve una cantidad importante de resultados. <a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Luces, Cámara, Acción!]]></title>
+    <link href="http://atasco.github.io/blog/2013/06/11/luces-camara-accion/"/>
+    <updated>2013-06-11T22:44:00+02:00</updated>
+    <id>http://atasco.github.io/blog/2013/06/11/luces-camara-accion</id>
+    <content type="html"><![CDATA[<p> {% img left /images/posts/lca.jpg &lsquo;Luces, Cámara, Acción&rsquo; %}</p>
+
+<p><strong><em>El personal se ubica en sus puestos y todo está listo para comenzar el rodaje.</em></strong></p>
+
+<p>Como en toda buena cinta lo importantes es un buen guión, con un planteamiento interesante seguido de un nudo que no deje que el &ldquo;espectador&rdquo; aparte la vista de la pantalla y un final redondo que cierre todas las incognitas planteadas durante el desarrollo.</p>
+
+<!-- more -->
+
+
+<p>Siguiendo con la analogía cinéfila, la historia que en  <strong>atas.co</strong> se va a desarrollar presenta las siguientes características:</p>
+
+<ul>
+<li><p><strong>Planteamiento:</strong> El protagonista se enfrenta a la adversidad. La situación es nueva, desconocida y desconcertante.</p>
+
+<blockquote><p>Marrón de proporciones biblicas se presenta en el horizonte (problemón relacionado con estos malditos cacharros llamados sistemas operativos, servidores, redes, virtualización…). Y por supuesto hay que tener una solución al problema <em>ya mismo</em>.</p></blockquote></li>
+<li><p><strong>Nudo:</strong> La lucha para salir del atolladero es titánica llevando al protagonista a enfrentarse a la situación sin desfallecer hasta que con ayuda del resto de personajes logra superar la prueba.</p>
+
+<blockquote><p>Comienza la lectura de documentación, los foros, los recuerdos de problemas previos que <em>se parecen un poco</em>.</p></blockquote></li>
+<li><p><strong>Desenlace:</strong> Después de aventuras sin fin, el protagonista sale airoso llevandose de paso a esa chica tan guapa que le ha ayudado en la aventura.</p>
+
+<blockquote><p>Después de numerosos ensayos de prueba y error la solución al problema aparece milagrosamente. Hay que registrar cuidadosamente los pasos seguidos para que cuando se repita la situación (que no lo dudéis se repetirá) podamos tener esa guía que nos saque del <strong>atas.co</strong></p></blockquote></li>
+</ul>
+
+
+<p>Además de esta línea argumental, también tendremos subtramas con sus respectivos nudos y desenlaces&hellip;</p>
+
+<p><strong><em>Ahora solo queda seguir mirando y descubrir si la película será un thriller, una comedia, tal vez un drama o una historia sangrienta de terror.</em></strong></p>
+]]></content>
+  </entry>
+  
+</feed>

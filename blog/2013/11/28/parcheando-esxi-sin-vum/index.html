@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Parcheando ESXi 5.X sin VUM - a t a s c o</title>
+  <meta name="author" content="alcher">
+
+  
+  <meta name="description" content="Parcheando ESXi 5.X Sin VUM 28 Nov 2013 En ocasiones, aplicar parches a los servidores ESXi 5.X no es sencillo cuando no se dispone de un vCenter ( &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://atasco.github.io/blog/2013/11/28/parcheando-esxi-sin-vum">
+  <link href="/favicon.png" rel="icon">
+  <link href='http://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="a t a s c o" type="application/atom+xml">
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/js/jquery.js"></script>
+  <script src="/js/bootstrap-collapse.js"></script>
+  <script src="/js/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/js/octopress.js" type="text/javascript"></script>
+  <script src="/js/jquery.cookieBar.js" type="text/javascript"></script>
+  <link href="/stylesheets/cookieBar.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $.cookieBar();
+    });
+  </script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <div class="navbar navbar-inverse navbar-static-top">
+  	<div class="navbar-inner">
+  	  <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+          <span class="fui-menu-24"></span>
+        </a>
+  	  	<div class="nav-collapse collapse navbar-responsive-collapse" style="height:0;">
+  	      <ul class="nav">
+    
+        <li ><a href="/index.html">atasco</a></li>
+    
+        <li ><a href="/blog/archives/index.html">entradas</a></li>
+    
+</ul>
+
+<ul class="nav pull-right">
+    
+    <li><a href="http://github.com/atasco" title="Github Profile"><i class="icon-github-sign social-navbar"></i></a></li>
+    
+    
+    <li><a href="http://linkedin.com/in/jaalcaldehernando" title="Linkedin Profile"><i class="icon-linkedin-sign social-navbar"></i></a></li>
+    
+    
+    <li><a href="http://twitter.com/by_atasco" title="Twitter Profile"><i class="icon-twitter-sign social-navbar"></i></a></li>
+    
+    
+    
+</ul>
+
+  	    </div>
+  	  </div>
+  	</div>
+  </div>
+  <div class="container" id="main">
+    <div class="span12">
+      <div class="row-fluid">
+        <div id="content">
+          <div>
+<article class="hentry" role="article">
+  
+
+  <header>
+  <div class="jumbotron">
+    Parcheando ESXi 5.X Sin VUM
+	<h5>
+
+
+
+
+
+
+
+
+  
+
+
+<i class="icon-calendar-empty"></i> <time datetime="2013-11-28T18:30:00+01:00" pubdate data-updated="true">28 Nov 2013</time></h5>
+  </div>
+</header>
+  <div class="row-fluid">
+    <div class="span12">
+      <p>En ocasiones, aplicar parches a los servidores <strong>ESXi 5.X</strong> no es sencillo cuando no se dispone de un vCenter (con vSphere Update Manager, VUM), tal como ocurre en los entornos de laboratorio formados por ESXi independientes.</p>
+
+<p>Vamos a ver como es posible aplicar los parches a los servidores ESXi de manera sencilla siguiendo los pasos siguientes.</p>
+
+<!-- more -->
+
+
+<h2>Requisito previo</h2>
+
+<p>Es necesario tener acceso vía SSH al servidor, para habilitarlo tenemos dos opciones:</p>
+
+<h3>A través del vSphere Client</h3>
+
+<ol>
+<li>Abrimos sesión en el servidor ESXi con el cliente</li>
+<li>Seleccionamos la pestaña <em>Configuration</em> y pinchamos en <em>Security Profile</em></li>
+<li>Pinchar en <em>Properties</em> en la esquina superior derecha y seleccionar el servicio <em>SSH</em> pulsando el botón <em>Options</em></li>
+<li>Desde aqui se puede arrancar el servicio y seleccionar las opciones de arranque del mismo</li>
+</ol>
+
+
+<h3>A través de la consola del servidor ESXi</h3>
+
+<ol>
+<li>Pulsar <em>F2</em> para acceder al menu de configuración</li>
+<li>Seleccionar <em>Troubleshooting Options</em></li>
+<li>Desde el menu de opciones seleccionar <em>Enable SSH</em></li>
+</ol>
+
+
+<h2>Dejar los parches en un Datastore accesible desde el servidor ESXi</h2>
+
+<p>Una vez que se descargan los parches desde la <a href="http://www.vmware.com/patch/download">web de vmware</a>, hay que dejarlos accesibles al servidor ESXi donde se van a aplicar.</p>
+
+<blockquote><p>Es conveniente crear una carpeta en el datastore para dejarlos y poder aplicarlos posteriormente.</p></blockquote>
+
+<h2>Aplicar los parches</h2>
+
+<p>Antes de aplicar los parches hay que apagar de forma ordenada todas las máquinas virtuales que están en el servidor.</p>
+
+<p>Conectarse por SSH al servidor ESXi y aplicar los parches mediante el comando:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>esxcli software vib update /vmfs/volumes/parches/&lt;your-upgrade-bundle.zip></span></code></pre></td></tr></table></div></figure>
+
+
+<p>Una vez que finaliza la aplicación del parche, aparecerá un mensaje indicándolo y solicitando el reinicio del servidor.</p>
+
+<h2>Referencias</h2>
+
+<p><a href="http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&amp;cmd=displayKC&amp;externalId=2004746">Using ESXi Shell in ESXi 5.0 and 5.1</a></p>
+
+<p><a href="http://communities.vmware.com/thread/328758">How to patch ESXi 5 en VMWare Communities</a></p>
+
+    </div>
+  </div>
+
+
+
+  <footer>
+    <hr>
+    
+    <div class="row-fluid">
+      
+      <div class="span6">
+        <p class="meta">
+        
+        
+
+
+
+  <a href="/blog/categories/vmware/"><span class="badge">vmware</span></a>
+
+
+
+
+        </p>
+      </div>
+      
+      <div class="span6 social-sharing">
+        <div class="sharing">
+  <div class="addthis_toolbox addthis_default_style ">
+  
+  
+  <a class="addthis_button_tweet"></a>
+  
+  
+  <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+      </div>
+      
+      
+    </div>
+    
+    <div class="row-fluid">
+      <div class="span12">
+        <p class="meta">
+          
+            <a class="basic-alignment left" href="/blog/2013/09/08/odio-las-lunes/" title="Previous Post: Odio las LUNes!">&laquo; Odio las LUNes!</a>
+          
+          
+            <a class="basic-alignment right" href="/blog/2014/03/12/switch-unicast/" title="Next Post: Tráfico unicast en switches">Tráfico unicast en switches &raquo;</a>
+          
+        </p>
+      </div>
+    </div>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comentarios</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+
+
+        </div>
+      </div>
+      <div class="row-fluid">
+        <footer class="footer-page" role="contentinfo">
+          <p>
+  Copyright &copy; 2014 - alcher - <a href="/politica-de-cookies">Política de Cookies</a> -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> and <a href="http://alexgaribay.com">Octoflat</a>
+</p>
+
+
+        </footer>
+      </div>
+    </div>
+  </div>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'atasco';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://atasco.github.io/blog/2013/11/28/parcheando-esxi-sin-vum/';
+        var disqus_url = 'http://atasco.github.io/blog/2013/11/28/parcheando-esxi-sin-vum/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
