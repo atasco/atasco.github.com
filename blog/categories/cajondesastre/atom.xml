@@ -4,10 +4,10 @@
   <title><![CDATA[Categoría: cajondesastre | a t a s c o]]></title>
   <link href="http://atasco.github.io/blog/categories/cajondesastre/atom.xml" rel="self"/>
   <link href="http://atasco.github.io/"/>
-  <updated>2014-06-06T20:51:53+02:00</updated>
+  <updated>2014-06-07T18:24:14+02:00</updated>
   <id>http://atasco.github.io/</id>
   <author>
-    <name><![CDATA[alcher]]></name>
+    <name><![CDATA[aH]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
@@ -60,7 +60,7 @@
     <link href="http://atasco.github.io/blog/2013/06/11/luces-camara-accion/"/>
     <updated>2013-06-11T22:44:00+02:00</updated>
     <id>http://atasco.github.io/blog/2013/06/11/luces-camara-accion</id>
-    <content type="html"><![CDATA[<p> {% img left /images/posts/lca.jpg &lsquo;Luces, Cámara, Acción&rsquo; %}</p>
+    <content type="html"><![CDATA[<p> <img class="left" src="/images/posts/lca.jpg" title="&lsquo;Luces, Cámara, Acción&rsquo;" ></p>
 
 <p><strong><em>El personal se ubica en sus puestos y todo está listo para comenzar el rodaje.</em></strong></p>
 
