@@ -6,7 +6,7 @@ url: http://atasco.github.io
 # url: http://www.atas.co
 title: a t a s c o
 subtitle: m. Dificultad que retrasa la marcha de un asunto
-author: alcher
+author: aH
 simple_search: http://google.com/search
 description:
 
@@ -108,7 +108,7 @@ disqus_short_name: atasco
 disqus_show_comment_count: false
 
 # Google Analytics
-# google_analytics_tracking_id: UA-46205791-1
+google_analytics_tracking_id: UA-46205791-1
 
 # Facebook Like
 facebook_like: false
