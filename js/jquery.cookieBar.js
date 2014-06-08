@@ -45,7 +45,7 @@
   // self injection init
   $.cookieBar = function( options ) {  
 	// $('body').prepend('<div class="ui-widget"><div style="display: none;" class="cookie-message ui-widget-header blue"><p>By using this website you allow us to place cookies on your computer. They are harmless and never personally identify you.</p></div></div>');
-        $('body').prepend('<div class="ui-widget"><div style="display: none;" class="cookie-message ui-widget-header blue"><p>En este sitio usamos Cookies...si sigues navegando entendemos que aceptas nuestra política.</p></div></div>'); 
+        $('body').prepend('<div class="ui-widget"><div style="display: none;" class="cookie-message ui-widget-header blue"><p>Esta página web utiliza cookies...si sigues navegando aceptas el uso de las mismas tal como se detalla en la Política de Cookies.</p></div></div>'); 
 	$('.cookie-message').cookieBar(options);
   };
 })( jQuery );

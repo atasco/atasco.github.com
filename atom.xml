@@ -4,7 +4,7 @@
   <title><![CDATA[a t a s c o]]></title>
   <link href="http://atasco.github.io/atom.xml" rel="self"/>
   <link href="http://atasco.github.io/"/>
-  <updated>2014-06-07T18:24:14+02:00</updated>
+  <updated>2014-06-08T22:32:18+02:00</updated>
   <id>http://atasco.github.io/</id>
   <author>
     <name><![CDATA[aH]]></name>
@@ -12,6 +12,103 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress y las Cookies]]></title>
+    <link href="http://atasco.github.io/blog/2014/06/08/octopress-y-las-cookies/"/>
+    <updated>2014-06-08T20:20:00+02:00</updated>
+    <id>http://atasco.github.io/blog/2014/06/08/octopress-y-las-cookies</id>
+    <content type="html"><![CDATA[<p>Vaya despiste, ha pasado casi un año de la apertura y puesta en largo del blog y hasta ahora no había hecho los cambios necesarios para cumplir con <em>La Ley de Cookies</em><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>.</p>
+
+<blockquote><p>Esa que nos amarga la vida cada vez que entramos en una página web haciéndonos aceptar si o sí la correspondiente política si queremos seguir consultando el contenido.</p></blockquote>
+
+<p><img class="left" src="http://atasco.github.io/images/posts/cookie.gif" title="'Galleta!'" ></p>
+
+<p>Como con casi todo lo referente a <a href="http://octopress.org/">octopress</a>, no sólo hay mucha información en la web para documentarse y solucionar cualquier problema, si no que hay desarrollos libres que resuelven el problema directamente.</p>
+
+<p>En esta entrada voy a documentar de forma sencilla la solución que se ha implementado para cumplir con la <em>Ley de Cookies</em><sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup> en esta web.</p>
+
+<!-- more -->
+
+
+<p>Vamos al grano, hay un plugin de <a href="http://www.carlwoodhouse.com/">Carl Woodhouse</a> que se puede encontrar en su repositorio de GitHub <a href="https://github.com/carlwoodhouse/jquery.cookieBar">carlwoodhouse</a> que, como el mismo indica, es perfecto para implementar <em>La Ley de Cookies Europea</em>.</p>
+
+<p>Hacer uso del plugin es tan sencillo como <a href="https://github.com/carlwoodhouse/jquery.cookieBar/tarball/master">descargarlo</a> y copiarlo al directorio de plugins:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>cp jquery.cookieBar.js <span class="nv">$HOME_OCTOPRESS</span>/source/js/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Si se quiere utilizar la hoja de estilo que viene con el plugin, hay que copiarla al directorio correspondiente:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>cp cookieBar.css <span class="nv">$HOME_OCTOPRESS</span>/source/stylesheets/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ahora hay que incluir las referencias al script y la hoja de estilo, así como la llamada, después de la librería <em>jQuery</em> en el fichero <em>head</em>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>vi <span class="nv">$HOME_OCTOPRESS</span>/source/_includes/head.html
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>introduciendo las líneas:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&lt;script <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;/js/jquery.cookieBar.js&quot;</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span>&gt;&lt;/script&gt;
+</span><span class='line'>&lt;link <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;/stylesheets/cookieBar.css&quot;</span> <span class="nv">media</span><span class="o">=</span><span class="s2">&quot;screen, projection&quot;</span> <span class="nv">rel</span><span class="o">=</span><span class="s2">&quot;stylesheet&quot;</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/css&quot;</span>&gt;
+</span><span class='line'>&lt;script <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span>&gt;
+</span><span class='line'>    <span class="k">$(</span>document<span class="k">)</span>.ready<span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="nv">$.</span>cookieBar<span class="o">()</span>;
+</span><span class='line'>    <span class="o">})</span>;
+</span><span class='line'>&lt;/script&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>después de:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&lt;script <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js&quot;</span>&gt;&lt;/script&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Para cambiar el texto que aparece en el banner de aceptación se edita el script:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>vi <span class="nv">$HOME_OCTOPRESS</span>/source/js/jquery.cookieBar.js
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>cambiando el texto:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>// <span class="k">$(</span><span class="s1">&#39;body&#39;</span><span class="k">)</span>.prepend<span class="o">(</span><span class="s1">&#39;&lt;div class=&quot;ui-widget&quot;&gt;&lt;div style=&quot;display: none;&quot; class=&quot;cookie-message ui-widget-header blue&quot;&gt;&lt;p&gt;By using this website you allow us to place cookies on your computer. They are harmless and never personally identify you.&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&#39;</span><span class="o">)</span>;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sólo nos queda crear una página con la información relativa a la política de cookies, en <strong>atas.co</strong> tenemos <a href="http://atas.co/politica-de-cookies">Política de Cookies</a>.</p>
+
+<p>Generando de nuevo el site tendremos una estupenda cabecera indicando la aceptación del uso de cookies en la página web.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>En Internet hay mucha información y mucho más detallada y precisa de la que yo pueda incluir aquí. Una sencilla búsqueda como <a href="https://duckduckgo.com/?q=ley+de+cookies+en+espa%C3%B1a">esta</a> devuelve una cantidad impresionante de fuentes desde la que comenzar la  apasionante puesta al día en <em>la vida, las cookies y cómo he podido vivir si la aplicación de la ley de cookies hasta este momento</em>.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p><a href="http://www.agpd.es/portalwebAGPD/canaldocumentacion/publicaciones/index-ides-idphp.php">Aquí</a> hay un documento <em>&ldquo;Guía sobre el uso de las cookies&rdquo;</em> donde se explica qué y cómo hacer uso de los dulces sin azúcar que se comen los navegadores. <a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Backup de postgresql en VCSA]]></title>

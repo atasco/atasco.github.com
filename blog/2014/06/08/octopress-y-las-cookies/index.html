@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Backup de postgresql en VCSA - a t a s c o</title>
+  <title>Octopress y las Cookies - a t a s c o</title>
   <meta name="author" content="aH">
 
   
-  <meta name="description" content="Backup De Postgresql en VCSA 23 May 2014 Cuando se realiza el despliegue de un vCenter con el appliance de VMWare (vCenter Server Appliance 5.X) es &hellip;">
+  <meta name="description" content="Octopress Y Las Cookies 08 Jun 2014 Vaya despiste, ha pasado casi un año de la apertura y puesta en largo del blog y hasta ahora no había hecho los &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://atasco.github.io/blog/2014/05/23/backup-de-postgresql-en-vcsa">
+  <link rel="canonical" href="http://atasco.github.io/blog/2014/06/08/octopress-y-las-cookies">
   <link href="/favicon.png" rel="icon">
   <link href='http://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
@@ -102,7 +102,7 @@
 
   <header>
   <div class="jumbotron">
-    Backup De Postgresql en VCSA
+    Octopress Y Las Cookies
 	<h5>
 
 
@@ -115,122 +115,97 @@
   
 
 
-<i class="icon-calendar-empty"></i> <time datetime="2014-05-23T21:13:51+02:00" pubdate data-updated="true">23 May 2014</time></h5>
+<i class="icon-calendar-empty"></i> <time datetime="2014-06-08T20:20:00+02:00" pubdate data-updated="true">08 Jun 2014</time></h5>
   </div>
 </header>
   <div class="row-fluid">
     <div class="span12">
-      <p>Cuando se realiza el despliegue de un vCenter con el appliance de VMWare (vCenter Server Appliance 5.X) es interesante (cuando no imprescindible) realizar backups periódicos de la base de datos incorporada (postgresql)<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> con el fin de poder hacer una recuperación rápida en caso de <em>accidente</em>.</p>
+      <p>Vaya despiste, ha pasado casi un año de la apertura y puesta en largo del blog y hasta ahora no había hecho los cambios necesarios para cumplir con <em>La Ley de Cookies</em><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>.</p>
 
-<p>En esta entrada se recoge la forma de hacer esta copia de seguridad así como la recuperación correspondiente si llega a ser necesario.</p>
+<blockquote><p>Esa que nos amarga la vida cada vez que entramos en una página web haciéndonos aceptar si o sí la correspondiente política si queremos seguir consultando el contenido.</p></blockquote>
+
+<p><img class="left" src="/images/posts/cookie.gif" title="'Galleta!'" ></p>
+
+<p>Como con casi todo lo referente a <a href="http://octopress.org/">octopress</a>, no sólo hay mucha información en la web para documentarse y solucionar cualquier problema, si no que hay desarrollos libres que resuelven el problema directamente.</p>
+
+<p>En esta entrada voy a documentar de forma sencilla la solución que se ha implementado para cumplir con la <em>Ley de Cookies</em><sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup> en esta web.</p>
 
 <!-- more -->
 
 
-<h2>Requisito previo</h2>
+<p>Vamos al grano, hay un plugin de <a href="http://www.carlwoodhouse.com/">Carl Woodhouse</a> que se puede encontrar en su repositorio de GitHub <a href="https://github.com/carlwoodhouse/jquery.cookieBar">carlwoodhouse</a> que, como el mismo indica, es perfecto para implementar <em>La Ley de Cookies Europea</em>.</p>
 
-<p>Es preciso disponer de acceso vía SSH al vCenter. Para habilitarlo:</p>
-
-<ol>
-<li>Acceder a la consola web del VCSA (<a href="https://VCSA:5480">https://VCSA:5480</a>)</li>
-<li>En la pestaña <em>Admin</em>, pulsar <em>Toggle SSH login</em> para permitir acceder al servidor a través de SSH</li>
-</ol>
-
-
-<h2>Copia</h2>
-
-<p><strong>1.</strong> Acceder al vCenter e ir al directorio donde se encuentran los binarios de postgresql:</p>
+<p>Hacer uso del plugin es tan sencillo como <a href="https://github.com/carlwoodhouse/jquery.cookieBar/tarball/master">descargarlo</a> y copiarlo al directorio de plugins:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">cd</span> /opt/vmware/vpostgres/1.0/bin
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>cp jquery.cookieBar.js <span class="nv">$HOME_OCTOPRESS</span>/source/js/
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>2.</strong> Para ver la configuración de la base de datos ejecutar el comando:</p>
+<p>Si se quiere utilizar la hoja de estilo que viene con el plugin, hay que copiarla al directorio correspondiente:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>cat /etc/vmware-vpx/embedded_db.cfg
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>cp cookieBar.css <span class="nv">$HOME_OCTOPRESS</span>/source/stylesheets/
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>3.</strong> Parar el servicio del vCenter:</p>
+<p>Ahora hay que incluir las referencias al script y la hoja de estilo, así como la llamada, después de la librería <em>jQuery</em> en el fichero <em>head</em>:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>service vmware-vpxd stop
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>vi <span class="nv">$HOME_OCTOPRESS</span>/source/_includes/head.html
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>4.</strong> Realizar la copia:</p>
+<p>introduciendo las líneas:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>./pg_dump EMB_DB_INSTANCE -U EMB_DB_USER -Fp -c &gt; VCDBBackupFile
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&lt;script <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;/js/jquery.cookieBar.js&quot;</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span>&gt;&lt;/script&gt;
+</span><span class='line'>&lt;link <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;/stylesheets/cookieBar.css&quot;</span> <span class="nv">media</span><span class="o">=</span><span class="s2">&quot;screen, projection&quot;</span> <span class="nv">rel</span><span class="o">=</span><span class="s2">&quot;stylesheet&quot;</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/css&quot;</span>&gt;
+</span><span class='line'>&lt;script <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span>&gt;
+</span><span class='line'>    <span class="k">$(</span>document<span class="k">)</span>.ready<span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="nv">$.</span>cookieBar<span class="o">()</span>;
+</span><span class='line'>    <span class="o">})</span>;
+</span><span class='line'>&lt;/script&gt;
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Donde <em>EMB_DB_INSTANCE</em> y <em>EMB_DB_USER</em> se sustituyen por los valores obtenidos en el punto <strong>[2]</strong>. <em>VCDBBackupFile</em> es el nombre del fichero donde se guardará el backup.</p>
-
-<blockquote><p>./pg_dump VCDB -U postgres -Fp -c > /tmp/VCDBackUp</p></blockquote>
-
-<p><strong>5.</strong> Arrancar el servicio del vCenter:</p>
+<p>después de:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>service vmware-vpxd start
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&lt;script <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js&quot;</span>&gt;&lt;/script&gt;
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>Recuperación</h2>
-
-<p><strong>1.</strong> Acceder al vCenter e ir al directorio donde se encuentran los binarios de postgresql:</p>
+<p>Para cambiar el texto que aparece en el banner de aceptación se edita el script:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">cd</span> /opt/vmware/vpostgres/1.0/bin
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>vi <span class="nv">$HOME_OCTOPRESS</span>/source/js/jquery.cookieBar.js
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>2.</strong> Para ver la configuración de la base de datos ejecutar el comando:</p>
+<p>cambiando el texto:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>cat /etc/vmware-vpx/embedded_db.cfg
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>// <span class="k">$(</span><span class="s1">&#39;body&#39;</span><span class="k">)</span>.prepend<span class="o">(</span><span class="s1">&#39;&lt;div class=&quot;ui-widget&quot;&gt;&lt;div style=&quot;display: none;&quot; class=&quot;cookie-message ui-widget-header blue&quot;&gt;&lt;p&gt;By using this website you allow us to place cookies on your computer. They are harmless and never personally identify you.&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&#39;</span><span class="o">)</span>;
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>3.</strong> Parar el servicio del vCenter:</p>
+<p>Sólo nos queda crear una página con la información relativa a la política de cookies, en <strong>atas.co</strong> tenemos <a href="http://atas.co/politica-de-cookies">Política de Cookies</a>.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>service vmware-vpxd stop
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>4.</strong> Restaurar la copia:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">PGPASSWORD</span><span class="o">=</span><span class="s1">&#39;EMB_DB_PASSWORD&#39;</span> ./psql -d EMB_DB_INSTANCE -Upostgres -f VCDBBackupFile
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Donde <em>PGPASSWORD</em> y <em>EMB_DB_INSTANCE</em> se sustituyen por los valores obtenidos en el punto <strong>[2]</strong>. <em>VCDBBackupFile</em> es el nombre del fichero donde se ha guardado previamente el backup.</p>
-
-<p>Utilizar comillas simples <strong>[&lsquo;]</strong> con la password tal como aparecece en el fichero de configuración del punto <strong>[2]</strong>.</p>
-
-<blockquote><p>PGPASSWORD=<code>'g&lt;T4EuybGsA=kG$G'</code> ./psql -d VCDB -U postgres -f /tmp/VCDBackUp</p></blockquote>
-
-<p><strong>5.</strong> Arrancar el servicio del vCenter:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>service vmware-vpxd start
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Referencias</h2>
-
-<p><a href="http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&amp;cmd=displayKC&amp;externalId=2034505">Backing up and restoring the vCenter Server Appliance (vPostgres) database (2034505)</a></p>
-
-<p><a href="http://pubs.vmware.com/vsphere-55/index.jsp?topic=%2Fcom.vmware.vsphere.vcenterhost.doc%2FGUID-8DC793FF-1E00-43A1-B85C-070414B9F9B0.html&amp;resultof=%22Enable%22%20%22enabl%22%20%22Disable%22%20%22disabl%22%20%22SSH%22%20%22ssh%22">Enable or Disable SSH Administrator Login on the VMware vCenter Server Appliance</a></p>
+<p>Generando de nuevo el site tendremos una estupenda cabecera indicando la aceptación del uso de cookies en la página web.</p>
 <div class="footnotes">
 <hr/>
 <ol>
 <li id="fn:1">
-<p>Si en la instalación se decide hacer uso de la misma, ya que también existe la posibilidad de utilizar otros motores de bases de datos como <a href="http://es.wikipedia.org/wiki/Oracle_Database">oracle</a>.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<p>En Internet hay mucha información y mucho más detallada y precisa de la que yo pueda incluir aquí. Una sencilla búsqueda como <a href="https://duckduckgo.com/?q=ley+de+cookies+en+espa%C3%B1a">esta</a> devuelve una cantidad impresionante de fuentes desde la que comenzar la  apasionante puesta al día en <em>la vida, las cookies y cómo he podido vivir si la aplicación de la ley de cookies hasta este momento</em>.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p><a href="http://www.agpd.es/portalwebAGPD/canaldocumentacion/publicaciones/index-ides-idphp.php">Aquí</a> hay un documento <em>&ldquo;Guía sobre el uso de las cookies&rdquo;</em> donde se explica qué y cómo hacer uso de los dulces sin azúcar que se comen los navegadores. <a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
@@ -252,7 +227,7 @@
 
 
 
-  <a href="/blog/categories/vmware/"><span class="badge">vmware</span></a>
+  <a href="/blog/categories/cajondesastre/"><span class="badge">cajondesastre</span></a>
 
 
 
@@ -282,10 +257,8 @@
       <div class="span12">
         <p class="meta">
           
-            <a class="basic-alignment left" href="/blog/2014/03/12/switch-unicast/" title="Previous Post: Tráfico unicast en switches">&laquo; Tráfico unicast en switches</a>
+            <a class="basic-alignment left" href="/blog/2014/05/23/backup-de-postgresql-en-vcsa/" title="Previous Post: Backup de postgresql en VCSA">&laquo; Backup de postgresql en VCSA</a>
           
-          
-            <a class="basic-alignment right" href="/blog/2014/06/08/octopress-y-las-cookies/" title="Next Post: Octopress y las Cookies">Octopress y las Cookies &raquo;</a>
           
         </p>
       </div>
@@ -325,8 +298,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://atasco.github.io/blog/2014/05/23/backup-de-postgresql-en-vcsa/';
-        var disqus_url = 'http://atasco.github.io/blog/2014/05/23/backup-de-postgresql-en-vcsa/';
+        var disqus_identifier = 'http://atasco.github.io/blog/2014/06/08/octopress-y-las-cookies/';
+        var disqus_url = 'http://atasco.github.io/blog/2014/06/08/octopress-y-las-cookies/';
         var disqus_script = 'embed.js';
       
     (function () {

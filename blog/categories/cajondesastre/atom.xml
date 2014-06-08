@@ -4,7 +4,7 @@
   <title><![CDATA[Categoría: cajondesastre | a t a s c o]]></title>
   <link href="http://atasco.github.io/blog/categories/cajondesastre/atom.xml" rel="self"/>
   <link href="http://atasco.github.io/"/>
-  <updated>2014-06-07T18:24:14+02:00</updated>
+  <updated>2014-06-08T22:32:19+02:00</updated>
   <id>http://atasco.github.io/</id>
   <author>
     <name><![CDATA[aH]]></name>
@@ -12,6 +12,99 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress y las Cookies]]></title>
+    <link href="http://atasco.github.io/blog/2014/06/08/octopress-y-las-cookies/"/>
+    <updated>2014-06-08T20:20:00+02:00</updated>
+    <id>http://atasco.github.io/blog/2014/06/08/octopress-y-las-cookies</id>
+    <content type="html"><![CDATA[<p>Vaya despiste, ha pasado casi un año de la apertura y puesta en largo del blog y hasta ahora no había hecho los cambios necesarios para cumplir con <em>La Ley de Cookies</em><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>.</p>
+
+<blockquote><p>Esa que nos amarga la vida cada vez que entramos en una página web haciéndonos aceptar si o sí la correspondiente política si queremos seguir consultando el contenido.</p></blockquote>
+
+<p>{% img left /images/posts/cookie.gif &lsquo;Galleta!&rsquo; %}</p>
+
+<p>Como con casi todo lo referente a <a href="http://octopress.org/">octopress</a>, no sólo hay mucha información en la web para documentarse y solucionar cualquier problema, si no que hay desarrollos libres que resuelven el problema directamente.</p>
+
+<p>En esta entrada voy a documentar de forma sencilla la solución que se ha implementado para cumplir con la <em>Ley de Cookies</em><sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup> en esta web.</p>
+
+<!-- more -->
+
+
+<p>Vamos al grano, hay un plugin de <a href="http://www.carlwoodhouse.com/">Carl Woodhouse</a> que se puede encontrar en su repositorio de GitHub <a href="https://github.com/carlwoodhouse/jquery.cookieBar">carlwoodhouse</a> que, como el mismo indica, es perfecto para implementar <em>La Ley de Cookies Europea</em>.</p>
+
+<p>Hacer uso del plugin es tan sencillo como <a href="https://github.com/carlwoodhouse/jquery.cookieBar/tarball/master">descargarlo</a> y copiarlo al directorio de plugins:</p>
+
+<p><code>sh
+cp jquery.cookieBar.js $HOME_OCTOPRESS/source/js/
+</code></p>
+
+<p>Si se quiere utilizar la hoja de estilo que viene con el plugin, hay que copiarla al directorio correspondiente:</p>
+
+<p><code>sh
+cp cookieBar.css $HOME_OCTOPRESS/source/stylesheets/
+</code></p>
+
+<p>Ahora hay que incluir las referencias al script y la hoja de estilo, así como la llamada, después de la librería <em>jQuery</em> en el fichero <em>head</em>:</p>
+
+<p><code>sh
+vi $HOME_OCTOPRESS/source/_includes/head.html
+</code></p>
+
+<p>introduciendo las líneas:</p>
+
+<p>```</p>
+
+<script src="{{ root_url }}/js/jquery.cookieBar.js" type="text/javascript"></script>
+
+
+<p><link href="{{ root_url }}/stylesheets/cookieBar.css" media="screen, projection" rel="stylesheet" type="text/css"></p>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+      $.cookieBar();
+    });
+</script>
+
+
+<p>```</p>
+
+<p>después de:</p>
+
+<p>```</p>
+
+<script src="http://atasco.github.io//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+<p>```</p>
+
+<p>Para cambiar el texto que aparece en el banner de aceptación se edita el script:</p>
+
+<p><code>sh
+vi $HOME_OCTOPRESS/source/js/jquery.cookieBar.js
+</code></p>
+
+<p>cambiando el texto:</p>
+
+<p><code>
+// $('body').prepend('&lt;div class="ui-widget"&gt;&lt;div style="display: none;" class="cookie-message ui-widget-header blue"&gt;&lt;p&gt;By using this website you allow us to place cookies on your computer. They are harmless and never personally identify you.&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;');
+</code></p>
+
+<p>Sólo nos queda crear una página con la información relativa a la política de cookies, en <strong>atas.co</strong> tenemos <a href="http://atas.co/politica-de-cookies">Política de Cookies</a>.</p>
+
+<p>Generando de nuevo el site tendremos una estupenda cabecera indicando la aceptación del uso de cookies en la página web.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>En Internet hay mucha información y mucho más detallada y precisa de la que yo pueda incluir aquí. Una sencilla búsqueda como <a href="https://duckduckgo.com/?q=ley+de+cookies+en+espa%C3%B1a">esta</a> devuelve una cantidad impresionante de fuentes desde la que comenzar la  apasionante puesta al día en <em>la vida, las cookies y cómo he podido vivir si la aplicación de la ley de cookies hasta este momento</em>.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p><a href="http://www.agpd.es/portalwebAGPD/canaldocumentacion/publicaciones/index-ides-idphp.php">Aquí</a> hay un documento <em>&ldquo;Guía sobre el uso de las cookies&rdquo;</em> donde se explica qué y cómo hacer uso de los dulces sin azúcar que se comen los navegadores. <a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Cómo se hizo]]></title>
@@ -60,7 +153,7 @@
     <link href="http://atasco.github.io/blog/2013/06/11/luces-camara-accion/"/>
     <updated>2013-06-11T22:44:00+02:00</updated>
     <id>http://atasco.github.io/blog/2013/06/11/luces-camara-accion</id>
-    <content type="html"><![CDATA[<p> <img class="left" src="/images/posts/lca.jpg" title="&lsquo;Luces, Cámara, Acción&rsquo;" ></p>
+    <content type="html"><![CDATA[<p> {% img left /images/posts/lca.jpg &lsquo;Luces, Cámara, Acción&rsquo; %}</p>
 
 <p><strong><em>El personal se ubica en sus puestos y todo está listo para comenzar el rodaje.</em></strong></p>
 
