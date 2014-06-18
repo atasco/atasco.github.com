@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Backup de postgresql en VCSA - a t a s c o</title>
+  <title>screen, la pantalla indiscreta - a t a s c o</title>
   <meta name="author" content="aH">
 
   
-  <meta name="description" content="Backup De Postgresql en VCSA 23 May 2014 Cuando se realiza el despliegue de un vCenter con el appliance de VMWare (vCenter Server Appliance 5.X) es &hellip;">
+  <meta name="description" content="Screen, La Pantalla Indiscreta 18 Jun 2014 Antes de preparar una serie de entradas dedicadas a la configuración y despliegue de switches (Cisco &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://atasco.github.io/blog/2014/05/23/backup-de-postgresql-en-vcsa">
+  <link rel="canonical" href="http://atasco.github.io/blog/2014/06/18/screen-la-pantalla-indiscreta">
   <link href="/favicon.png" rel="icon">
   <link href='http://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
@@ -103,7 +103,7 @@
 
   <header>
   <div class="jumbotron">
-    Backup De Postgresql en VCSA
+    Screen, La Pantalla Indiscreta
 	<h5>
 
 
@@ -116,122 +116,140 @@
   
 
 
-<i class="icon-calendar-empty"></i> <time datetime="2014-05-23T21:13:51+02:00" pubdate data-updated="true">23 May 2014</time></h5>
+<i class="icon-calendar-empty"></i> <time datetime="2014-06-18T22:30:00+02:00" pubdate data-updated="true">18 Jun 2014</time></h5>
   </div>
 </header>
   <div class="row-fluid">
     <div class="span12">
-      <p>Cuando se realiza el despliegue de un vCenter con el appliance de VMWare (vCenter Server Appliance 5.X) es interesante (cuando no imprescindible) realizar backups periódicos de la base de datos incorporada (postgresql)<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> con el fin de poder hacer una recuperación rápida en caso de <em>accidente</em>.</p>
+      <p><img class="right" src="/images/posts/screen.png" title="'screen'" ></p>
 
-<p>En esta entrada se recoge la forma de hacer esta copia de seguridad así como la recuperación correspondiente si llega a ser necesario.</p>
+<p>Antes de preparar una serie de entradas dedicadas a la configuración y despliegue de switches <em>(Cisco Catalyst)</em> voy a dedicar algunos artículos a la herramienta que utilizo para hacer estas tareas.</p>
+
+<p>La herramienta básica y más importante, al menos durante las labores de configuración inicial, es un cliente que nos permita establecer una conexión vía consola con los switches. Aunque hay muchas alternativas<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>, existe una aplicación que por su potencia y versatilidad no debería faltar en ningún equipo que funcione con LiNUX, <a href="http://linux.die.net/man/1/screen">screen</a>.</p>
+
+<p>En este primer post dedicado a <em>screen</em> vamos a ver su funcionalidad como cliente para conectarse a una consola serie junto con los comandos más habituales para trabajar de forma cómoda.</p>
 
 <!-- more -->
 
 
-<h2>Requisito previo</h2>
+<p><em>Screen</em> es una herramienta muy polivalente que nos permite disponer de múltiples ventanas (<a href="https://es.wikipedia.org/wiki/Shell_de_UNIX">shells</a>) dentro de una sesión, con la peculiaridad de que lo que se está ejecutando en estas ventanas se puede mantener en ejecución al abandonarlas. No sólo eso, podemos volver a conectarnos desde cualquier otra consola a una sesión previamente establecida retomando el estado de las ventanas tal como se encontraban al dejarlas.</p>
 
-<p>Es preciso disponer de acceso vía SSH al vCenter. Para habilitarlo:</p>
+<p>Además de lo anterior, que de por sí ya es una funcionalidad más que interesante en el trabajo con servidores, nos permite establecer conexiones a través del puerto serie (puerto de consola en switches) con todos aquellos dispositivos que dispongan de este tipo de conectores.</p>
+
+<h2>Conceptos</h2>
 
 <ol>
-<li>Acceder a la consola web del VCSA (<a href="https://VCSA:5480">https://VCSA:5480</a>)</li>
-<li>En la pestaña <em>Admin</em>, pulsar <em>Toggle SSH login</em> para permitir acceder al servidor a través de SSH</li>
+<li><strong>Sesión:</strong> Es el área de trabajo creada al ejecutar el comando.</li>
+<li><strong>Ventana:</strong> Son las <em>shells</em> que se abren dentro de la sesión.</li>
 </ol>
 
 
-<h2>Copia</h2>
+<p>También es posible mantener varias ventanas en la misma sesión separadas en <strong>regiones</strong> (horizontales y/o verticales).</p>
 
-<p><strong>1.</strong> Acceder al vCenter e ir al directorio donde se encuentran los binarios de postgresql:</p>
+<h2>Conexión a una consola serie</h2>
+
+<p>Antes de lanzar el comando para conectarnos a la consola del switch, hay que identificar en el ordenador el dispositivo serie:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">cd</span> /opt/vmware/vpostgres/1.0/bin
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>dmesg | grep tty
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>2.</strong> Para ver la configuración de la base de datos ejecutar el comando:</p>
+<p>Este comando nos devolverá el dispositivo con una nomenclatura del tipo <code>ttySX</code> o <code>ttyUSBX</code>(donde <em>X</em> es un valor numérico, habitualmente 0).</p>
+
+<p>Con esta información ya podemos utilizar el comando <em>screen</em> para conectarnos:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>cat /etc/vmware-vpx/embedded_db.cfg
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>screen /dev/ttyXXXX baud_rate,cs8|cs7,ixon|-ixon,ixoff|-ixoff,istrip|-istrip
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>3.</strong> Parar el servicio del vCenter:</p>
+<p>Donde:</p>
+
+<p><code>/dev/ttyXXXX</code>: Puerto serie. <br/>
+<code>baud_rate</code>: Habitualmente 300, 1200, 9600 o 19200. <br/>
+<code>cs8</code> o <code>cs7</code>: Transmisión de 8 o 7 bits por byte. <br/>
+<code>ixon</code> o <code>-ixon</code>: Habilita o deshabilita el control de flujo por software (en envío). <br/>
+<code>ixoff</code> o <code>-ixoff</code>: Habilita o deshabilita el control de flujo por software (en recepción). <br/>
+<code>istrip</code> o <code>-istrip</code>: Elimina o mantiene el octavo bit de cada byte recibido.</p>
+
+<blockquote><p>Todos los switches Cisco Catalyst disponen de un puerto de consola accesible con los parámetros:</p>
+
+<ul>
+<li>Connection speed = 9600 bps</li>
+<li>Data bits = 8</li>
+<li>Parity = None</li>
+<li>Stop bits = 1</li>
+<li>Flow control = None</li>
+</ul>
+</blockquote>
+
+<p>Para conectarnos utilizaremos el siguiente comando:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>service vmware-vpxd stop
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>screen /dev/ttyUSB0 9600,cs8,-ixon,-ixoff,-istrip
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>4.</strong> Realizar la copia:</p>
+<p>O en su forma abreviada:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>./pg_dump EMB_DB_INSTANCE -U EMB_DB_USER -Fp -c &gt; VCDBBackupFile
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>screen /dev/ttyUSB0
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Donde <em>EMB_DB_INSTANCE</em> y <em>EMB_DB_USER</em> se sustituyen por los valores obtenidos en el punto <strong>[2]</strong>. <em>VCDBBackupFile</em> es el nombre del fichero donde se guardará el backup.</p>
+<h2>Comandos básicos</h2>
 
-<blockquote><p>./pg_dump VCDB -U postgres -Fp -c > /tmp/VCDBackUp</p></blockquote>
+<p>Como este artículo está enfocado al uso de <em>screen</em> para realizar una conexión vía consola (a un switch), sólo vamos a ver los comandos imprescindibles para realizar esta tarea.</p>
 
-<p><strong>5.</strong> Arrancar el servicio del vCenter:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>service vmware-vpxd start
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Recuperación</h2>
-
-<p><strong>1.</strong> Acceder al vCenter e ir al directorio donde se encuentran los binarios de postgresql:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">cd</span> /opt/vmware/vpostgres/1.0/bin
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>2.</strong> Para ver la configuración de la base de datos ejecutar el comando:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>cat /etc/vmware-vpx/embedded_db.cfg
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>3.</strong> Parar el servicio del vCenter:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>service vmware-vpxd stop
-</span></code></pre></td></tr></table></div></figure>
+<table>
+<thead>
+<tr>
+<th align="center">Combinación de Teclas </th>
+<th align="left"> Tarea </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>CTRL + a</code> + <code>?</code>      </td>
+<td align="left"> Ayuda (lista de comandos)</td>
+</tr>
+<tr>
+<td align="center"><code>CTRL + a</code> + <code>i</code>      </td>
+<td align="left"> Información y estado del puerto serie</td>
+</tr>
+<tr>
+<td align="center"><code>CTRL + a</code> + <code>k</code>      </td>
+<td align="left"> Cerrar la sesión actual</td>
+</tr>
+</tbody>
+</table>
 
 
-<p><strong>4.</strong> Restaurar la copia:</p>
+<h2>Resumen</h2>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">PGPASSWORD</span><span class="o">=</span><span class="s1">&#39;EMB_DB_PASSWORD&#39;</span> ./psql -d EMB_DB_INSTANCE -Upostgres -f VCDBBackupFile
-</span></code></pre></td></tr></table></div></figure>
+<p>Los pasos para conectarnos a una consola serie con <em>screen</em> son los siguientes:</p>
+
+<ol>
+<li>Determinar el dispositivo serie en el equipo: <code>dmesg | grep tty</code></li>
+<li>Conectarse: <code>screen /dev/ttyUSB0</code></li>
+<li>Hacer los cambios necesarios</li>
+<li>Desconectarse: <code>CTRL + a</code> + <code>k</code></li>
+</ol>
 
 
-<p>Donde <em>PGPASSWORD</em> y <em>EMB_DB_INSTANCE</em> se sustituyen por los valores obtenidos en el punto <strong>[2]</strong>. <em>VCDBBackupFile</em> es el nombre del fichero donde se ha guardado previamente el backup.</p>
-
-<p>Utilizar comillas simples <strong>[&lsquo;]</strong> con la password tal como aparecece en el fichero de configuración del punto <strong>[2]</strong>.</p>
-
-<blockquote><p>PGPASSWORD=<code>'g&lt;T4EuybGsA=kG$G'</code> ./psql -d VCDB -U postgres -f /tmp/VCDBackUp</p></blockquote>
-
-<p><strong>5.</strong> Arrancar el servicio del vCenter:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>service vmware-vpxd start
-</span></code></pre></td></tr></table></div></figure>
-
+<p>En una próxima entrada seguiremos descubriendo las múltiples capacidades del poderoso <strong>screen</strong>.</p>
 
 <h2>Referencias</h2>
 
-<p><a href="http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&amp;cmd=displayKC&amp;externalId=2034505">Backing up and restoring the vCenter Server Appliance (vPostgres) database (2034505)</a></p>
+<p><a href="http://www.cyberciti.biz/hardware/5-linux-unix-commands-for-connecting-to-the-serial-console/">5 Linux / Unix Commands For Connecting To The Serial Console</a></p>
 
-<p><a href="http://pubs.vmware.com/vsphere-55/index.jsp?topic=%2Fcom.vmware.vsphere.vcenterhost.doc%2FGUID-8DC793FF-1E00-43A1-B85C-070414B9F9B0.html&amp;resultof=%22Enable%22%20%22enabl%22%20%22Disable%22%20%22disabl%22%20%22SSH%22%20%22ssh%22">Enable or Disable SSH Administrator Login on the VMware vCenter Server Appliance</a></p>
+<p><a href="https://www.gnu.org/software/screen/manual/screen.html">Screen User&rsquo;s Manual</a></p>
 <div class="footnotes">
 <hr/>
 <ol>
 <li id="fn:1">
-<p>Si en la instalación se decide hacer uso de la misma, ya que también existe la posibilidad de utilizar otros motores de bases de datos como <a href="http://es.wikipedia.org/wiki/Oracle_Database">oracle</a>.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<p>Disponemos de clientes completos como <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">Putty</a> y <a href="http://linux.die.net/man/1/minicom">minicom</a> además de herramientas más sencillas como <a href="http://linux.die.net/man/1/cu">cu</a><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
@@ -253,7 +271,9 @@
 
 
 
-  <a href="/blog/categories/vmware/"><span class="badge">vmware</span></a>
+  <a href="/blog/categories/cisco/"><span class="badge">cisco</span></a>
+
+  <a href="/blog/categories/linux/"><span class="badge">linux</span></a>
 
 
 
@@ -283,10 +303,8 @@
       <div class="span12">
         <p class="meta">
           
-            <a class="basic-alignment left" href="/blog/2014/03/12/switch-unicast/" title="Previous Post: Tráfico unicast en switches">&laquo; Tráfico unicast en switches</a>
+            <a class="basic-alignment left" href="/blog/2014/06/08/octopress-y-las-cookies/" title="Previous Post: Octopress y las Cookies">&laquo; Octopress y las Cookies</a>
           
-          
-            <a class="basic-alignment right" href="/blog/2014/06/08/octopress-y-las-cookies/" title="Next Post: Octopress y las Cookies">Octopress y las Cookies &raquo;</a>
           
         </p>
       </div>
@@ -326,8 +344,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://atasco.github.io/blog/2014/05/23/backup-de-postgresql-en-vcsa/';
-        var disqus_url = 'http://atasco.github.io/blog/2014/05/23/backup-de-postgresql-en-vcsa/';
+        var disqus_identifier = 'http://atasco.github.io/blog/2014/06/18/screen-la-pantalla-indiscreta/';
+        var disqus_url = 'http://atasco.github.io/blog/2014/06/18/screen-la-pantalla-indiscreta/';
         var disqus_script = 'embed.js';
       
     (function () {
