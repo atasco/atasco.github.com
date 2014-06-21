@@ -4,7 +4,7 @@
   <title><![CDATA[a t a s c o]]></title>
   <link href="http://atasco.github.io/atom.xml" rel="self"/>
   <link href="http://atasco.github.io/"/>
-  <updated>2014-06-18T23:12:42+02:00</updated>
+  <updated>2014-06-21T15:33:14+02:00</updated>
   <id>http://atasco.github.io/</id>
   <author>
     <name><![CDATA[aH]]></name>
@@ -33,7 +33,7 @@
 
 <p>Además de lo anterior, que de por sí ya es una funcionalidad más que interesante en el trabajo con servidores, nos permite establecer conexiones a través del puerto serie (puerto de consola en switches) con todos aquellos dispositivos que dispongan de este tipo de conectores.</p>
 
-<h2>Conceptos</h2>
+<h1>Conceptos</h1>
 
 <ol>
 <li><strong>Sesión:</strong> Es el área de trabajo creada al ejecutar el comando.</li>
@@ -43,7 +43,7 @@
 
 <p>También es posible mantener varias ventanas en la misma sesión separadas en <strong>regiones</strong> (horizontales y/o verticales).</p>
 
-<h2>Conexión a una consola serie</h2>
+<h1>Conexión a una consola serie</h1>
 
 <p>Antes de lanzar el comando para conectarnos a la consola del switch, hay que identificar en el ordenador el dispositivo serie:</p>
 
@@ -95,7 +95,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>Comandos básicos</h2>
+<h1>Comandos básicos</h1>
 
 <p>Como este artículo está enfocado al uso de <em>screen</em> para realizar una conexión vía consola (a un switch), sólo vamos a ver los comandos imprescindibles para realizar esta tarea.</p>
 
@@ -123,7 +123,7 @@
 </table>
 
 
-<h2>Resumen</h2>
+<h1>Resumen</h1>
 
 <p>Los pasos para conectarnos a una consola serie con <em>screen</em> son los siguientes:</p>
 
@@ -137,7 +137,7 @@
 
 <p>En una próxima entrada seguiremos descubriendo las múltiples capacidades del poderoso <strong>screen</strong>.</p>
 
-<h2>Referencias</h2>
+<h1>Referencias</h1>
 
 <p><a href="http://www.cyberciti.biz/hardware/5-linux-unix-commands-for-connecting-to-the-serial-console/">5 Linux / Unix Commands For Connecting To The Serial Console</a></p>
 
@@ -345,7 +345,7 @@
 
 <p>Donde <em>PGPASSWORD</em> y <em>EMB_DB_INSTANCE</em> se sustituyen por los valores obtenidos en el punto <strong>[2]</strong>. <em>VCDBBackupFile</em> es el nombre del fichero donde se ha guardado previamente el backup.</p>
 
-<p>Utilizar comillas simples <strong>[&lsquo;]</strong> con la password tal como aparecece en el fichero de configuración del punto <strong>[2]</strong>.</p>
+<p>Utilizar comillas simples <strong>[&lsquo;]</strong> con la password tal como aparece en el fichero de configuración del punto <strong>[2]</strong>.</p>
 
 <blockquote><p>PGPASSWORD=<code>'g&lt;T4EuybGsA=kG$G'</code> ./psql -d VCDB -U postgres -f /tmp/VCDBackUp</p></blockquote>
 
@@ -731,7 +731,7 @@
 
 <h2>Teaming</h2>
 
-<p>En aquellos casos en los que un host necesita enviar y/o recibir volumenes de tráfico muy elevados que no puede asumir un sólo enlace es necesario agrupar (<em>team, bond&hellip;</em>) más de un adaptador de red para aumentar el ancho de banda.</p>
+<p>En aquellos casos en los que un host necesita enviar y/o recibir volúmenes de tráfico muy elevados que no puede asumir un sólo enlace es necesario agrupar (<em>team, bond&hellip;</em>) más de un adaptador de red para aumentar el ancho de banda.</p>
 
 <p>Al igual que en el host se agrupan los interfaces de red, el switch debe conocer que puertos pertenecen al mismo enlace lógico y realizar el ether-channel correspondiente con los mismos. De otra manera habrá problemas con entradas incorrectas en la CAM que darán lugar a la presencia de tráfico unicast.</p>
 
@@ -830,11 +830,11 @@
 
 <h2>Microsoft NLB</h2>
 
-<p>No existe una solución válida y sencilla que nos permita evitar el <em>unicast flooding</em> cuando tenemos clusters NLB en la red. Una forma de mitigar el problema es crear una VLAN independiente para los nodos del clúster.</p>
+<p>No existe una solución válida y sencilla que nos permita evitar el <em>unicast flooding</em> cuando tenemos clusters NLB en la red. Una forma de mitigar el problema es crear una VLAN independiente para los nodos del cluster.</p>
 
-<p>Ahora bien, en el caso de tener un NLB en modo multicast, existe la posibilidad de evitar el tráfico unicast añadiendo de forma estática en las tablas ARP y CAM las IP y MAC asociadas a la IP virtual del clúster.</p>
+<p>Ahora bien, en el caso de tener un NLB en modo multicast, existe la posibilidad de evitar el tráfico unicast añadiendo de forma estática en las tablas ARP y CAM las IP y MAC asociadas a la IP virtual del cluster.</p>
 
-<p>Por ejemplo, si la IP virtual es la 10.10.10.10 y la MAC 1111.1111.1111 en la VLAN 100 donde los nodos del clúster están conectados a los puertos Gi0/1 y Gi0/2:</p>
+<p>Por ejemplo, si la IP virtual es la 10.10.10.10 y la MAC 1111.1111.1111 en la VLAN 100 donde los nodos del cluster están conectados a los puertos Gi0/1 y Gi0/2:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -855,7 +855,7 @@
 
 <p>La manera de evitar el <em>unicast flooding</em> cuando hay host en la red con interfaces agrupados es verificar y realizar una configuración correcta del team (bond) en el lado del host y del ether-channel en el switch, asegurando el que el protocolo utilizado y los puertos agregados son los correctos.</p>
 
-<h2>LLenado de la tabla CAM</h2>
+<h2>Llenado de la tabla CAM</h2>
 
 <p>En este caso, la solución consiste en segmentar la red en subredes (VLAN) más pequeñas.</p>
 
@@ -874,7 +874,7 @@
 <hr/>
 <ol>
 <li id="fn:1">
-<p>Los switches almacenan en tablas dinámicas (content addressable memory table, CAM table) las relaciones entre puertos y MACs. Estas tablas tienen un periodo de vida (timeout) determinado (en el caso de switches cisco, por defecto son 5 minutos) y un tamaño tambien limitado.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<p>Los switches almacenan en tablas dinámicas (content addressable memory table, CAM table) las relaciones entre puertos y MACs. Estas tablas tienen un periodo de vida (timeout) determinado (en el caso de switches cisco, por defecto son 5 minutos) y un tamaño también limitado.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 <li id="fn:2">
 <p>Las MAC puede pasar a estar inactivas debido a que el dispositivo se encuentra apagado o bien a que los equipos se han conectado a otro puerto distinto del switch.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
 <li id="fn:3">
@@ -888,9 +888,9 @@
 <li id="fn:7">
 <p>Las notificaciones de cambio de topología (<em>TCN</em>) están diseñadas para corregir la tablas de reenvío cuando se produce un cambio. Esto es necesario para evitar cortes en las comunicaciones, ya que cuando se produce un cambio de topología algunos destinos dejan de estar accesibles a través de unos determinados puertos para ser accesibles por otros. TCN funciona reduciendo el tiempo de permanencia de las entradas en la tabla CAM, de modo que si una dirección no se vuelve a aprender se eliminará de la tabla y se producirá el envío de tráfico unicast por todos los puertos del switch.<a href="#fnref:7" rev="footnote">&#8617;</a></p></li>
 <li id="fn:8">
-<p>Los puertos del switch asignados a los host no están involucrados en los cambios de topología STP o en el envío de las BPDUs.<a href="#fnref:8" rev="footnote">&#8617;</a></p></li>
+<p>Los puertos del switch asignados a los hosts no están involucrados en los cambios de topología STP o en el envío de las BPDUs.<a href="#fnref:8" rev="footnote">&#8617;</a></p></li>
 <li id="fn:9">
-<p>Es más complejo que todo todo esto, en función de como se configura el cluster NLB (multicast o unicast) el comportamiento del tráfico varía.<a href="#fnref:9" rev="footnote">&#8617;</a></p></li>
+<p>Es más complejo que todo esto, en función de como se configura el cluster NLB (multicast o unicast) el comportamiento del tráfico varía.<a href="#fnref:9" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
@@ -909,11 +909,11 @@
 <!-- more -->
 
 
-<h2>Requisito previo</h2>
+<h1>Requisito previo</h1>
 
 <p>Es necesario tener acceso vía SSH al servidor, para habilitarlo tenemos dos opciones:</p>
 
-<h3>A través del vSphere Client</h3>
+<h2>A través del vSphere Client</h2>
 
 <ol>
 <li>Abrimos sesión en el servidor ESXi con el cliente</li>
@@ -923,22 +923,22 @@
 </ol>
 
 
-<h3>A través de la consola del servidor ESXi</h3>
+<h2>A través de la consola del servidor ESXi</h2>
 
 <ol>
 <li>Pulsar <em>F2</em> para acceder al menu de configuración</li>
 <li>Seleccionar <em>Troubleshooting Options</em></li>
-<li>Desde el menu de opciones seleccionar <em>Enable SSH</em></li>
+<li>Desde el menú de opciones seleccionar <em>Enable SSH</em></li>
 </ol>
 
 
-<h2>Dejar los parches en un Datastore accesible desde el servidor ESXi</h2>
+<h1>Dejar los parches en un Datastore accesible desde el servidor ESXi</h1>
 
 <p>Una vez que se descargan los parches desde la <a href="http://www.vmware.com/patch/download">web de vmware</a>, hay que dejarlos accesibles al servidor ESXi donde se van a aplicar.</p>
 
-<blockquote><p>Es conveniente crear una carpeta en el datastore para dejarlos y poder aplicarlos posteriormente.</p></blockquote>
+<blockquote><p>Es conveniente crear una carpeta en el <em>datastore</em> donde dejarlos y poder aplicarlos posteriormente.</p></blockquote>
 
-<h2>Aplicar los parches</h2>
+<h1>Aplicar los parches</h1>
 
 <p>Antes de aplicar los parches hay que apagar de forma ordenada todas las máquinas virtuales que están en el servidor.</p>
 
@@ -950,7 +950,7 @@
 
 <p>Una vez que finaliza la aplicación del parche, aparecerá un mensaje indicándolo y solicitando el reinicio del servidor.</p>
 
-<h2>Referencias</h2>
+<h1>Referencias</h1>
 
 <p><a href="http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&amp;cmd=displayKC&amp;externalId=2004746">Using ESXi Shell in ESXi 5.0 and 5.1</a></p>
 
@@ -963,7 +963,7 @@
     <link href="http://atasco.github.io/blog/2013/09/08/odio-las-lunes/"/>
     <updated>2013-09-08T20:30:00+02:00</updated>
     <id>http://atasco.github.io/blog/2013/09/08/odio-las-lunes</id>
-    <content type="html"><![CDATA[<p>Julio y agosto, meses de vacaciones, momento ideal para <em>romper</em> la infraestructura virtual con las actualizaciones anuales. Este año toca <strong>vSpehere 5.1</strong> (si esperamos un poco caemos en la 5.5).</p>
+    <content type="html"><![CDATA[<p>Julio y agosto, meses de vacaciones, momento ideal para <em>romper</em> la infraestructura virtual con las actualizaciones anuales. Este año toca <strong>vSpehere 5.1</strong> (si esperamos un poco <em>caemos</em> en la 5.5).</p>
 
 <p>Tras la pertinente revisión de compatibilidad de hardware y la toma de decisiones previas (que implican cambio del vCenter, nos pasamos al nuevo appliance bajo LiNUX <a href="http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&amp;cmd=displayKC&amp;externalId=2007619">VCSA</a>, asignación de nuevas LUN…) se procede a la instalación del nuevo vCenter y la migración de los ESX 4.1 U2.</p>
 
@@ -976,7 +976,7 @@
 
 <p>Una vez realizada la migración, se observa que el rendimiento en acceso a disco de las VM en los ESXi 5.0 no se corresponde con las VM en los ESXi 5.1.</p>
 
-<p>Revisando la configuración se observa que la politica de selección de caminos en las LUNes de la cabina (EMC VNX 5500 que soporta el protocolo ALUA) para los ESXi 5.0 no es la que tenemos configurada habitualmente. Aparece como FIXED cuando debería estar como ROUND ROBIN.</p>
+<p>Revisando la configuración se observa que la política de selección de caminos en las LUNes de la cabina (EMC VNX 5500 que soporta el protocolo ALUA) para los ESXi 5.0 no es la que tenemos configurada habitualmente. Aparece como FIXED cuando debería estar como ROUND ROBIN.</p>
 
 <p>Con el comando:</p>
 
@@ -1007,27 +1007,42 @@
 
 <p>Cambiar la PSP por defecto es sencillo, solo hay que ejecutar el comando:</p>
 
-<blockquote><p>esxcli storage nmp satp set &mdash;default-psp=policy &mdash;satp=your_SATP_name</p></blockquote>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>esxcli storage nmp satp <span class="nb">set</span> --default-psp<span class="o">=</span>policy --satp<span class="o">=</span>your_SATP_name
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>Para cambiar el modo FIXED por ROUND ROBIN en la cabina VNX 3000 que soporta ALUA, el comando a ejecutar es:</p>
 
-<blockquote><p>esxcli storage nmp satp set &mdash;default-psp=VMW_PSP_RR &mdash;satp=VMW_SATP_ALUA_CX</p></blockquote>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>esxcli storage nmp satp <span class="nb">set</span> --default-psp<span class="o">=</span>VMW_PSP_RR --satp<span class="o">=</span>VMW_SATP_ALUA_CX
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>A partir de ahora las nuevas LUN de la cabina que se presenten a los ESXi 5.0 tendrán como PSP Round Robin, pero las que se encuentran ya presentadas mantendrán la política Fixed.</p>
 
-<p>Se puede cambiar la politica selección de camino reiniciando el ESXi para hacerlo de forma global para todas las LUN que se presebtan al mismo, o bien de forma individual para cada LUN.</p>
+<p>Se puede cambiar la política de selección de caminos reiniciando el ESXi para hacerlo de forma global, para todas las LUN que se presentan al mismo, o bien de forma individual para cada LUN.</p>
 
 <p>Para conseguir que una LUN pase a utilizar un PSP diferente, ejecutamos el comando siguiente en el ESXi afectado:</p>
 
-<blockquote><p>esxcli storage nmp device set -d NAAID -psp=policy</p></blockquote>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>esxcli storage nmp device <span class="nb">set</span> -d NAAID -psp<span class="o">=</span>policy
+</span></code></pre></td></tr></table></div></figure>
 
-<p>Es necesario identificar previamente el NAAID de la LUN afectada. Para ello se puede hacer uso del cliente gráfico (viclient o web) o con el comando:</p>
 
-<blockquote><p>esxcli storage nmp device list</p></blockquote>
+<p>Es necesario identificar previamente el NAAID de la LUN afectada. Para ello se puede hacer uso del cliente gráfico (viclient o webclient) o con el comando:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>esxcli storage nmp device list
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>Una vez realizado el cambio se verifica el mismo con:</p>
 
-<blockquote><p>esxcli storage nmp device list -d NAAID</p></blockquote>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>esxcli storage nmp device list -d NAAID
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>Ejemplo:</p>
 
@@ -1038,9 +1053,9 @@
 
 <p>Una vez realizados los cambios, con todos los ESXi utilizando la misma política de selección de caminos para las LUNes, el rendimiento de los hosts con versión 5.0 se estabiliza y adquiere valores similares a los que tienen la versión 5.1.</p>
 
-<h2>Resumen</h2>
+<h1>Resumen</h1>
 
-<h3>Cambio de la PSP por defecto</h3>
+<h2>Cambio de la PSP por defecto</h2>
 
 <figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1057,7 +1072,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>Cambio de la PSP por LUN</h3>
+<h2>Cambio de la PSP por LUN</h2>
 
 <figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1078,7 +1093,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>Referencias</h2>
+<h1>Referencias</h1>
 
 <p><a href="http://kb.vmware.com/selfservice/search.do?cmd=displayKC&amp;docType=kc&amp;docTypeID=DT_KB_1_1&amp;externalId=1017760">Changing the default pathing policy for new/existing LUNs</a></p>
 
@@ -1091,7 +1106,9 @@
     <link href="http://atasco.github.io/blog/2013/07/14/como-se-hizo/"/>
     <updated>2013-07-14T18:30:00+02:00</updated>
     <id>http://atasco.github.io/blog/2013/07/14/como-se-hizo</id>
-    <content type="html"><![CDATA[<p>En la actualidad crear un blog, partiendo de unos conocimientos básicos, es relativamente sencillo. Existen diversas herramientas que facilitan la tarea, de modo que lo más complicado es elegir la que se adapte a las necesiades de cada uno.</p>
+    <content type="html"><![CDATA[<p><img class="right" src="http://atasco.github.io/images/posts/octopress.png" title="'octopress'" ></p>
+
+<p>En la actualidad crear un blog, partiendo de unos conocimientos básicos, es relativamente sencillo. Existen diversas herramientas que facilitan la tarea, de modo que lo más complicado es elegir la que se adapte a las necesidades de cada uno.</p>
 
 <p>En <strong>atas.co</strong> la herramienta utilizada es <a href="http://octopress.org">octopress</a> con el tema <a href="http://alexgaribay.com">octoflat</a> y utilizando como hosting <a href="http://pages.github.com">Github Pages</a>.</p>
 
@@ -1110,11 +1127,11 @@
 
 <p>Una vez que tenemos el blog operativo con <strong>octopress</strong>, si el contenido está en español como es el caso, tenemos el &ldquo;pequeño&rdquo; inconveniente de que las fechas aparecen automáticamente en perfecto inglés. La solución es sencilla si seguimos las instrucciones que aparecen en <a href="http://www.hazteonline.es/blog/press/2012/08/17/las-fechas-en-octopress/">las fechas en octopress</a>.</p>
 
-<p>Gracias a toda esta información desplegar el blog no ha supuesto mucho esfuerzo, y si yo he podido hacerlo cualquiera es capaz :)</p>
+<p>Gracias a toda esta información desplegar el blog no ha supuesto mucho esfuerzo.</p>
 
 <h2>Actualización: 14/12/2013</h2>
 
-<p>Preparando una nueva entrada repleta de tablas, me he dado cuenta que las tablas en octopress no se generan de forma correcta, ya que no presentan los bordes correspondientes.</p>
+<p>Preparando una nueva entrada repleta de tablas, me he dado cuenta que las tablas en octopress no se generan de forma correcta ya que no presentan los bordes correspondientes.</p>
 
 <p>La solución a este <em>&ldquo;problemilla&rdquo;</em> se puede encontrar en <a href="http://samwize.com/2012/09/24/octopress-table-stylesheet/">Octopress Table Stylesheet</a>.</p>
 <div class="footnotes">
@@ -1137,7 +1154,7 @@
 
 <p><strong><em>El personal se ubica en sus puestos y todo está listo para comenzar el rodaje.</em></strong></p>
 
-<p>Como en toda buena cinta lo importantes es un buen guión, con un planteamiento interesante seguido de un nudo que no deje que el &ldquo;espectador&rdquo; aparte la vista de la pantalla y un final redondo que cierre todas las incognitas planteadas durante el desarrollo.</p>
+<p>Como en toda buena cinta lo importantes es un buen guión, con un planteamiento interesante seguido de un nudo que no deje que el &ldquo;espectador&rdquo; aparte la vista de la pantalla y un final redondo que cierre todas las incógnitas planteadas durante el desarrollo.</p>
 
 <!-- more -->
 
@@ -1147,11 +1164,11 @@
 <ul>
 <li><p><strong>Planteamiento:</strong> El protagonista se enfrenta a la adversidad. La situación es nueva, desconocida y desconcertante.</p>
 
-<blockquote><p>Marrón de proporciones biblicas se presenta en el horizonte (problemón relacionado con estos malditos cacharros llamados sistemas operativos, servidores, redes, virtualización…). Y por supuesto hay que tener una solución al problema <em>ya mismo</em>.</p></blockquote></li>
+<blockquote><p>Marrón de proporciones bíblicas se presenta en el horizonte (problemón relacionado con estos malditos cacharros llamados sistemas operativos, servidores, redes, virtualización…). Y por supuesto hay que tener una solución al problema <em>ya mismo</em>.</p></blockquote></li>
 <li><p><strong>Nudo:</strong> La lucha para salir del atolladero es titánica llevando al protagonista a enfrentarse a la situación sin desfallecer hasta que con ayuda del resto de personajes logra superar la prueba.</p>
 
 <blockquote><p>Comienza la lectura de documentación, los foros, los recuerdos de problemas previos que <em>se parecen un poco</em>.</p></blockquote></li>
-<li><p><strong>Desenlace:</strong> Después de aventuras sin fin, el protagonista sale airoso llevandose de paso a esa chica tan guapa que le ha ayudado en la aventura.</p>
+<li><p><strong>Desenlace:</strong> Después de aventuras sin fin, el protagonista sale airoso llevándose de paso a esa chica tan guapa que le ha ayudado en la aventura.</p>
 
 <blockquote><p>Después de numerosos ensayos de prueba y error la solución al problema aparece milagrosamente. Hay que registrar cuidadosamente los pasos seguidos para que cuando se repita la situación (que no lo dudéis se repetirá) podamos tener esa guía que nos saque del <strong>atas.co</strong></p></blockquote></li>
 </ul>

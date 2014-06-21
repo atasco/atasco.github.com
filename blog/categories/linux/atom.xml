@@ -4,7 +4,7 @@
   <title><![CDATA[Categoría: linux | a t a s c o]]></title>
   <link href="http://atasco.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://atasco.github.io/"/>
-  <updated>2014-06-18T23:12:43+02:00</updated>
+  <updated>2014-06-21T15:33:15+02:00</updated>
   <id>http://atasco.github.io/</id>
   <author>
     <name><![CDATA[aH]]></name>
@@ -33,7 +33,7 @@
 
 <p>Además de lo anterior, que de por sí ya es una funcionalidad más que interesante en el trabajo con servidores, nos permite establecer conexiones a través del puerto serie (puerto de consola en switches) con todos aquellos dispositivos que dispongan de este tipo de conectores.</p>
 
-<h2>Conceptos</h2>
+<h1>Conceptos</h1>
 
 <ol>
 <li><strong>Sesión:</strong> Es el área de trabajo creada al ejecutar el comando.</li>
@@ -43,7 +43,7 @@
 
 <p>También es posible mantener varias ventanas en la misma sesión separadas en <strong>regiones</strong> (horizontales y/o verticales).</p>
 
-<h2>Conexión a una consola serie</h2>
+<h1>Conexión a una consola serie</h1>
 
 <p>Antes de lanzar el comando para conectarnos a la consola del switch, hay que identificar en el ordenador el dispositivo serie:</p>
 
@@ -90,7 +90,7 @@ screen /dev/ttyUSB0 9600,cs8,-ixon,-ixoff,-istrip
 screen /dev/ttyUSB0
 </code></p>
 
-<h2>Comandos básicos</h2>
+<h1>Comandos básicos</h1>
 
 <p>Como este artículo está enfocado al uso de <em>screen</em> para realizar una conexión vía consola (a un switch), sólo vamos a ver los comandos imprescindibles para realizar esta tarea.</p>
 
@@ -118,7 +118,7 @@ screen /dev/ttyUSB0
 </table>
 
 
-<h2>Resumen</h2>
+<h1>Resumen</h1>
 
 <p>Los pasos para conectarnos a una consola serie con <em>screen</em> son los siguientes:</p>
 
@@ -132,7 +132,7 @@ screen /dev/ttyUSB0
 
 <p>En una próxima entrada seguiremos descubriendo las múltiples capacidades del poderoso <strong>screen</strong>.</p>
 
-<h2>Referencias</h2>
+<h1>Referencias</h1>
 
 <p><a href="http://www.cyberciti.biz/hardware/5-linux-unix-commands-for-connecting-to-the-serial-console/">5 Linux / Unix Commands For Connecting To The Serial Console</a></p>
 

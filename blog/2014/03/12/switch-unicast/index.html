@@ -475,7 +475,7 @@
 
 <h2>Teaming</h2>
 
-<p>En aquellos casos en los que un host necesita enviar y/o recibir volumenes de tráfico muy elevados que no puede asumir un sólo enlace es necesario agrupar (<em>team, bond&hellip;</em>) más de un adaptador de red para aumentar el ancho de banda.</p>
+<p>En aquellos casos en los que un host necesita enviar y/o recibir volúmenes de tráfico muy elevados que no puede asumir un sólo enlace es necesario agrupar (<em>team, bond&hellip;</em>) más de un adaptador de red para aumentar el ancho de banda.</p>
 
 <p>Al igual que en el host se agrupan los interfaces de red, el switch debe conocer que puertos pertenecen al mismo enlace lógico y realizar el ether-channel correspondiente con los mismos. De otra manera habrá problemas con entradas incorrectas en la CAM que darán lugar a la presencia de tráfico unicast.</p>
 
@@ -574,11 +574,11 @@
 
 <h2>Microsoft NLB</h2>
 
-<p>No existe una solución válida y sencilla que nos permita evitar el <em>unicast flooding</em> cuando tenemos clusters NLB en la red. Una forma de mitigar el problema es crear una VLAN independiente para los nodos del clúster.</p>
+<p>No existe una solución válida y sencilla que nos permita evitar el <em>unicast flooding</em> cuando tenemos clusters NLB en la red. Una forma de mitigar el problema es crear una VLAN independiente para los nodos del cluster.</p>
 
-<p>Ahora bien, en el caso de tener un NLB en modo multicast, existe la posibilidad de evitar el tráfico unicast añadiendo de forma estática en las tablas ARP y CAM las IP y MAC asociadas a la IP virtual del clúster.</p>
+<p>Ahora bien, en el caso de tener un NLB en modo multicast, existe la posibilidad de evitar el tráfico unicast añadiendo de forma estática en las tablas ARP y CAM las IP y MAC asociadas a la IP virtual del cluster.</p>
 
-<p>Por ejemplo, si la IP virtual es la 10.10.10.10 y la MAC 1111.1111.1111 en la VLAN 100 donde los nodos del clúster están conectados a los puertos Gi0/1 y Gi0/2:</p>
+<p>Por ejemplo, si la IP virtual es la 10.10.10.10 y la MAC 1111.1111.1111 en la VLAN 100 donde los nodos del cluster están conectados a los puertos Gi0/1 y Gi0/2:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -599,7 +599,7 @@
 
 <p>La manera de evitar el <em>unicast flooding</em> cuando hay host en la red con interfaces agrupados es verificar y realizar una configuración correcta del team (bond) en el lado del host y del ether-channel en el switch, asegurando el que el protocolo utilizado y los puertos agregados son los correctos.</p>
 
-<h2>LLenado de la tabla CAM</h2>
+<h2>Llenado de la tabla CAM</h2>
 
 <p>En este caso, la solución consiste en segmentar la red en subredes (VLAN) más pequeñas.</p>
 
@@ -618,7 +618,7 @@
 <hr/>
 <ol>
 <li id="fn:1">
-<p>Los switches almacenan en tablas dinámicas (content addressable memory table, CAM table) las relaciones entre puertos y MACs. Estas tablas tienen un periodo de vida (timeout) determinado (en el caso de switches cisco, por defecto son 5 minutos) y un tamaño tambien limitado.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<p>Los switches almacenan en tablas dinámicas (content addressable memory table, CAM table) las relaciones entre puertos y MACs. Estas tablas tienen un periodo de vida (timeout) determinado (en el caso de switches cisco, por defecto son 5 minutos) y un tamaño también limitado.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 <li id="fn:2">
 <p>Las MAC puede pasar a estar inactivas debido a que el dispositivo se encuentra apagado o bien a que los equipos se han conectado a otro puerto distinto del switch.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
 <li id="fn:3">
@@ -632,9 +632,9 @@
 <li id="fn:7">
 <p>Las notificaciones de cambio de topología (<em>TCN</em>) están diseñadas para corregir la tablas de reenvío cuando se produce un cambio. Esto es necesario para evitar cortes en las comunicaciones, ya que cuando se produce un cambio de topología algunos destinos dejan de estar accesibles a través de unos determinados puertos para ser accesibles por otros. TCN funciona reduciendo el tiempo de permanencia de las entradas en la tabla CAM, de modo que si una dirección no se vuelve a aprender se eliminará de la tabla y se producirá el envío de tráfico unicast por todos los puertos del switch.<a href="#fnref:7" rev="footnote">&#8617;</a></p></li>
 <li id="fn:8">
-<p>Los puertos del switch asignados a los host no están involucrados en los cambios de topología STP o en el envío de las BPDUs.<a href="#fnref:8" rev="footnote">&#8617;</a></p></li>
+<p>Los puertos del switch asignados a los hosts no están involucrados en los cambios de topología STP o en el envío de las BPDUs.<a href="#fnref:8" rev="footnote">&#8617;</a></p></li>
 <li id="fn:9">
-<p>Es más complejo que todo todo esto, en función de como se configura el cluster NLB (multicast o unicast) el comportamiento del tráfico varía.<a href="#fnref:9" rev="footnote">&#8617;</a></p></li>
+<p>Es más complejo que todo esto, en función de como se configura el cluster NLB (multicast o unicast) el comportamiento del tráfico varía.<a href="#fnref:9" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
@@ -712,7 +712,7 @@
       <div class="row-fluid">
         <footer class="footer-page" role="contentinfo">
           <p align="center">
-  <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/deed.es_ES"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a> - 2014 - aH - <a href="/politica-de-cookies">Política de Cookies</a>
+  <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/deed.es_ES"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a> - 2014 - <a href="/contacto">aH</a> - <a href="/politica-de-cookies">Política de Cookies</a>
 </br>
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> and <a href="http://alexgaribay.com">Octoflat</a>
 </p>
