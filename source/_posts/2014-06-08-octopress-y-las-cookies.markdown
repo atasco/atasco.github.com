@@ -5,6 +5,7 @@ date: 2014-06-08 20:20
 comments: true
 categories: cajondesastre
 ---
+
 Vaya despiste, ha pasado casi un año de la apertura y puesta en largo del blog y hasta ahora no había hecho los cambios necesarios para cumplir con *La Ley de Cookies*[^1].
 
 > Esa que nos amarga la vida cada vez que entramos en una página web haciéndonos aceptar si o sí la correspondiente política si queremos seguir consultando el contenido.

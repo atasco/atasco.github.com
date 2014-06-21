@@ -5,7 +5,10 @@ date: 2013-07-14 18:30
 comments: true
 categories: cajondesastre
 ---
-En la actualidad crear un blog, partiendo de unos conocimientos básicos, es relativamente sencillo. Existen diversas herramientas que facilitan la tarea, de modo que lo más complicado es elegir la que se adapte a las necesiades de cada uno.
+
+{% img right /images/posts/octopress.png 'octopress' %}
+
+En la actualidad crear un blog, partiendo de unos conocimientos básicos, es relativamente sencillo. Existen diversas herramientas que facilitan la tarea, de modo que lo más complicado es elegir la que se adapte a las necesidades de cada uno.
 
 En **atas.co** la herramienta utilizada es [octopress](http://octopress.org) con el tema [octoflat](http://alexgaribay.com) y utilizando como hosting [Github Pages](http://pages.github.com).
 <!-- more -->
@@ -19,11 +22,11 @@ Si que voy a recoger en esta entrada aquellas fuentes que han facilitado (y que 
 
 Una vez que tenemos el blog operativo con **octopress**, si el contenido está en español como es el caso, tenemos el "pequeño" inconveniente de que las fechas aparecen automáticamente en perfecto inglés. La solución es sencilla si seguimos las instrucciones que aparecen en [las fechas en octopress](http://www.hazteonline.es/blog/press/2012/08/17/las-fechas-en-octopress/).
 
-Gracias a toda esta información desplegar el blog no ha supuesto mucho esfuerzo, y si yo he podido hacerlo cualquiera es capaz :)
+Gracias a toda esta información desplegar el blog no ha supuesto mucho esfuerzo.
 
 ## Actualización: 14/12/2013
 
-Preparando una nueva entrada repleta de tablas, me he dado cuenta que las tablas en octopress no se generan de forma correcta, ya que no presentan los bordes correspondientes. 
+Preparando una nueva entrada repleta de tablas, me he dado cuenta que las tablas en octopress no se generan de forma correcta ya que no presentan los bordes correspondientes. 
 
 La solución a este *"problemilla"* se puede encontrar en [Octopress Table Stylesheet](http://samwize.com/2012/09/24/octopress-table-stylesheet/).
  

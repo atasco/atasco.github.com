@@ -5,6 +5,7 @@ date: 2014-05-23 21:13:51 +0200
 comments: true
 categories: vmware
 ---
+
 Cuando se realiza el despliegue de un vCenter con el appliance de VMWare (vCenter Server Appliance 5.X) es interesante (cuando no imprescindible) realizar backups periódicos de la base de datos incorporada (postgresql)[^1] con el fin de poder hacer una recuperación rápida en caso de *accidente*.
 
 En esta entrada se recoge la forma de hacer esta copia de seguridad así como la recuperación correspondiente si llega a ser necesario.
@@ -82,7 +83,7 @@ PGPASSWORD='EMB_DB_PASSWORD' ./psql -d EMB_DB_INSTANCE -Upostgres -f VCDBBackupF
 
 Donde *PGPASSWORD* y *EMB_DB_INSTANCE* se sustituyen por los valores obtenidos en el punto **[2]**. *VCDBBackupFile* es el nombre del fichero donde se ha guardado previamente el backup.
 
-Utilizar comillas simples **[']** con la password tal como aparecece en el fichero de configuración del punto **[2]**.
+Utilizar comillas simples **[']** con la password tal como aparece en el fichero de configuración del punto **[2]**.
 
 > PGPASSWORD=`'g<T4EuybGsA=kG$G'` ./psql -d VCDB -U postgres -f /tmp/VCDBackUp
 

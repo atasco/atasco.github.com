@@ -5,6 +5,7 @@ date: 2014-03-12 18:25
 comments: true
 categories: network 
 ---
+
 Realizando una auditoría en la red para determinar su estado se observa, en el equipo en el que se está realizando la captura, tráfico unicast destinado a otros equipos.
 
 Este tráfico es bastante elevado en la *VLAN de Internet*, mientras que en las *VLANes de Servicio* el tráfico unicast recogido es el normal en una red conmutada.
@@ -153,7 +154,7 @@ El problema es que todos los equipos en la misma VLAN también recibirán el tr�
 
 ## Teaming
 
-En aquellos casos en los que un host necesita enviar y/o recibir volumenes de tráfico muy elevados que no puede asumir un sólo enlace es necesario agrupar (*team, bond...*) más de un adaptador de red para aumentar el ancho de banda. 
+En aquellos casos en los que un host necesita enviar y/o recibir volúmenes de tráfico muy elevados que no puede asumir un sólo enlace es necesario agrupar (*team, bond...*) más de un adaptador de red para aumentar el ancho de banda. 
 
 Al igual que en el host se agrupan los interfaces de red, el switch debe conocer que puertos pertenecen al mismo enlace lógico y realizar el ether-channel correspondiente con los mismos. De otra manera habrá problemas con entradas incorrectas en la CAM que darán lugar a la presencia de tráfico unicast.
 
@@ -229,11 +230,11 @@ core1(config-if)#spanning-tree port-fast
 
 ## Microsoft NLB
 
-No existe una solución válida y sencilla que nos permita evitar el *unicast flooding* cuando tenemos clusters NLB en la red. Una forma de mitigar el problema es crear una VLAN independiente para los nodos del clúster.
+No existe una solución válida y sencilla que nos permita evitar el *unicast flooding* cuando tenemos clusters NLB en la red. Una forma de mitigar el problema es crear una VLAN independiente para los nodos del cluster.
 
-Ahora bien, en el caso de tener un NLB en modo multicast, existe la posibilidad de evitar el tráfico unicast añadiendo de forma estática en las tablas ARP y CAM las IP y MAC asociadas a la IP virtual del clúster.
+Ahora bien, en el caso de tener un NLB en modo multicast, existe la posibilidad de evitar el tráfico unicast añadiendo de forma estática en las tablas ARP y CAM las IP y MAC asociadas a la IP virtual del cluster.
 
-Por ejemplo, si la IP virtual es la 10.10.10.10 y la MAC 1111.1111.1111 en la VLAN 100 donde los nodos del clúster están conectados a los puertos Gi0/1 y Gi0/2:
+Por ejemplo, si la IP virtual es la 10.10.10.10 y la MAC 1111.1111.1111 en la VLAN 100 donde los nodos del cluster están conectados a los puertos Gi0/1 y Gi0/2:
 
 ``` sh
 # ROUTER
@@ -248,7 +249,7 @@ core1#mac-address-table static 1111.1111.1111 vlan 100 int gi0/1 gi0/2
 
 La manera de evitar el *unicast flooding* cuando hay host en la red con interfaces agrupados es verificar y realizar una configuración correcta del team (bond) en el lado del host y del ether-channel en el switch, asegurando el que el protocolo utilizado y los puertos agregados son los correctos.
 
-## LLenado de la tabla CAM
+## Llenado de la tabla CAM
 
 En este caso, la solución consiste en segmentar la red en subredes (VLAN) más pequeñas.
 
@@ -265,7 +266,7 @@ En este caso, la solución consiste en segmentar la red en subredes (VLAN) más 
 [Troubleshooting Unicast Flooding Due to Topology](http://www.ciscopress.com/articles/article.asp?p=336872)
 
 
-[^1]: Los switches almacenan en tablas dinámicas (content addressable memory table, CAM table) las relaciones entre puertos y MACs. Estas tablas tienen un periodo de vida (timeout) determinado (en el caso de switches cisco, por defecto son 5 minutos) y un tamaño tambien limitado.
+[^1]: Los switches almacenan en tablas dinámicas (content addressable memory table, CAM table) las relaciones entre puertos y MACs. Estas tablas tienen un periodo de vida (timeout) determinado (en el caso de switches cisco, por defecto son 5 minutos) y un tamaño también limitado.
 
 [^2]: Las MAC puede pasar a estar inactivas debido a que el dispositivo se encuentra apagado o bien a que los equipos se han conectado a otro puerto distinto del switch.
 
@@ -279,6 +280,6 @@ En este caso, la solución consiste en segmentar la red en subredes (VLAN) más 
 
 [^7]: Las notificaciones de cambio de topología (*TCN*) están diseñadas para corregir la tablas de reenvío cuando se produce un cambio. Esto es necesario para evitar cortes en las comunicaciones, ya que cuando se produce un cambio de topología algunos destinos dejan de estar accesibles a través de unos determinados puertos para ser accesibles por otros. TCN funciona reduciendo el tiempo de permanencia de las entradas en la tabla CAM, de modo que si una dirección no se vuelve a aprender se eliminará de la tabla y se producirá el envío de tráfico unicast por todos los puertos del switch.
 
-[^8]: Los puertos del switch asignados a los host no están involucrados en los cambios de topología STP o en el envío de las BPDUs.
+[^8]: Los puertos del switch asignados a los hosts no están involucrados en los cambios de topología STP o en el envío de las BPDUs.
 
-[^9]: Es más complejo que todo todo esto, en función de como se configura el cluster NLB (multicast o unicast) el comportamiento del tráfico varía.
+[^9]: Es más complejo que todo esto, en función de como se configura el cluster NLB (multicast o unicast) el comportamiento del tráfico varía.

@@ -1,0 +1,5 @@
+<p align="center">
+  <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/deed.es_ES"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a> - {{ site.time | date: "%Y" }} - <a href= "mailto:alcher@atas.co" >{{ site.author }}</a> - <a href="{{ root_url }}/politica-de-cookies">Política de Cookies</a>
+</br>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> and <a href="http://alexgaribay.com">Octoflat</a>
+</p>
