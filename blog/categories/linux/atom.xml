@@ -4,7 +4,7 @@
   <title><![CDATA[Categoría: linux | a t a s c o]]></title>
   <link href="http://atasco.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://atasco.github.io/"/>
-  <updated>2014-06-21T15:33:15+02:00</updated>
+  <updated>2014-06-22T13:11:47+02:00</updated>
   <id>http://atasco.github.io/</id>
   <author>
     <name><![CDATA[aH]]></name>
@@ -18,7 +18,7 @@
     <link href="http://atasco.github.io/blog/2014/06/18/screen-la-pantalla-indiscreta/"/>
     <updated>2014-06-18T22:30:00+02:00</updated>
     <id>http://atasco.github.io/blog/2014/06/18/screen-la-pantalla-indiscreta</id>
-    <content type="html"><![CDATA[<p>{% img right /images/posts/screen.png &lsquo;screen&rsquo; %}</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/posts/screen.png" title="&lsquo;screen&rsquo;" ></p>
 
 <p>Antes de preparar una serie de entradas dedicadas a la configuración y despliegue de switches <em>(Cisco Catalyst)</em> voy a dedicar algunos artículos a la herramienta que utilizo para hacer estas tareas.</p>
 
