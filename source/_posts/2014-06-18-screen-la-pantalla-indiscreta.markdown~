@@ -3,7 +3,7 @@ layout: post
 title: "screen, la pantalla indiscreta"
 date: 2014-06-18 22:30
 comments: true
-categories: linux network
+categories: linux cisco
 ---
 
 {% img right /images/posts/screen.png 'screen' %}
@@ -20,14 +20,14 @@ En este primer post dedicado a *screen* vamos a ver su funcionalidad como client
 
 Además de lo anterior, que de por sí ya es una funcionalidad más que interesante en el trabajo con servidores, nos permite establecer conexiones a través del puerto serie (puerto de consola en switches) con todos aquellos dispositivos que dispongan de este tipo de conectores.
 
-# Conceptos
+## Conceptos
 
 1.  **Sesión:** Es el área de trabajo creada al ejecutar el comando.
 2.  **Ventana:** Son las *shells* que se abren dentro de la sesión. 
 
 También es posible mantener varias ventanas en la misma sesión separadas en **regiones** (horizontales y/o verticales).
 
-# Conexión a una consola serie
+## Conexión a una consola serie
 
 Antes de lanzar el comando para conectarnos a la consola del switch, hay que identificar en el ordenador el dispositivo serie:
 
@@ -71,7 +71,7 @@ O en su forma abreviada:
 screen /dev/ttyUSB0
 ```
 
-# Comandos básicos
+## Comandos básicos
 
 Como este artículo está enfocado al uso de *screen* para realizar una conexión vía consola (a un switch), sólo vamos a ver los comandos imprescindibles para realizar esta tarea.
 
@@ -81,7 +81,7 @@ Combinación de Teclas | Tarea
 `CTRL + a` + `i`      | Información y estado del puerto serie
 `CTRL + a` + `k`      | Cerrar la sesión actual
 
-# Resumen
+## Resumen
 
 Los pasos para conectarnos a una consola serie con *screen* son los siguientes:
 
@@ -92,7 +92,7 @@ Los pasos para conectarnos a una consola serie con *screen* son los siguientes:
 
 En una próxima entrada seguiremos descubriendo las múltiples capacidades del poderoso **screen**.
 
-# Referencias
+## Referencias
 
 [5 Linux / Unix Commands For Connecting To The Serial Console](http://www.cyberciti.biz/hardware/5-linux-unix-commands-for-connecting-to-the-serial-console/)
 

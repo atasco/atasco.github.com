@@ -1,0 +1,234 @@
+---
+layout: post
+title: "Cisco Catalyst: Origen"
+date: 2014-08-16 17:35
+comments: true
+categories: network
+---
+Antes de seguir con la serie dedicada a [screen](http://atas.co/blog/2014/06/18/screen-la-pantalla-indiscreta/), hacemos un inciso viendo su aplicación directa en la preparación de un switch Cisco Catalyst (C3560 y C2960).
+
+{% img right /images/posts/WSC35608PCS.jpg 375 250 'C3560' %}
+
+Cuando recibimos un switch, habitualmente realizamos una serie de tareas previas a su configuración:
+
+1. Restauración a los valores de fábrica, si el dispositivo se encontraba previamente configurado.
+2. Revisión de la versión de IOS y actualización de la misma si es necesario.
+
+En esta entrada vamos a ver en detalle como realizar estas tareas.
+
+<!-- more -->
+
+# Restaurar el switch a valores de fábrica
+
+Si se trata de un switch que ha sido utilizado con anterioridad, y que tiene por tanto una configuración establecida, en primer lugar hay que restaurar la configuración a los valores de fábrica. 
+
+La manera de hacerlo es sencilla, hay que ejecutar los comandos siguientes en modo privilegiado[^1]:
+
+```
+enable
+delete flash:vlan.dat
+erase startup-config 
+reload
+```
+
+* Comando `enable`: pasamos al modo privilegiado.
+* Comando `delete flash:vlan.dat`: borramos la base de datos de las vlan y la configuración VTP[^2].
+* Comando `erase startup-config` (o `erase NVRAM:`): borramos la configuración.
+* Comando `reload`: reiniciamos el switch. 
+ 
+>Debemos responder **no** a la pregunta *System configuration has been modified. Save? [yes/no]:*.
+
+![Volver a valores de Fábrica](/images/posts/c3560_factory_reset.png)
+
+Si desconocemos la contraseña para pasar a modo privilegiado no es posible utilizar los comandos anteriores para borrar la configuración y dejar el switch con los valores de fábrica. En ese caso tendremos que hacer uso de métodos más *contundentes* consistentes en acceder al switch para recuperar la contraseña utilizada.
+
+# Recuperación de passwords
+
+En los catalyst de la serie 3560, los pasos a seguir son los siguientes:
+
+1. Conectar el equipo al switch a través del cable de consola (ver la entrada [Screen, La Pantalla Indiscreta](http://atas.co/blog/2014/06/18/screen-la-pantalla-indiscreta/)).
+2. Desconectar el switch de la alimentación y volver a conectarlo manteniendo pulsado el botón *MODE* hasta que el led *SYST* se mantenga fijo de color verde (cuando se libere el botón *MODE*, el led *SYST* comenzara a parpadear).
+3. Seguir las instrucciones mostradas en pantalla.
+
+```
+flash_init
+dir flash:
+rename flash:config.text flash:config.old
+boot
+```
+
+* Comando `flash_init`: inicializamos la *flash* del switch.
+* Comando `dir flash:`: vemos el contenido de la *flash* para ver cual es el fichero de configuración *(config.text)*.
+* Comando `rename flash:config.text flash:config.old`: renombramos el fichero de configuración.
+* Comando `boot`: cargamos la imagen y entramos en la línea de comandos del switch. 
+
+>Debemos responder **yes** a la pregunta *Would you like to terminate autoinstall? [yes]:* y **no** a la pregunta *Would you like to enter the initial configuration dialog? [yes/no]:*.
+
+![Recuperación de passwords](/images/posts/c3560_password_recovery_1.png)
+
+```
+enable
+rename flash:config.old flash:config.text
+copy flash:config.text system:running-config
+configure terminal
+enable secret <new_secret_password>
+enable password <new_enable_password>
+line vty 0 15
+password <new_vty_password>
+login
+line con 0
+password <new_console_password>
+end
+write memory
+```
+
+* Comando `enable`: pasamos al modo privilegiado.
+* Comando `rename flash:config.old flash:config.text`: volvemos a restaurar el fichero de configuración previamente renombrado.
+* Comando `copy flash:config.text system:running-config`: cargamos la configuración en memoria.
+* Comando `configure terminal`: entramos en modo configuración.
+* Comando `enable secret <new_secret_password>`: cambiamos la contraseña.
+* Comando `enable password <new_enable_password>`: cambiamos la contraseña para pasar al modo privilegiado.
+* Comando `line vty 0 15`: entramos en la configuración de las terminales remotas.
+* Comando `password <new_vty_password>`: cambiamos el password de las terminales remotas.
+* Comando `login` habilitamos la petición de contraseña en las terminales remotas.
+* Comando `line con 0`: entramos en la configuración de la línea de consola.
+* Comando `password <new_console_password>`: cambiamos la contraseña de la línea de consola.
+* Comando `end`: salimos del modo de configuración.
+* Comando `write memory`: grabamos la configuración en la NVRAM (nonvolatile random-access memory). 
+
+![Recuperación de passwords](/images/posts/c3560_password_recovery_2.png)
+
+# Actualización de IOS
+
+Una vez que tenemos el switch con la configuración *limpia* debemos revisar la versión de IOS instalada y ver si existe alguna versión posterior que corrija o añada funcionalidades que nos resulten necesarias.
+
+
+Los pasos que vamos a seguir son los siguientes:
+
+## 1. Verificamos la versión de IOS que tiene el switch.
+
+``` sh
+enable
+show version
+```
+
+* Comando `enable`: pasamos al modo privilegiado.
+* comando `show version`: muestra información sobre el modelo y la versión de IOS.
+
+![Versión IOS](/images/posts/IOS_Version.png)
+
+## 2. Descargamos la ultima versión de la web de *CISCO*.
+
+Nos dirigimos a la web de *CISCO* y descargamos la versión de IOS para el modelo de switch que vamos a actualizar. También copiaremos el [MD5](https://es.wikipedia.org/wiki/MD5) de la versión para realizar la verificación de la misma antes de realizar la instalación.
+
+## 3. Si es necesario, para disponer del suficiente espacio en la flash eliminamos la versión instalada.
+
+``` sh
+enable
+show flash:
+```
+
+* Comando `enable`: pasamos al modo privilegiado.
+* comando `show flash:`: muestra el contenido de la memoria *flash* del equipo y el espacio disponible. Existe el comando `dir flash:` que es análogo al anterior.
+
+![Flash](/images/posts/IOS_Flash.png)
+
+Si el espacio disponible no es suficiente, debemos borrar la versión de IOS instalada. 
+
+>Al realizar el borrado el switch continua funcionando con normalidad ya que la imagen de IOS se mantiene en la memoria del equipo (sólo se procede a su carga (lectura) cuando se inicia el switch).
+
+``` sh
+enable
+delete /recursive /force flash:<IOS>
+```
+
+* Comando `enable`: pasamos al modo privilegiado.
+* comando `delete /recursive /force flash:<IOS>`: fuerza el borrado recursivo del fichero (directorio) <IOS>.
+
+## 4. Copiamos la nueva imagen al switch.
+
+>Para transferir la nueva imagen a la memoria flash del switch necesitamos un servidor TFTP[^3].
+
+``` sh
+enable
+copy tftp flash:
+```
+
+* Comando `enable`: pasamos al modo privilegiado.
+* comando `copy tftp flash:`: copia la nueva imagen desde el servidor TFTP a la memoria flash del switch.
+
+![TFTP](/images/posts/IOS_TFTP.png)
+
+Una vez copiada la imagen, verificamos que nada ha ido mal asegurándonos que el valor *MD5* es el mismo que el que hemos copiado en la web de *CISCO*.
+
+``` sh
+enable
+verify /md5 flash:<IOS>
+```
+
+* Comando `enable`: pasamos al modo privilegiado.
+* comando `verify /md5 flash:<IOS>`: verifica el valor *MD5* de la imagen <IOS> que se encuentra en la flash del switch.
+
+![Verificar IOS](/images/posts/IOS_Verify.png)
+
+## 5. Modificamos el arranque del switch para que se realice desde la IOS instalada.
+
+``` sh
+enable
+configure terminal
+boot system flash:<IOS>
+```
+
+* Comando `enable`: pasamos al modo privilegiado.
+* Comando `configure terminal`: entramos en modo configuración.
+* Comando `boot system flash:<IOS>`: configura la imagen <IOS> como imagen de arranque.
+
+Comprobamos que la nueva imagen se cargará por defecto en los arranques del sistema.
+
+``` sh
+enable
+show boot
+```
+
+* Comando `enable`: pasamos al modo privilegiado.
+* Comando `show boot`: muestra la imagen de la IOS que se utilizará en el arranque del sistema.
+
+![Boot IOS](/images/posts/IOS_Boot.png)
+
+## 6. Grabamos la configuración y reiniciamos el switch.
+
+``` sh
+enable
+write memory 
+reload
+```
+
+* Comando `enable`: pasamos al modo privilegiado.
+* Comando `write memory`: grabamos la configuración en la NVRAM (nonvolatile random-access memory). 
+* Comando `reload`: reiniciamos el switch.
+
+## 7. Verificación final.
+
+Una vez que el switch se ha reiniciado, comprobamos que la imagen de IOS cargada se corresponde con la versión actualizada.
+
+``` sh
+enable
+show version
+```
+
+* Comando `enable`: pasamos al modo privilegiado.
+* comando `show version`: muestra información sobre el modelo y la versión de IOS.
+
+# Referencias
+
+[Resetting Catalyst Switches to Factory Defaults](http://www.cisco.com/c/en/us/support/docs/switches/catalyst-2900-xl-series-switches/24328-156.html)
+
+[Cisco Catalyst Fixed Configuration Layer 2 and Layer 3 Switches](http://www.cisco.com/c/en/us/support/docs/switches/catalyst-2950-series-switches/12040-pswdrec-2900xl.html)
+
+[Upgrading Software Images on Catalyst 3550 Series Switches Using the Command Line Interface](http://www.cisco.com/c/en/us/support/docs/switches/catalyst-3550-series-switches/41541-190.html)
+
+[Software Cisco](http://software.cisco.com/download/navigator.html)
+
+[^1]: Los switches (routers) **cisco** presentan tres modos de operación. El modo normal, el privilegiado y el de configuración. En el modo normal solo se permite la ejecución de un conjunto reducido de comandos que muestran información básica del dispositivo. El modo privilegiado facilita el acceso a los comandos avanzados, entre ellos el que permite entrar en modo de configuración. 
+[^2]: En futuras entradas veremos en detalle que es [VTP](https://es.wikipedia.org/wiki/VLAN_Trunking_Protocol).
+[^3]: [TFTP](https://es.wikipedia.org/wiki/TFTP)
