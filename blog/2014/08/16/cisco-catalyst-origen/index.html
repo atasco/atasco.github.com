@@ -1,0 +1,560 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Cisco Catalyst: Origen - a t a s c o</title>
+  <meta name="author" content="aH">
+
+  
+  <meta name="description" content="Cisco Catalyst: Origen 16 Ago 2014 Antes de seguir con la serie dedicada a screen, hacemos un inciso viendo su aplicación directa en la preparación &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://atasco.github.io/blog/2014/08/16/cisco-catalyst-origen">
+  <link href="/favicon.png" rel="icon">
+  <link href='http://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="a t a s c o" type="application/atom+xml">
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/js/jquery.js"></script>
+  <script src="/js/bootstrap-collapse.js"></script>
+  <script src="/js/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/js/octopress.js" type="text/javascript"></script>
+  <script src="/js/jquery.cookieBar.js" type="text/javascript"></script>
+  <link href="/stylesheets/cookieBar.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/ordered-list.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $.cookieBar();
+    });
+  </script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-46205791-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <div class="navbar navbar-inverse navbar-static-top">
+  	<div class="navbar-inner">
+  	  <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+          <span class="fui-menu-24"></span>
+        </a>
+  	  	<div class="nav-collapse collapse navbar-responsive-collapse" style="height:0;">
+  	      <ul class="nav">
+    
+        <li ><a href="/index.html">atasco</a></li>
+    
+        <li ><a href="/blog/archives/index.html">entradas</a></li>
+    
+</ul>
+
+<ul class="nav pull-right">
+    
+    <li><a href="http://github.com/atasco" title="Github Profile"><i class="icon-github-sign social-navbar"></i></a></li>
+    
+    
+    <li><a href="http://linkedin.com/in/jaalcaldehernando" title="Linkedin Profile"><i class="icon-linkedin-sign social-navbar"></i></a></li>
+    
+    
+    <li><a href="http://twitter.com/by_atasco" title="Twitter Profile"><i class="icon-twitter-sign social-navbar"></i></a></li>
+    
+    
+    
+</ul>
+
+  	    </div>
+  	  </div>
+  	</div>
+  </div>
+  <div class="container" id="main">
+    <div class="span12">
+      <div class="row-fluid">
+        <div id="content">
+          <div>
+<article class="hentry" role="article">
+  
+
+  <header>
+  <div class="jumbotron">
+    Cisco Catalyst: Origen
+	<h5>
+
+
+
+
+
+
+
+
+  
+
+
+<i class="icon-calendar-empty"></i> <time datetime="2014-08-16T17:35:00+02:00" pubdate data-updated="true">16 Ago 2014</time></h5>
+  </div>
+</header>
+  <div class="row-fluid">
+    <div class="span12">
+      <p>Antes de seguir con la serie dedicada a <a href="http://atas.co/blog/2014/06/18/screen-la-pantalla-indiscreta/">screen</a>, hacemos un inciso viendo su aplicación directa en la preparación de un switch Cisco Catalyst (C3560 y C2960).</p>
+
+<p><img class="right" src="/images/posts/WSC35608PCS.jpg" width="375" height="250" title="'C3560'" ></p>
+
+<p>Cuando recibimos un switch, habitualmente realizamos una serie de tareas previas a su configuración:</p>
+
+<ol>
+<li>Restauración a los valores de fábrica, si el dispositivo se encontraba previamente configurado.</li>
+<li>Revisión de la versión de IOS y actualización de la misma si es necesario.</li>
+</ol>
+
+
+<p>En esta entrada vamos a ver en detalle como realizar estas tareas.</p>
+
+<!-- more -->
+
+
+<h1>Restaurar el switch a valores de fábrica</h1>
+
+<p>Si se trata de un switch que ha sido utilizado con anterioridad, y que tiene por tanto una configuración establecida, en primer lugar hay que restaurar la configuración a los valores de fábrica.</p>
+
+<p>La manera de hacerlo es sencilla, hay que ejecutar los comandos siguientes en modo privilegiado<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>enable
+</span><span class='line'>delete flash:vlan.dat
+</span><span class='line'>erase startup-config 
+</span><span class='line'>reload</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Comando <code>enable</code>: pasamos al modo privilegiado.</li>
+<li>Comando <code>delete flash:vlan.dat</code>: borramos la base de datos de las vlan y la configuración VTP<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>.</li>
+<li>Comando <code>erase startup-config</code> (o <code>erase NVRAM:</code>): borramos la configuración.</li>
+<li>Comando <code>reload</code>: reiniciamos el switch.</li>
+</ul>
+
+
+<blockquote><p>Debemos responder <strong>no</strong> a la pregunta <em>System configuration has been modified. Save? [yes/no]:</em>.</p></blockquote>
+
+<p><img src="/images/posts/c3560_factory_reset.png" alt="Volver a valores de Fábrica" /></p>
+
+<p>Si desconocemos la contraseña para pasar a modo privilegiado no es posible utilizar los comandos anteriores para borrar la configuración y dejar el switch con los valores de fábrica. En ese caso tendremos que hacer uso de métodos más <em>contundentes</em> consistentes en acceder al switch para recuperar la contraseña utilizada.</p>
+
+<h1>Recuperación de passwords</h1>
+
+<p>En los catalyst de la serie 3560, los pasos a seguir son los siguientes:</p>
+
+<ol>
+<li>Conectar el equipo al switch a través del cable de consola (ver la entrada <a href="http://atas.co/blog/2014/06/18/screen-la-pantalla-indiscreta/">Screen, La Pantalla Indiscreta</a>).</li>
+<li>Desconectar el switch de la alimentación y volver a conectarlo manteniendo pulsado el botón <em>MODE</em> hasta que el led <em>SYST</em> se mantenga fijo de color verde (cuando se libere el botón <em>MODE</em>, el led <em>SYST</em> comenzara a parpadear).</li>
+<li>Seguir las instrucciones mostradas en pantalla.</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>flash_init
+</span><span class='line'>dir flash:
+</span><span class='line'>rename flash:config.text flash:config.old
+</span><span class='line'>boot</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Comando <code>flash_init</code>: inicializamos la <em>flash</em> del switch.</li>
+<li>Comando <code>dir flash:</code>: vemos el contenido de la <em>flash</em> para ver cual es el fichero de configuración <em>(config.text)</em>.</li>
+<li>Comando <code>rename flash:config.text flash:config.old</code>: renombramos el fichero de configuración.</li>
+<li>Comando <code>boot</code>: cargamos la imagen y entramos en la línea de comandos del switch.</li>
+</ul>
+
+
+<blockquote><p>Debemos responder <strong>yes</strong> a la pregunta <em>Would you like to terminate autoinstall? [yes]:</em> y <strong>no</strong> a la pregunta <em>Would you like to enter the initial configuration dialog? [yes/no]:</em>.</p></blockquote>
+
+<p><img src="/images/posts/c3560_password_recovery_1.png" alt="Recuperación de passwords" /></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>enable
+</span><span class='line'>rename flash:config.old flash:config.text
+</span><span class='line'>copy flash:config.text system:running-config
+</span><span class='line'>configure terminal
+</span><span class='line'>enable secret &lt;new_secret_password&gt;
+</span><span class='line'>enable password &lt;new_enable_password&gt;
+</span><span class='line'>line vty 0 15
+</span><span class='line'>password &lt;new_vty_password&gt;
+</span><span class='line'>login
+</span><span class='line'>line con 0
+</span><span class='line'>password &lt;new_console_password&gt;
+</span><span class='line'>end
+</span><span class='line'>write memory</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Comando <code>enable</code>: pasamos al modo privilegiado.</li>
+<li>Comando <code>rename flash:config.old flash:config.text</code>: volvemos a restaurar el fichero de configuración previamente renombrado.</li>
+<li>Comando <code>copy flash:config.text system:running-config</code>: cargamos la configuración en memoria.</li>
+<li>Comando <code>configure terminal</code>: entramos en modo configuración.</li>
+<li>Comando <code>enable secret &lt;new_secret_password&gt;</code>: cambiamos la contraseña.</li>
+<li>Comando <code>enable password &lt;new_enable_password&gt;</code>: cambiamos la contraseña para pasar al modo privilegiado.</li>
+<li>Comando <code>line vty 0 15</code>: entramos en la configuración de las terminales remotas.</li>
+<li>Comando <code>password &lt;new_vty_password&gt;</code>: cambiamos el password de las terminales remotas.</li>
+<li>Comando <code>login</code> habilitamos la petición de contraseña en las terminales remotas.</li>
+<li>Comando <code>line con 0</code>: entramos en la configuración de la línea de consola.</li>
+<li>Comando <code>password &lt;new_console_password&gt;</code>: cambiamos la contraseña de la línea de consola.</li>
+<li>Comando <code>end</code>: salimos del modo de configuración.</li>
+<li>Comando <code>write memory</code>: grabamos la configuración en la NVRAM (nonvolatile random-access memory).</li>
+</ul>
+
+
+<p><img src="/images/posts/c3560_password_recovery_2.png" alt="Recuperación de passwords" /></p>
+
+<h1>Actualización de IOS</h1>
+
+<p>Una vez que tenemos el switch con la configuración <em>limpia</em> debemos revisar la versión de IOS instalada y ver si existe alguna versión posterior que corrija o añada funcionalidades que nos resulten necesarias.</p>
+
+<p>Los pasos que vamos a seguir son los siguientes:</p>
+
+<h2>1. Verificamos la versión de IOS que tiene el switch.</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">enable</span>
+</span><span class='line'>show version
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Comando <code>enable</code>: pasamos al modo privilegiado.</li>
+<li>comando <code>show version</code>: muestra información sobre el modelo y la versión de IOS.</li>
+</ul>
+
+
+<p><img src="/images/posts/IOS_Version.png" alt="Versión IOS" /></p>
+
+<h2>2. Descargamos la ultima versión de la web de <em>CISCO</em>.</h2>
+
+<p>Nos dirigimos a la web de <em>CISCO</em> y descargamos la versión de IOS para el modelo de switch que vamos a actualizar. También copiaremos el <a href="https://es.wikipedia.org/wiki/MD5">MD5</a> de la versión para realizar la verificación de la misma antes de realizar la instalación.</p>
+
+<h2>3. Si es necesario, para disponer del suficiente espacio en la flash eliminamos la versión instalada.</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">enable</span>
+</span><span class='line'>show flash:
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Comando <code>enable</code>: pasamos al modo privilegiado.</li>
+<li>comando <code>show flash:</code>: muestra el contenido de la memoria <em>flash</em> del equipo y el espacio disponible. Existe el comando <code>dir flash:</code> que es análogo al anterior.</li>
+</ul>
+
+
+<p><img src="/images/posts/IOS_Flash.png" alt="Flash" /></p>
+
+<p>Si el espacio disponible no es suficiente, debemos borrar la versión de IOS instalada.</p>
+
+<blockquote><p>Al realizar el borrado el switch continua funcionando con normalidad ya que la imagen de IOS se mantiene en la memoria del equipo (sólo se procede a su carga (lectura) cuando se inicia el switch).</p></blockquote>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">enable</span>
+</span><span class='line'>delete /recursive /force flash:&lt;IOS&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Comando <code>enable</code>: pasamos al modo privilegiado.</li>
+<li>comando <code>delete /recursive /force flash:&lt;IOS&gt;</code>: fuerza el borrado recursivo del fichero (directorio) <IOS>.</li>
+</ul>
+
+
+<h2>4. Copiamos la nueva imagen al switch.</h2>
+
+<blockquote><p>Para transferir la nueva imagen a la memoria flash del switch necesitamos un servidor TFTP<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>.</p></blockquote>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">enable</span>
+</span><span class='line'>copy tftp flash:
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Comando <code>enable</code>: pasamos al modo privilegiado.</li>
+<li>comando <code>copy tftp flash:</code>: copia la nueva imagen desde el servidor TFTP a la memoria flash del switch.</li>
+</ul>
+
+
+<p><img src="/images/posts/IOS_TFTP.png" alt="TFTP" /></p>
+
+<p>Una vez copiada la imagen, verificamos que nada ha ido mal asegurándonos que el valor <em>MD5</em> es el mismo que el que hemos copiado en la web de <em>CISCO</em>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">enable</span>
+</span><span class='line'>verify /md5 flash:&lt;IOS&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Comando <code>enable</code>: pasamos al modo privilegiado.</li>
+<li>comando <code>verify /md5 flash:&lt;IOS&gt;</code>: verifica el valor <em>MD5</em> de la imagen <IOS> que se encuentra en la flash del switch.</li>
+</ul>
+
+
+<p><img src="/images/posts/IOS_Verify.png" alt="Verificar IOS" /></p>
+
+<h2>5. Modificamos el arranque del switch para que se realice desde la IOS instalada.</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">enable</span>
+</span><span class='line'>configure terminal
+</span><span class='line'>boot system flash:&lt;IOS&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Comando <code>enable</code>: pasamos al modo privilegiado.</li>
+<li>Comando <code>configure terminal</code>: entramos en modo configuración.</li>
+<li>Comando <code>boot system flash:&lt;IOS&gt;</code>: configura la imagen <IOS> como imagen de arranque.</li>
+</ul>
+
+
+<p>Comprobamos que la nueva imagen se cargará por defecto en los arranques del sistema.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">enable</span>
+</span><span class='line'>show boot
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Comando <code>enable</code>: pasamos al modo privilegiado.</li>
+<li>Comando <code>show boot</code>: muestra la imagen de la IOS que se utilizará en el arranque del sistema.</li>
+</ul>
+
+
+<p><img src="/images/posts/IOS_Boot.png" alt="Boot IOS" /></p>
+
+<h2>6. Grabamos la configuración y reiniciamos el switch.</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">enable</span>
+</span><span class='line'>write memory
+</span><span class='line'>reload
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Comando <code>enable</code>: pasamos al modo privilegiado.</li>
+<li>Comando <code>write memory</code>: grabamos la configuración en la NVRAM (nonvolatile random-access memory).</li>
+<li>Comando <code>reload</code>: reiniciamos el switch.</li>
+</ul>
+
+
+<h2>7. Verificación final.</h2>
+
+<p>Una vez que el switch se ha reiniciado, comprobamos que la imagen de IOS cargada se corresponde con la versión actualizada.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">enable</span>
+</span><span class='line'>show version
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Comando <code>enable</code>: pasamos al modo privilegiado.</li>
+<li>comando <code>show version</code>: muestra información sobre el modelo y la versión de IOS.</li>
+</ul>
+
+
+<h1>Referencias</h1>
+
+<p><a href="http://www.cisco.com/c/en/us/support/docs/switches/catalyst-2900-xl-series-switches/24328-156.html">Resetting Catalyst Switches to Factory Defaults</a></p>
+
+<p><a href="http://www.cisco.com/c/en/us/support/docs/switches/catalyst-2950-series-switches/12040-pswdrec-2900xl.html">Cisco Catalyst Fixed Configuration Layer 2 and Layer 3 Switches</a></p>
+
+<p><a href="http://www.cisco.com/c/en/us/support/docs/switches/catalyst-3550-series-switches/41541-190.html">Upgrading Software Images on Catalyst 3550 Series Switches Using the Command Line Interface</a></p>
+
+<p><a href="http://software.cisco.com/download/navigator.html">Software Cisco</a></p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Los switches (routers) <strong>cisco</strong> presentan tres modos de operación. El modo normal, el privilegiado y el de configuración. En el modo normal solo se permite la ejecución de un conjunto reducido de comandos que muestran información básica del dispositivo. El modo privilegiado facilita el acceso a los comandos avanzados, entre ellos el que permite entrar en modo de configuración. <a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>En futuras entradas veremos en detalle que es <a href="https://es.wikipedia.org/wiki/VLAN_Trunking_Protocol">VTP</a>.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<li id="fn:3">
+<p><a href="https://es.wikipedia.org/wiki/TFTP">TFTP</a><a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+
+    </div>
+  </div>
+
+
+
+  <footer>
+    <hr>
+    
+    <div class="row-fluid">
+      
+      <div class="span6">
+        <p class="meta">
+        
+        
+
+
+
+  <a href="/blog/categories/network/"><span class="badge">network</span></a>
+
+
+
+
+        </p>
+      </div>
+      
+      <div class="span6 social-sharing">
+        <div class="sharing">
+  <div class="addthis_toolbox addthis_default_style ">
+  
+  
+  <a class="addthis_button_tweet"></a>
+  
+  
+  <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+      </div>
+      
+      
+    </div>
+    
+    <div class="row-fluid">
+      <div class="span12">
+        <p class="meta">
+          
+            <a class="basic-alignment left" href="/blog/2014/06/18/screen-la-pantalla-indiscreta/" title="Previous Post: screen, la pantalla indiscreta">&laquo; screen, la pantalla indiscreta</a>
+          
+          
+        </p>
+      </div>
+    </div>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comentarios</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+
+
+        </div>
+      </div>
+      <div class="row-fluid">
+        <footer class="footer-page" role="contentinfo">
+          <p align="center">
+  <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/deed.es_ES"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a> - 2014 - <a href="/contacto">aH</a> - <a href="/politica-de-cookies">Política de Cookies</a>
+</br>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> and <a href="http://alexgaribay.com">Octoflat</a>
+</p>
+
+
+        </footer>
+      </div>
+    </div>
+  </div>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'atasco';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://atasco.github.io/blog/2014/08/16/cisco-catalyst-origen/';
+        var disqus_url = 'http://atasco.github.io/blog/2014/08/16/cisco-catalyst-origen/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
