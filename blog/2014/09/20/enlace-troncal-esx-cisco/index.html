@@ -1,0 +1,372 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Enlaces troncales Cisco Catalyst - ESX(i) - a t a s c o</title>
+  <meta name="author" content="aH">
+
+  
+  <meta name="description" content="Enlaces Troncales Cisco Catalyst - ESX(i) 20 Sep 2014 Para realizar la instalación de un servidor ESX(i) en la infraestructura virtual es preciso &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://atasco.github.io/blog/2014/09/20/enlace-troncal-esx-cisco">
+  <link href="/favicon.png" rel="icon">
+  <link href='http://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="a t a s c o" type="application/atom+xml">
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/js/jquery.js"></script>
+  <script src="/js/bootstrap-collapse.js"></script>
+  <script src="/js/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/js/octopress.js" type="text/javascript"></script>
+  <script src="/js/jquery.cookieBar.js" type="text/javascript"></script>
+  <link href="/stylesheets/cookieBar.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/ordered-list.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $.cookieBar();
+    });
+  </script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-46205791-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <div class="navbar navbar-inverse navbar-static-top">
+  	<div class="navbar-inner">
+  	  <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+          <span class="fui-menu-24"></span>
+        </a>
+  	  	<div class="nav-collapse collapse navbar-responsive-collapse" style="height:0;">
+  	      <ul class="nav">
+    
+        <li ><a href="/index.html">atasco</a></li>
+    
+        <li ><a href="/blog/archives/index.html">entradas</a></li>
+    
+</ul>
+
+<ul class="nav pull-right">
+    
+    <li><a href="http://github.com/atasco" title="Github Profile"><i class="icon-github-sign social-navbar"></i></a></li>
+    
+    
+    <li><a href="http://linkedin.com/in/jaalcaldehernando" title="Linkedin Profile"><i class="icon-linkedin-sign social-navbar"></i></a></li>
+    
+    
+    <li><a href="http://twitter.com/by_atasco" title="Twitter Profile"><i class="icon-twitter-sign social-navbar"></i></a></li>
+    
+    
+    
+</ul>
+
+  	    </div>
+  	  </div>
+  	</div>
+  </div>
+  <div class="container" id="main">
+    <div class="span12">
+      <div class="row-fluid">
+        <div id="content">
+          <div>
+<article class="hentry" role="article">
+  
+
+  <header>
+  <div class="jumbotron">
+    Enlaces Troncales Cisco Catalyst - ESX(i)
+	<h5>
+
+
+
+
+
+
+
+
+  
+
+
+<i class="icon-calendar-empty"></i> <time datetime="2014-09-20T20:40:00+02:00" pubdate data-updated="true">20 Sep 2014</time></h5>
+  </div>
+</header>
+  <div class="row-fluid">
+    <div class="span12">
+      <p>Para realizar la instalación de un servidor ESX(i) en la infraestructura virtual es preciso hacer un análisis previo que nos permita determinar las necesidades. Dentro de estas necesidades la conexión del nuevo servidor en la red es una de las más críticas e importantes.</p>
+
+<p>Existe mucha documentación al respecto en la <a href="http://kb.vmware.com/selfservice/microsites/">base de datos de conocimiento de VMWare</a> así como en sus <a href="https://communities.vmware.com/community">comunidades</a>, pero en este artículo vamos a centrarnos en la conexión del servidor ESX(i) con los switches (Cisco) desplegados en la red.</p>
+
+<!-- more -->
+
+
+<p>Antes de comenzar con los comandos para la configuración de los switches físico (Cisco Catalyst) y virtual (VMWare vSwitch0), vamos a ver en el siguiente diagrama el diseño final que queremos alcanzar.</p>
+
+<p><img src="/images/posts/trunk_cisco_esx_1.png" alt="Diagrama de conexión Cisco - ESX" /></p>
+
+<table>
+<thead>
+<tr>
+<th align="left">VLAN </th>
+<th> Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">60   </td>
+<td> Red de Gestión (<strong>management network</strong>)</td>
+</tr>
+<tr>
+<td align="left">70   </td>
+<td> Red de VMotion (<strong>VMotion network</strong>)</td>
+</tr>
+</tbody>
+</table>
+
+
+<h1>Configuración Cisco Catalyst</h1>
+
+<p>En primer lugar configuramos los puertos que intervienen en el <em>EtherChannel</em>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>enable
+</span><span class='line'>configure terminal
+</span><span class='line'>interface GigabitEthernet1/1
+</span><span class='line'>description ESX_LAB-NIC0
+</span><span class='line'>channel-group 1 mode on
+</span><span class='line'>interface GigabitEthernet1/2
+</span><span class='line'>description ESX_LAB-NIC1
+</span><span class='line'>channel-group 1 mode on</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Comando <code>enable</code>: pasamos al modo privilegiado.</li>
+<li>Comando <code>configure terminal</code>: entramos en modo configuración.</li>
+<li>Comando <code>interface GigabitEthernet1/1</code>: puerto del switch que vamos a configurar.</li>
+<li>Comando <code>description ESX_LAB-NIC0</code>: descripción del puerto.</li>
+<li>Comando <code>channel-group 1 mode on</code>: asignamos el puerto al grupo 1 y configuramos el modo incondicional.</li>
+</ul>
+
+
+<p>Ahora pasamos a configurar la interfaz lógica, <em>Port-Channel</em>, asociada a la agrupación de puertos del <em>EtherChannel</em>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>enable
+</span><span class='line'>configure terminal
+</span><span class='line'>interface port-channel 1
+</span><span class='line'>witchport trunk encapsulation dot1q
+</span><span class='line'>switchport trunk allowed vlan 60,70
+</span><span class='line'>switchport mode trunk
+</span><span class='line'>switchport nonegotiate
+</span><span class='line'>spanning-tree portfast trunk</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Comando <code>interface port-channel 1</code>: Port-Channel que vamos a configurar.</li>
+<li>Comando <code>switchport trunk encapsulation dot1q</code>: configuramos como protocolo de encapsulación el estándard del IEEE 802.1q (dot1q) ya que los ESX(i) sólo soportan este protocolo.</li>
+<li>Comando <code>switchport trunk allowed vlan 60,70</code>: configuramos las VLANs permitidas en el enlace troncal.</li>
+<li>Comando <code>switchport mode trunk</code>: habilitamos el enlace troncal.</li>
+<li>Comando <code>switchport nonegotiate</code>: como ESX(i) no soporta DTP (Dynamic Trunking Protocol) lo deshabilitamos.</li>
+<li>Comando <code>spanning-tree portfast trunk</code>: habilitamos PortFast en el interface cuando se encuentra en modo troncal.</li>
+</ul>
+
+
+<p>Finalmente verificamos la configuración y grabamos los cambios:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>show interfaces trunk
+</span><span class='line'>show etherchannel summary
+</span><span class='line'>copy running-config startup-config</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>Cuando el vSwitch del servidor no está configurado y tenemos varios puertos en el <em>EtherChannel</em> activos no es posible llegar en remoto a la red de gestión (<strong>management network</strong>), para lograrlo lo más sencillo es dejar sólo un puerto del <em>EtherChannel</em> activo.</p></blockquote>
+
+<h1>Configuración vSwitch0 ESX(i)</h1>
+
+<p>Si el nuevo ESX(i) va a formar parte de una infraestructura virtual previa donde ya hay desplegado un vCenter, podemos realizar la configuración del virtual switch a través del <strong>web client</strong>:</p>
+
+<p><img src="/images/posts/vswitch_vcenter.png" alt="vSwitch - ESX" /></p>
+
+<ol>
+<li>Cambiamos la configuración de balanceo a <code>Route based on IP hash</code>.</li>
+<li>Ponemos activos los adaptadores (vmnic) que están en <strong>standby</strong>.</li>
+</ol>
+
+
+<p>Si no existe un VCenter o si nos encontramos más cómodos con el <em>cli</em>, podemos configurar el switch virtual a través de la línea de comandos, accediendo vía SSH al servidor ESX(i):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>esxcfg-vswitch -v 60 -p "Management Network" vSwitch0</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Referencias</h1>
+
+<p><a href="http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&amp;cmd=displayKC&amp;externalId=1006628">Sample switch port configuration for VLAN and TRUNK MODE</a></p>
+
+    </div>
+  </div>
+
+
+
+  <footer>
+    <hr>
+    
+    <div class="row-fluid">
+      
+      <div class="span6">
+        <p class="meta">
+        
+        
+
+
+
+  <a href="/blog/categories/network/"><span class="badge">network</span></a>
+
+  <a href="/blog/categories/vmware/"><span class="badge">vmware</span></a>
+
+
+
+
+        </p>
+      </div>
+      
+      <div class="span6 social-sharing">
+        <div class="sharing">
+  <div class="addthis_toolbox addthis_default_style ">
+  
+  
+  <a class="addthis_button_tweet"></a>
+  
+  
+  <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+      </div>
+      
+      
+    </div>
+    
+    <div class="row-fluid">
+      <div class="span12">
+        <p class="meta">
+          
+            <a class="basic-alignment left" href="/blog/2014/08/16/cisco-catalyst-origen/" title="Previous Post: Cisco Catalyst: Origen">&laquo; Cisco Catalyst: Origen</a>
+          
+          
+        </p>
+      </div>
+    </div>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comentarios</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+
+
+        </div>
+      </div>
+      <div class="row-fluid">
+        <footer class="footer-page" role="contentinfo">
+          <p align="center">
+  <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/deed.es_ES"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a> - 2014 - <a href="/contacto">aH</a> - <a href="/politica-de-cookies">Política de Cookies</a>
+</br>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> and <a href="http://alexgaribay.com">Octoflat</a>
+</p>
+
+
+        </footer>
+      </div>
+    </div>
+  </div>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'atasco';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://atasco.github.io/blog/2014/09/20/enlace-troncal-esx-cisco/';
+        var disqus_url = 'http://atasco.github.io/blog/2014/09/20/enlace-troncal-esx-cisco/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Categoría: vmware | a t a s c o]]></title>
   <link href="http://atasco.github.io/blog/categories/vmware/atom.xml" rel="self"/>
   <link href="http://atasco.github.io/"/>
-  <updated>2014-08-16T18:00:46+02:00</updated>
+  <updated>2014-09-20T13:06:34+02:00</updated>
   <id>http://atasco.github.io/</id>
   <author>
     <name><![CDATA[aH]]></name>
@@ -12,6 +12,123 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Enlaces troncales Cisco Catalyst - ESX(i)]]></title>
+    <link href="http://atasco.github.io/blog/2014/09/20/enlace-troncal-esx-cisco/"/>
+    <updated>2014-09-20T20:40:00+02:00</updated>
+    <id>http://atasco.github.io/blog/2014/09/20/enlace-troncal-esx-cisco</id>
+    <content type="html"><![CDATA[<p>Para realizar la instalación de un servidor ESX(i) en la infraestructura virtual es preciso hacer un análisis previo que nos permita determinar las necesidades. Dentro de estas necesidades la conexión del nuevo servidor en la red es una de las más críticas e importantes.</p>
+
+<p>Existe mucha documentación al respecto en la <a href="http://kb.vmware.com/selfservice/microsites/">base de datos de conocimiento de VMWare</a> así como en sus <a href="https://communities.vmware.com/community">comunidades</a>, pero en este artículo vamos a centrarnos en la conexión del servidor ESX(i) con los switches (Cisco) desplegados en la red.</p>
+
+<!-- more -->
+
+
+<p>Antes de comenzar con los comandos para la configuración de los switches físico (Cisco Catalyst) y virtual (VMWare vSwitch0), vamos a ver en el siguiente diagrama el diseño final que queremos alcanzar.</p>
+
+<p><img src="/images/posts/trunk_cisco_esx_1.png" alt="Diagrama de conexión Cisco - ESX" /></p>
+
+<table>
+<thead>
+<tr>
+<th align="left">VLAN </th>
+<th> Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">60   </td>
+<td> Red de Gestión (<strong>management network</strong>)</td>
+</tr>
+<tr>
+<td align="left">70   </td>
+<td> Red de VMotion (<strong>VMotion network</strong>)</td>
+</tr>
+</tbody>
+</table>
+
+
+<h1>Configuración Cisco Catalyst</h1>
+
+<p>En primer lugar configuramos los puertos que intervienen en el <em>EtherChannel</em>:</p>
+
+<p><code>
+enable
+configure terminal
+interface GigabitEthernet1/1
+description ESX_LAB-NIC0
+channel-group 1 mode on
+interface GigabitEthernet1/2
+description ESX_LAB-NIC1
+channel-group 1 mode on
+</code></p>
+
+<ul>
+<li>Comando <code>enable</code>: pasamos al modo privilegiado.</li>
+<li>Comando <code>configure terminal</code>: entramos en modo configuración.</li>
+<li>Comando <code>interface GigabitEthernet1/1</code>: puerto del switch que vamos a configurar.</li>
+<li>Comando <code>description ESX_LAB-NIC0</code>: descripción del puerto.</li>
+<li>Comando <code>channel-group 1 mode on</code>: asignamos el puerto al grupo 1 y configuramos el modo incondicional.</li>
+</ul>
+
+
+<p>Ahora pasamos a configurar la interfaz lógica, <em>Port-Channel</em>, asociada a la agrupación de puertos del <em>EtherChannel</em>:</p>
+
+<p><code>
+enable
+configure terminal
+interface port-channel 1
+witchport trunk encapsulation dot1q
+switchport trunk allowed vlan 60,70
+switchport mode trunk
+switchport nonegotiate
+spanning-tree portfast trunk
+</code></p>
+
+<ul>
+<li>Comando <code>interface port-channel 1</code>: Port-Channel que vamos a configurar.</li>
+<li>Comando <code>switchport trunk encapsulation dot1q</code>: configuramos como protocolo de encapsulación el estándard del IEEE 802.1q (dot1q) ya que los ESX(i) sólo soportan este protocolo.</li>
+<li>Comando <code>switchport trunk allowed vlan 60,70</code>: configuramos las VLANs permitidas en el enlace troncal.</li>
+<li>Comando <code>switchport mode trunk</code>: habilitamos el enlace troncal.</li>
+<li>Comando <code>switchport nonegotiate</code>: como ESX(i) no soporta DTP (Dynamic Trunking Protocol) lo deshabilitamos.</li>
+<li>Comando <code>spanning-tree portfast trunk</code>: habilitamos PortFast en el interface cuando se encuentra en modo troncal.</li>
+</ul>
+
+
+<p>Finalmente verificamos la configuración y grabamos los cambios:</p>
+
+<p><code>
+show interfaces trunk
+show etherchannel summary
+copy running-config startup-config
+</code></p>
+
+<blockquote><p>Cuando el vSwitch del servidor no está configurado y tenemos varios puertos en el <em>EtherChannel</em> activos no es posible llegar en remoto a la red de gestión (<strong>management network</strong>), para lograrlo lo más sencillo es dejar sólo un puerto del <em>EtherChannel</em> activo.</p></blockquote>
+
+<h1>Configuración vSwitch0 ESX(i)</h1>
+
+<p>Si el nuevo ESX(i) va a formar parte de una infraestructura virtual previa donde ya hay desplegado un vCenter, podemos realizar la configuración del virtual switch a través del <strong>web client</strong>:</p>
+
+<p><img src="/images/posts/vswitch_vcenter.png" alt="vSwitch - ESX" /></p>
+
+<ol>
+<li>Cambiamos la configuración de balanceo a <code>Route based on IP hash</code>.</li>
+<li>Ponemos activos los adaptadores (vmnic) que están en <strong>standby</strong>.</li>
+</ol>
+
+
+<p>Si no existe un VCenter o si nos encontramos más cómodos con el <em>cli</em>, podemos configurar el switch virtual a través de la línea de comandos, accediendo vía SSH al servidor ESX(i):</p>
+
+<p><code>
+esxcfg-vswitch -v 60 -p "Management Network" vSwitch0
+</code></p>
+
+<h1>Referencias</h1>
+
+<p><a href="http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&amp;cmd=displayKC&amp;externalId=1006628">Sample switch port configuration for VLAN and TRUNK MODE</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Backup de postgresql en VCSA]]></title>
@@ -172,8 +289,9 @@ service vmware-vpxd start
 
 <p>Conectarse por SSH al servidor ESXi y aplicar los parches mediante el comando:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>esxcli software vib update /vmfs/volumes/parches/&lt;your-upgrade-bundle.zip></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock %}
+esxcli software vib update &mdash;depot /vmfs/volumes/parches/&lt;your-upgrade-bundle.zip>
+{% endcodeblock %}</p>
 
 <p>Una vez que finaliza la aplicación del parche, aparecerá un mensaje indicándolo y solicitando el reinicio del servidor.</p>
 
@@ -213,27 +331,18 @@ service vmware-vpxd start
 
 <p>Por ejemplo, en un ESXi 5.0:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>Name                 Default PSP    Description&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;hr /&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;VMW_SATP_ALUA_CX     VMW_PSP_FIXED  Supports EMC CX that use the ALUA protocol           &lt;br/&gt;
-</span><span class='line'>VMW_SATP_ALUA        VMW_PSP_MRU    Supports non-specific arrays that use the ALUA protocol
-</span><span class='line'>VMW_SATP_CX          VMW_PSP_MRU    Supports EMC CX that <span class="k">do </span>not use the ALUA protocol    &lt;br/&gt;
-</span><span class='line'>VMW_SATP_MSA         VMW_PSP_MRU    Placeholder <span class="o">(</span>plugin not loaded<span class="o">)</span>                      &lt;br/&gt;
-</span><span class='line'>VMW_SATP_DEFAULT_AP  VMW_PSP_MRU    Placeholder <span class="o">(</span>plugin not loaded<span class="o">)</span>
-</span><span class='line'>&amp;hellip;
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:sh %}
+Name                 Default PSP    Description</p>
+
+<hr />
+
+<p>VMW_SATP_ALUA_CX     VMW_PSP_FIXED  Supports EMC CX that use the ALUA protocol           <br/>
+VMW_SATP_ALUA        VMW_PSP_MRU    Supports non-specific arrays that use the ALUA protocol
+VMW_SATP_CX          VMW_PSP_MRU    Supports EMC CX that do not use the ALUA protocol    <br/>
+VMW_SATP_MSA         VMW_PSP_MRU    Placeholder (plugin not loaded)                      <br/>
+VMW_SATP_DEFAULT_AP  VMW_PSP_MRU    Placeholder (plugin not loaded)
+&hellip;
+{% endcodeblock %}</p>
 
 <p>Cambiar la PSP por defecto es sencillo, solo hay que ejecutar el comando:</p>
 
@@ -271,9 +380,9 @@ esxcli storage nmp device list -d NAAID
 
 <p>Ejemplo:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>esxcli storage nmp device <span class="nb">set</span> -d naa.6006016055711d00cff95e65664ee011 &amp;mdash;psp<span class="o">=</span>VMW_PSP_MRU
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:sh %}
+esxcli storage nmp device set -d naa.6006016055711d00cff95e65664ee011 &mdash;psp=VMW_PSP_MRU
+{% endcodeblock %}</p>
 
 <p>Una vez realizados los cambios, con todos los ESXi utilizando la misma política de selección de caminos para las LUNes, el rendimiento de los hosts con versión 5.0 se estabiliza y adquiere valores similares a los que tienen la versión 5.1.</p>
 
@@ -281,71 +390,41 @@ esxcli storage nmp device list -d NAAID
 
 <h2>Cambio de la PSP por defecto</h2>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;Mirar la PSP <span class="o">(</span>Path Selection Policy<span class="o">)</span>actual&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;esxcli storage nmp satp list&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;Cambiar la PSP por defecto&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;esxcli storage nmp satp <span class="nb">set</span> &amp;mdash;default-psp<span class="o">=</span>policy &amp;mdash;satp<span class="o">=</span>your_SATP_name&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;Verificar el cambio&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;esxcli storage nmp satp list
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:sh %}</p>
+
+<h1>Mirar la PSP (Path Selection Policy)actual</h1>
+
+<p>esxcli storage nmp satp list</p>
+
+<h1>Cambiar la PSP por defecto</h1>
+
+<p>esxcli storage nmp satp set &mdash;default-psp=policy &mdash;satp=your_SATP_name</p>
+
+<h1>Verificar el cambio</h1>
+
+<p>esxcli storage nmp satp list
+{% endcodeblock %}</p>
 
 <h2>Cambio de la PSP por LUN</h2>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;Identificar LUN ID <span class="o">(</span>NAA ID<span class="o">)</span>&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;1. En VI Client <span class="o">(</span>o web<span class="o">)</span>.&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;2. Vía comando&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;esxcli storage nmp device list&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;Cambiar la PSP&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;esxcli storage nmp device <span class="nb">set</span> -d NAAID -psp<span class="o">=</span>policy&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;Verificar el cambio&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;esxcli storage nmp device list -d NAAID
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:sh %}</p>
+
+<h1>Identificar LUN ID (NAA ID)</h1>
+
+<h1>1. En VI Client (o web).</h1>
+
+<h1>2. Vía comando</h1>
+
+<p>esxcli storage nmp device list</p>
+
+<h1>Cambiar la PSP</h1>
+
+<p>esxcli storage nmp device set -d NAAID -psp=policy</p>
+
+<h1>Verificar el cambio</h1>
+
+<p>esxcli storage nmp device list -d NAAID
+{% endcodeblock %}</p>
 
 <h1>Referencias</h1>
 

@@ -164,7 +164,7 @@
 <p>Conectarse por SSH al servidor ESXi y aplicar los parches mediante el comando:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>esxcli software vib update /vmfs/volumes/parches/&lt;your-upgrade-bundle.zip></span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>esxcli software vib update --depot /vmfs/volumes/parches/&lt;your-upgrade-bundle.zip></span></code></pre></td></tr></table></div></figure>
 
 
 <p>Una vez que finaliza la aplicación del parche, aparecerá un mensaje indicándolo y solicitando el reinicio del servidor.</p>
