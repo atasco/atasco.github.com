@@ -42,7 +42,7 @@ Antes de aplicar los parches hay que apagar de forma ordenada todas las máquina
 Conectarse por SSH al servidor ESXi y aplicar los parches mediante el comando:
 
 {% codeblock %}
-esxcli software vib update /vmfs/volumes/parches/<your-upgrade-bundle.zip>
+esxcli software vib update --depot /vmfs/volumes/parches/<your-upgrade-bundle.zip>
 {% endcodeblock %}
 
 Una vez que finaliza la aplicación del parche, aparecerá un mensaje indicándolo y solicitando el reinicio del servidor.

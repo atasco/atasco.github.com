@@ -66,10 +66,21 @@ boot
 
 ![Recuperación de passwords](/images/posts/c3560_password_recovery_1.png)
 
+Recuperamos el fichero de configuración original:
+
 ```
 enable
 rename flash:config.old flash:config.text
 copy flash:config.text system:running-config
+```
+
+* Comando `enable`: pasamos al modo privilegiado.
+* Comando `rename flash:config.old flash:config.text`: volvemos a restaurar el fichero de configuración previamente renombrado.
+* Comando `copy flash:config.text system:running-config`: cargamos la configuración en memoria.
+
+Cambiamos las contraseñas:
+
+```
 configure terminal
 enable secret <new_secret_password>
 enable password <new_enable_password>
@@ -79,12 +90,8 @@ login
 line con 0
 password <new_console_password>
 end
-write memory
 ```
 
-* Comando `enable`: pasamos al modo privilegiado.
-* Comando `rename flash:config.old flash:config.text`: volvemos a restaurar el fichero de configuración previamente renombrado.
-* Comando `copy flash:config.text system:running-config`: cargamos la configuración en memoria.
 * Comando `configure terminal`: entramos en modo configuración.
 * Comando `enable secret <new_secret_password>`: cambiamos la contraseña.
 * Comando `enable password <new_enable_password>`: cambiamos la contraseña para pasar al modo privilegiado.
@@ -94,6 +101,13 @@ write memory
 * Comando `line con 0`: entramos en la configuración de la línea de consola.
 * Comando `password <new_console_password>`: cambiamos la contraseña de la línea de consola.
 * Comando `end`: salimos del modo de configuración.
+
+Guardamos los cambios:
+
+```
+write memory
+```
+
 * Comando `write memory`: grabamos la configuración en la NVRAM (nonvolatile random-access memory). 
 
 ![Recuperación de passwords](/images/posts/c3560_password_recovery_2.png)
