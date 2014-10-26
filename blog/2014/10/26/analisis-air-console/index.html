@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Análisis: Air Console - a t a s c o</title>
+  <meta name="author" content="aH">
+
+  
+  <meta name="description" content="Análisis: Air Console 26 Oct 2014 Una tarea tan común y aparentemente sencilla, que todo ingeniero de redes realiza de forma continua, como es &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://atasco.github.io/blog/2014/10/26/analisis-air-console">
+  <link href="/favicon.png" rel="icon">
+  <link href='http://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="a t a s c o" type="application/atom+xml">
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/js/jquery.js"></script>
+  <script src="/js/bootstrap-collapse.js"></script>
+  <script src="/js/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/js/octopress.js" type="text/javascript"></script>
+  <script src="/js/jquery.cookieBar.js" type="text/javascript"></script>
+  <link href="/stylesheets/cookieBar.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/ordered-list.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $.cookieBar();
+    });
+  </script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-46205791-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <div class="navbar navbar-inverse navbar-static-top">
+  	<div class="navbar-inner">
+  	  <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+          <span class="fui-menu-24"></span>
+        </a>
+  	  	<div class="nav-collapse collapse navbar-responsive-collapse" style="height:0;">
+  	      <ul class="nav">
+    
+        <li ><a href="/index.html">atasco</a></li>
+    
+        <li ><a href="/blog/archives/index.html">entradas</a></li>
+    
+</ul>
+
+<ul class="nav pull-right">
+    
+    <li><a href="http://github.com/atasco" title="Github Profile"><i class="icon-github-sign social-navbar"></i></a></li>
+    
+    
+    <li><a href="http://linkedin.com/in/jaalcaldehernando" title="Linkedin Profile"><i class="icon-linkedin-sign social-navbar"></i></a></li>
+    
+    
+    <li><a href="http://twitter.com/by_atasco" title="Twitter Profile"><i class="icon-twitter-sign social-navbar"></i></a></li>
+    
+    
+    
+</ul>
+
+  	    </div>
+  	  </div>
+  	</div>
+  </div>
+  <div class="container" id="main">
+    <div class="span12">
+      <div class="row-fluid">
+        <div id="content">
+          <div>
+<article class="hentry" role="article">
+  
+
+  <header>
+  <div class="jumbotron">
+    Análisis: Air Console
+	<h5>
+
+
+
+
+
+
+
+
+  
+
+
+<i class="icon-calendar-empty"></i> <time datetime="2014-10-26T21:30:00+01:00" pubdate data-updated="true">26 Oct 2014</time></h5>
+  </div>
+</header>
+  <div class="row-fluid">
+    <div class="span12">
+      <p><img class="right" src="/images/posts/airconsole.png" title="'airconsole'" ></p>
+
+<p>Una tarea tan común y aparentemente sencilla, que todo ingeniero de redes realiza de forma continua, como es conectarse vía consola a la electrónica de red (router, switch, firewall&hellip;) puede complicarse si el acceso al dispositivo no resulta sencillo.</p>
+
+<p>Para esos casos el dispositivo que analizamos en esta entrada puede ser la solución ideal.</p>
+
+<!-- more -->
+
+
+<p>En ocasiones trabajar en un <a href="http://es.wikipedia.org/wiki/Centro_de_procesamiento_de_datos">CPD</a> puede resultar una experiencia incomoda por el espacio de trabajo que disponemos y/o por las condiciones de temperatura. En otras situaciones, el acceso a los armarios de comunicaciones resulta casi una misión imposible por el lugar donde están ubicados y conectarse a la consola de los switches, routers&hellip; <em>colgado</em> no es lo más adecuado.</p>
+
+<p>Si a todo esto le añadimos que cada vez utilizamos más dispositivos móviles (smartphones, tablets&hellip;), que pueden llegar a sustituir a los ordenadores portátiles, resulta muy práctico disponer de un dispositivo que nos facilite el acceso a la consola haciendo uso de los mismos. <a href="http://www.get-console.com/airconsole/">Air Console</a> es la solución a todos estos inconvenientes.</p>
+
+<p>Se trata de un producto originario de Nueva Zelanda, pero la compra y el envío ha resultado de lo más rápido y sencillo. Realizando el pedido a través de la <a href="http://www.get-console.com/shop/">tienda online</a> un domingo, el miércoles ya estaba el producto en su destino.</p>
+
+<p>Una vez desembalado, y cargada la batería, lo primero es su configuración. En la caja del producto viene una <a href="http://www.get-console.com/airconsole/files/Airconsole-QuickStart-Wifi-Bluetooth-2.5.pdf">guía rápida</a> que resulta suficiente para los primeros pasos.</p>
+
+<p><strong>Air Console</strong> se conecta a la consola del dispositivo y a su vez se comporta como un <a href="http://es.wikipedia.org/wiki/Punto_de_acceso_inal%C3%A1mbrico">AP</a> al que nos podemos conectar, se trata de un adaptador <a href="http://es.wikipedia.org/wiki/RS-232">RS232</a> sobre wifi y bluetooth.</p>
+
+<p>Para acceder a la consola desde dispositivos móviles, <strong>Get Console</strong> dispone de aplicaciones para <a href="http://es.wikipedia.org/wiki/Android">Android</a> (<a href="https://play.google.com/store/apps/details?id=nz.co.cloudstore.serialbot">SerialBot</a>) y para <a href="http://es.wikipedia.org/wiki/IOS">iOS</a> (<a href="https://itunes.apple.com/us/app/rapidssh/id546150309?mt=8">RapidSSH</a>, <a href="https://itunes.apple.com/us/app/get-console/id412067943?mt=8&amp;ls=1">Get Console</a>).</p>
+
+<p>Para los sistemas operativos Windows y Mac OS X, en la propia web de <strong>Get Console</strong> están disponibles los drivers correspondientes.</p>
+
+<p>En caso de utilizar otro sistema operativo, tenemos las siguientes opciones:</p>
+
+<ol>
+<li><p>Se puede usar el navegador web del dispositivo para conectarse al emulador de terminal (<a href="http://es.wikipedia.org/wiki/VT100">VT100</a>) que facilita como puente <strong>Air Console</strong>. Sólo hay que conectarse a <code>http://&lt;IP_AIRCONSOLE&gt;/terminal.asp</code>.</p></li>
+<li><p>Se puede usar un <a href="http://es.wikipedia.org/wiki/Emulador_de_terminal">emulador de terminal</a> en el dispositivo para conectarse vía <a href="http://es.wikipedia.org/wiki/Telnet">telnet</a> al puerto 3696 (2167 para serial raw) de <strong>Air Console</strong>.</p></li>
+<li><p>También se puede usar un cliente <a href="http://es.wikipedia.org/wiki/WebSocket">websockets</a> para conectarse a <strong>Airconsole</strong>.</p></li>
+<li><p>Finalmente, si la programación es lo tuyo, puedes escribir una aplicación para interactuar con <strong>Air Console</strong> utilizando los <a href="http://es.wikipedia.org/wiki/Kit_de_desarrollo_de_software">SDKs</a> disponibles en <a href="http://www.get-console.com">Get Console</a>.</p></li>
+</ol>
+
+
+<p>Si usas LiNUX, lo mas sencillo es crear un nuevo dispositivo con <strong>socat</strong>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>socat PTY,link<span class="o">=</span>/dev/ttyVS0,user<span class="o">=</span>root,group<span class="o">=</span>uucp,mode<span class="o">=</span>660 TCP:&lt;IP_AIRCONSOLE&gt;:3696
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ahora solo hemos de usar <a href="http://atas.co/blog/2014/06/18/screen-la-pantalla-indiscreta/">screen</a> para conectarnos a través del nuevo dispositivo serie virtual creado con <strong>socat</strong>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>screen /dev/ttyVS0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Referencias</h1>
+
+<p><a href="http://www.get-console.com/airconsole/">Air Console</a></p>
+
+<p><a href="http://www.dest-unreach.org/socat/">Socat</a></p>
+
+    </div>
+  </div>
+
+
+
+  <footer>
+    <hr>
+    
+    <div class="row-fluid">
+      
+      <div class="span6">
+        <p class="meta">
+        
+        
+
+
+
+  <a href="/blog/categories/cajondesastre/"><span class="badge">cajondesastre</span></a>
+
+  <a href="/blog/categories/network/"><span class="badge">network</span></a>
+
+
+
+
+        </p>
+      </div>
+      
+      <div class="span6 social-sharing">
+        <div class="sharing">
+  <div class="addthis_toolbox addthis_default_style ">
+  
+  
+  <a class="addthis_button_tweet"></a>
+  
+  
+  <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+      </div>
+      
+      
+    </div>
+    
+    <div class="row-fluid">
+      <div class="span12">
+        <p class="meta">
+          
+            <a class="basic-alignment left" href="/blog/2014/09/20/enlace-troncal-esx-cisco/" title="Previous Post: Enlaces troncales Cisco Catalyst - ESX(i)">&laquo; Enlaces troncales Cisco Catalyst - ESX(i)</a>
+          
+          
+        </p>
+      </div>
+    </div>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comentarios</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+
+
+        </div>
+      </div>
+      <div class="row-fluid">
+        <footer class="footer-page" role="contentinfo">
+          <p align="center">
+  <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/deed.es_ES"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a> - 2014 - <a href="/contacto">aH</a> - <a href="/politica-de-cookies">Política de Cookies</a>
+</br>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> and <a href="http://alexgaribay.com">Octoflat</a>
+</p>
+
+
+        </footer>
+      </div>
+    </div>
+  </div>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'atasco';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://atasco.github.io/blog/2014/10/26/analisis-air-console/';
+        var disqus_url = 'http://atasco.github.io/blog/2014/10/26/analisis-air-console/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

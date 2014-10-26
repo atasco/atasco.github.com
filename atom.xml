@@ -4,7 +4,7 @@
   <title><![CDATA[a t a s c o]]></title>
   <link href="http://atasco.github.io/atom.xml" rel="self"/>
   <link href="http://atasco.github.io/"/>
-  <updated>2014-09-20T13:06:33+02:00</updated>
+  <updated>2014-10-26T21:22:58+01:00</updated>
   <id>http://atasco.github.io/</id>
   <author>
     <name><![CDATA[aH]]></name>
@@ -12,6 +12,66 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Análisis: Air Console]]></title>
+    <link href="http://atasco.github.io/blog/2014/10/26/analisis-air-console/"/>
+    <updated>2014-10-26T21:30:00+01:00</updated>
+    <id>http://atasco.github.io/blog/2014/10/26/analisis-air-console</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://atasco.github.io/images/posts/airconsole.png" title="'airconsole'" ></p>
+
+<p>Una tarea tan común y aparentemente sencilla, que todo ingeniero de redes realiza de forma continua, como es conectarse vía consola a la electrónica de red (router, switch, firewall&hellip;) puede complicarse si el acceso al dispositivo no resulta sencillo.</p>
+
+<p>Para esos casos el dispositivo que analizamos en esta entrada puede ser la solución ideal.</p>
+
+<!-- more -->
+
+
+<p>En ocasiones trabajar en un <a href="http://es.wikipedia.org/wiki/Centro_de_procesamiento_de_datos">CPD</a> puede resultar una experiencia incomoda por el espacio de trabajo que disponemos y/o por las condiciones de temperatura. En otras situaciones, el acceso a los armarios de comunicaciones resulta casi una misión imposible por el lugar donde están ubicados y conectarse a la consola de los switches, routers&hellip; <em>colgado</em> no es lo más adecuado.</p>
+
+<p>Si a todo esto le añadimos que cada vez utilizamos más dispositivos móviles (smartphones, tablets&hellip;), que pueden llegar a sustituir a los ordenadores portátiles, resulta muy práctico disponer de un dispositivo que nos facilite el acceso a la consola haciendo uso de los mismos. <a href="http://www.get-console.com/airconsole/">Air Console</a> es la solución a todos estos inconvenientes.</p>
+
+<p>Se trata de un producto originario de Nueva Zelanda, pero la compra y el envío ha resultado de lo más rápido y sencillo. Realizando el pedido a través de la <a href="http://www.get-console.com/shop/">tienda online</a> un domingo, el miércoles ya estaba el producto en su destino.</p>
+
+<p>Una vez desembalado, y cargada la batería, lo primero es su configuración. En la caja del producto viene una <a href="http://www.get-console.com/airconsole/files/Airconsole-QuickStart-Wifi-Bluetooth-2.5.pdf">guía rápida</a> que resulta suficiente para los primeros pasos.</p>
+
+<p><strong>Air Console</strong> se conecta a la consola del dispositivo y a su vez se comporta como un <a href="http://es.wikipedia.org/wiki/Punto_de_acceso_inal%C3%A1mbrico">AP</a> al que nos podemos conectar, se trata de un adaptador <a href="http://es.wikipedia.org/wiki/RS-232">RS232</a> sobre wifi y bluetooth.</p>
+
+<p>Para acceder a la consola desde dispositivos móviles, <strong>Get Console</strong> dispone de aplicaciones para <a href="http://es.wikipedia.org/wiki/Android">Android</a> (<a href="https://play.google.com/store/apps/details?id=nz.co.cloudstore.serialbot">SerialBot</a>) y para <a href="http://es.wikipedia.org/wiki/IOS">iOS</a> (<a href="https://itunes.apple.com/us/app/rapidssh/id546150309?mt=8">RapidSSH</a>, <a href="https://itunes.apple.com/us/app/get-console/id412067943?mt=8&amp;ls=1">Get Console</a>).</p>
+
+<p>Para los sistemas operativos Windows y Mac OS X, en la propia web de <strong>Get Console</strong> están disponibles los drivers correspondientes.</p>
+
+<p>En caso de utilizar otro sistema operativo, tenemos las siguientes opciones:</p>
+
+<ol>
+<li><p>Se puede usar el navegador web del dispositivo para conectarse al emulador de terminal (<a href="http://es.wikipedia.org/wiki/VT100">VT100</a>) que facilita como puente <strong>Air Console</strong>. Sólo hay que conectarse a <code>http://&lt;IP_AIRCONSOLE&gt;/terminal.asp</code>.</p></li>
+<li><p>Se puede usar un <a href="http://es.wikipedia.org/wiki/Emulador_de_terminal">emulador de terminal</a> en el dispositivo para conectarse vía <a href="http://es.wikipedia.org/wiki/Telnet">telnet</a> al puerto 3696 (2167 para serial raw) de <strong>Air Console</strong>.</p></li>
+<li><p>También se puede usar un cliente <a href="http://es.wikipedia.org/wiki/WebSocket">websockets</a> para conectarse a <strong>Airconsole</strong>.</p></li>
+<li><p>Finalmente, si la programación es lo tuyo, puedes escribir una aplicación para interactuar con <strong>Air Console</strong> utilizando los <a href="http://es.wikipedia.org/wiki/Kit_de_desarrollo_de_software">SDKs</a> disponibles en <a href="http://www.get-console.com">Get Console</a>.</p></li>
+</ol>
+
+
+<p>Si usas LiNUX, lo mas sencillo es crear un nuevo dispositivo con <strong>socat</strong>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>socat PTY,link<span class="o">=</span>/dev/ttyVS0,user<span class="o">=</span>root,group<span class="o">=</span>uucp,mode<span class="o">=</span>660 TCP:&lt;IP_AIRCONSOLE&gt;:3696
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ahora solo hemos de usar <a href="http://atas.co/blog/2014/06/18/screen-la-pantalla-indiscreta/">screen</a> para conectarnos a través del nuevo dispositivo serie virtual creado con <strong>socat</strong>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>screen /dev/ttyVS0
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Referencias</h1>
+
+<p><a href="http://www.get-console.com/airconsole/">Air Console</a></p>
+
+<p><a href="http://www.dest-unreach.org/socat/">Socat</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Enlaces troncales Cisco Catalyst - ESX(i)]]></title>
@@ -135,6 +195,139 @@
 
 
 <p>Si no existe un VCenter o si nos encontramos más cómodos con el <em>cli</em>, podemos configurar el switch virtual a través de la línea de comandos, accediendo vía SSH al servidor ESX(i):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>esxcfg-vswitch -v 60 -p "Management Network" vSwitch0</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Referencias</h1>
+
+<p><a href="http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&amp;cmd=displayKC&amp;externalId=1006628">Sample switch port configuration for VLAN and TRUNK MODE</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Enlaces troncales Cisco Catalyst - ESX(i)]]></title>
+    <link href="http://atasco.github.io/blog/2014/09/20/enlace-troncal-esx-cisco/"/>
+    <updated>2014-09-20T20:40:00+02:00</updated>
+    <id>http://atasco.github.io/blog/2014/09/20/enlace-troncal-esx-cisco</id>
+    <content type="html"><![CDATA[<p>Antes de realizar la instalación de un servidor ESX(i) en la infraestructura virtual es preciso hacer un análisis previo para determinar las necesidades. Dentro de estás necesidades la conexión del nuevo servidor en la red es una de las más críticas e importantes.</p>
+
+<p>Existe mucha documentación al respecto en la <a href="http://kb.vmware.com/selfservice/microsites/">base de datos de conocimiento de VMWare</a> así como en sus <a href="https://communities.vmware.com/community">comunidades</a>, pero en este artículo vamos a centrarnos en la conexión del servidor ESX(i) con los switches (Cisco) desplegados en la red.</p>
+
+<!-- more -->
+
+
+<p>Antes de comenzar con los comandos para la configuración de los switches físico (Cisco Catalyst) y virtual (VMWare vSwitch0), vamos a ver en el siguiente diagrama el diseño final que queremos alcanzar.</p>
+
+<p><img src="http://atasco.github.io/images/posts/trunk_cisco_esx_1.png" alt="Diagrama de conexión Cisco - ESX" /></p>
+
+<table>
+<thead>
+<tr>
+<th align="left">VLAN </th>
+<th> Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">60   </td>
+<td> Red de Gestión (<strong>management network</strong>)</td>
+</tr>
+<tr>
+<td align="left">70   </td>
+<td> Red de VMotion (<strong>VMotion network</strong>)</td>
+</tr>
+</tbody>
+</table>
+
+
+<h1>Configuración Cisco Catalyst</h1>
+
+<p>Configuramos los puertos que intervienen en el EtherChannel.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>enable
+</span><span class='line'>configure terminal
+</span><span class='line'>interface GigabitEthernet1/1
+</span><span class='line'>description ESX_LAB-NIC0
+</span><span class='line'>channel-group 1 mode on
+</span><span class='line'>interface GigabitEthernet1/2
+</span><span class='line'>description ESX_LAB-NIC1
+</span><span class='line'>channel-group 1 mode on</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Comando <code>enable</code>: pasamos al modo privilegiado.</li>
+<li>Comando <code>configure terminal</code>: entramos en modo configuración.</li>
+<li>Comando <code>interface GigabitEthernet1/1</code>: puerto del switch que vamos a configurar.</li>
+<li>Comando <code>description ESX_LAB-NIC0</code>: descripción del puerto.</li>
+<li>Comando <code>channel-group 1 mode on</code>: asignamos el puerto al grupo 1 y configuramos el modo incondicional.</li>
+</ul>
+
+
+<p>Configuramos la interfaz lógica, Port-Channel, asociada a la agrupación de puertos del EtherChannel:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>enable
+</span><span class='line'>configure terminal
+</span><span class='line'>interface port-channel 1
+</span><span class='line'>witchport trunk encapsulation dot1q
+</span><span class='line'>switchport trunk allowed vlan 60,70
+</span><span class='line'>switchport mode trunk
+</span><span class='line'>switchport nonegotiate
+</span><span class='line'>spanning-tree portfast trunk</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Comando <code>interface port-channel 1</code>: Port-Channel que vamos a configurar.</li>
+<li>Comando <code>switchport trunk encapsulation dot1q</code>: configuramos como protocolo de encapsulación el estándard del IEEE 802.1q (dot1q) ya que los ESX(i) sólo soportan este protocolo.</li>
+<li>Comando <code>switchport trunk allowed vlan 60,70</code>: configuramos las VLANs permitidas en el enlace troncal.</li>
+<li>Comando <code>switchport mode trunk</code>: habilitamos el enlace troncal.</li>
+<li>Comando <code>switchport nonegotiate</code>: como ESX(i) no soporta DTP (Dynamic Trunking Protocol) lo deshabilitamos.</li>
+<li>Comando <code>spanning-tree portfast trunk</code>: habilitamos PortFast en el interface cuando se encuentra en modo troncal.</li>
+</ul>
+
+
+<p>Verificamos la configuración y grabamos los cambios:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>show interfaces trunk
+</span><span class='line'>show etherchannel summary
+</span><span class='line'>copy running-config startup-config</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>En un primer momento, cuando el vSwitch del servidor no está configurado, si tenemos varios puertos en el EtherChannel activos no es posible llegar en remoto a la red de gestión (<strong>management network</strong>). Para lograrlo lo más sencillo es dejar sólo un puerto del EtherChannel activo.</p></blockquote>
+
+<h1>Configuración vSwitch0 ESX(i)</h1>
+
+<p>Si el nuevo ESX(i) va a formar parte de una infraestructura virtual previa donde ya hay desplegado un vCenter, podemos realizar la configuración del virtual switch a través del <strong>web client</strong>:</p>
+
+<p><img src="http://atasco.github.io/images/posts/vswitch_vcenter.png" alt="vSwitch - ESX" /></p>
+
+<ol>
+<li>Cambiamos la configuración de balanceo a <code>Route based on IP hash</code>.</li>
+<li>Ponemos activos los adaptadores (vmnic) que estan en <strong>standby</strong>.</li>
+</ol>
+
+
+<p>En caso contrario (o si nos encontramos más cómodos con el cli), podemos configurar el switch virtual a través de la línea de comandos, accediendo vía SSH al servidor ESX(i):</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>esxcfg-vswitch -v 60 -p "Management Network" vSwitch0</span></code></pre></td></tr></table></div></figure>
