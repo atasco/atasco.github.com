@@ -4,7 +4,7 @@
   <title><![CDATA[Categoría: cajondesastre | a t a s c o]]></title>
   <link href="http://atasco.github.io/blog/categories/cajondesastre/atom.xml" rel="self"/>
   <link href="http://atasco.github.io/"/>
-  <updated>2014-10-26T21:23:00+01:00</updated>
+  <updated>2014-10-27T18:01:03+01:00</updated>
   <id>http://atasco.github.io/</id>
   <author>
     <name><![CDATA[aH]]></name>
@@ -18,7 +18,7 @@
     <link href="http://atasco.github.io/blog/2014/10/26/analisis-air-console/"/>
     <updated>2014-10-26T21:30:00+01:00</updated>
     <id>http://atasco.github.io/blog/2014/10/26/analisis-air-console</id>
-    <content type="html"><![CDATA[<p>{% img right /images/posts/airconsole.png &lsquo;airconsole&rsquo; %}</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/posts/airconsole.png" title="&lsquo;airconsole&rsquo;" ></p>
 
 <p>Una tarea tan común y aparentemente sencilla, que todo ingeniero de redes realiza de forma continua, como es conectarse vía consola a la electrónica de red (router, switch, firewall&hellip;) puede complicarse si el acceso al dispositivo no resulta sencillo.</p>
 
@@ -80,7 +80,7 @@ screen /dev/ttyVS0
 
 <blockquote><p>Esa que nos amarga la vida cada vez que entramos en una página web haciéndonos aceptar si o sí la correspondiente política si queremos seguir consultando el contenido.</p></blockquote>
 
-<p>{% img left /images/posts/cookie.gif &lsquo;Galleta!&rsquo; %}</p>
+<p><img class="left" src="/images/posts/cookie.gif" title="&lsquo;Galleta!&rsquo;" ></p>
 
 <p>Como con casi todo lo referente a <a href="http://octopress.org/">octopress</a>, no sólo hay mucha información en la web para documentarse y solucionar cualquier problema, si no que hay desarrollos libres que resuelven el problema directamente.</p>
 
@@ -113,10 +113,10 @@ vi $HOME_OCTOPRESS/source/_includes/head.html
 
 <p>```</p>
 
-<script src="{{ root_url }}/js/jquery.cookieBar.js" type="text/javascript"></script>
+<script src="/js/jquery.cookieBar.js" type="text/javascript"></script>
 
 
-<p><link href="{{ root_url }}/stylesheets/cookieBar.css" media="screen, projection" rel="stylesheet" type="text/css"></p>
+<p><link href="/stylesheets/cookieBar.css" media="screen, projection" rel="stylesheet" type="text/css"></p>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -169,7 +169,7 @@ vi $HOME_OCTOPRESS/source/js/jquery.cookieBar.js
     <link href="http://atasco.github.io/blog/2013/07/14/como-se-hizo/"/>
     <updated>2013-07-14T18:30:00+02:00</updated>
     <id>http://atasco.github.io/blog/2013/07/14/como-se-hizo</id>
-    <content type="html"><![CDATA[<p>{% img right /images/posts/octopress.png &lsquo;octopress&rsquo; %}</p>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/posts/octopress.png" title="&lsquo;octopress&rsquo;" ></p>
 
 <p>En la actualidad crear un blog, partiendo de unos conocimientos básicos, es relativamente sencillo. Existen diversas herramientas que facilitan la tarea, de modo que lo más complicado es elegir la que se adapte a las necesidades de cada uno.</p>
 
@@ -213,7 +213,7 @@ vi $HOME_OCTOPRESS/source/js/jquery.cookieBar.js
     <link href="http://atasco.github.io/blog/2013/06/11/luces-camara-accion/"/>
     <updated>2013-06-11T22:44:00+02:00</updated>
     <id>http://atasco.github.io/blog/2013/06/11/luces-camara-accion</id>
-    <content type="html"><![CDATA[<p> {% img left /images/posts/lca.jpg &lsquo;Luces, Cámara, Acción&rsquo; %}</p>
+    <content type="html"><![CDATA[<p> <img class="left" src="/images/posts/lca.jpg" title="&lsquo;Luces, Cámara, Acción&rsquo;" ></p>
 
 <p><strong><em>El personal se ubica en sus puestos y todo está listo para comenzar el rodaje.</em></strong></p>
 
